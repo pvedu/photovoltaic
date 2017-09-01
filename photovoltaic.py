@@ -443,6 +443,9 @@ def carrier_conc(N, ni=8.6e9):
     minority = N / (ni ** 2)
     return majority, minority
 
+def conductivity(n,p,ue,uh):
+    return (q * ue * n) + (q * uh * p)
+
 
 def mob_thurber(N, p_type=True, majority=True):
     """ mobility of electrons as minority carriers in silicon based on doping (cm**-3) """
@@ -467,7 +470,7 @@ def resistivity_Si_p(Nacceptor):
     return 1 / ((q * mob_thurber(Nacceptor) * Nacceptor) + (q * mob_thurber(n_minority, True, False) * n_minority))
 
 
-def mob_klassen(Na, Nd, Δn=1, T=298.16):
+def mob_klassen(Nd, Na, Δn=1, T=298.16):
     """ return the mobility (cm2/Vs)
     given the doping etc."""
     s1 = 0.89233
@@ -489,12 +492,12 @@ def mob_klassen(Na, Nd, Δn=1, T=298.16):
     me_m0 = 1
 
     T = 298.16
-    Na = 1e16
-    Nd = 1.0
-    Δn = 8.16e13
-
-    p0 = 1E+16
-    n0 = 6908.718235
+    #Na = 1e15
+    #Nd = 1.0
+    #Δn = 1e15
+    n0, p0 = carrier_conc(Nd)
+    #p0 = 1.3520822065981611e-05
+    #n0 = 1000000000000000.0
 
     n_i = 8.31E+09
 
@@ -568,6 +571,8 @@ def mob_klassen(Na, Nd, Δn=1, T=298.16):
 
     µe = 1 / (1 / µ_eL + 1 / µe_Dah)
     µh = 1 / (1 / µ_hL + 1 / µh_Dae)
+
+    return µe, µh
 
 
 def Eg0_Paessler(T=298.15):
