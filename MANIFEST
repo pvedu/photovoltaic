@@ -2,4 +2,5 @@
 README.txt
 setup.cfg
 setup.py
+photovoltaic\__init__.py
 photovoltaic\photovoltaic.py
