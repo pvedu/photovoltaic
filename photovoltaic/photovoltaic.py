@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """ Basic photovoltaic functions
-Alpha Version 0.04
+Version 0.1.1
 
 Requires numpy
 
@@ -17,9 +17,8 @@ to do is listed as 9999
 The first line on all input files is ignored to allow for column headers
 # denotes a comment in input files and is ignored.
 
-Contributions by: sgbowden, ?, ? etc
+Contributions by: sgbowden, richter, heraimenka,?, ? etc
 """
-import numpy as np
 
 '''
 Bugs:
@@ -28,6 +27,7 @@ The path of data files uses os.path.dirname and may not be reliable
 
 # objective is to have as few imports as possible.
 
+import numpy as np
 
 # define constants
 q = 1.60217662e-19  # (C) (units go after the comment line)
@@ -35,19 +35,37 @@ eV = q
 k = 1.38064852e-23  # (J/K)
 Wien = 2.898e-3
 Stefan_Boltzmann = 5.670367e-08  # (W m^-2 K^-4)
-pi = np.pi
-π = np.pi  # yes, i am inconsistent
+π = np.pi  # yes, I use unicode
 h = 6.62607004e-34  # (J.s)
-ℏ = 6.62607004e-34 / (2 * π)  # this is just silly
-hbar = 6.62607004e-34 / (2 * π) # usable
+hbar = 6.62607004e-34 / (2 * π)  # usable
 c = 299792458.0  # (m s^-1)
 hc_q = h * c / q
 
-d2rad = pi / 180  # use to convert to radians
-r2deg = 180 / pi  # use to convert to degrees
-
 
 # python helpers that are not pv
+def sind(angle):
+    """return the sine of the angle(degrees)"""
+    return np.sin(np.radians(angle))
+
+
+def cosd(angle):
+    """return the cosine of the angle(degrees)"""
+    return np.cos(np.radians(angle))
+
+
+def tand(angle):
+    """return the tangent of the angle(degrees)"""
+    return np.tan(np.radians(angle))
+
+
+def arcsind(x):
+    """return the arcsin (degrees)"""
+    return np.degrees(np.arcsin(x))
+
+
+def arccosd(x):
+    """return the arccos (degrees)"""
+    return np.degrees(np.arccos(x))
 
 
 # basics
@@ -60,26 +78,6 @@ def module_path():
     return dir_path
 
 
-def rad(x):
-    """ Convert degrees to radians"""
-    return x * π / 180
-
-
-def deg(x):
-    """ Convert degrees to radians"""
-    return x * 180 / π
-
-
-def kelvin(x):
-    """ Convert celsius to kelvin"""
-    return x * 180 / π
-
-
-def celcius(x):
-    """ Convert kelvin to celsius"""
-    return x * 180 / π
-
-
 def nm2eV(x):
     """ Given wavelength of a photon in nm return the energy in eV """
     return hc_q * 1e9 / x
@@ -90,40 +88,11 @@ def nm2joule(x):
     return h * c * 1e9 / x
 
 
-'''
-def PhotonWavelength(x):
-    """ return the energy of photon in eV and joules given teh wave
-    """
-    energy_eV = h * c / x
-    energy_J = energy_eV * q
-    return energy_eV, energy_J
-'''
-
-
 def photon_flux(power, wavelength):
     """ return the photon flux (/s)
     given the power of light (watts) and wavelength (nm)
     If power is in W/m2 then flux is in m-2s-1"""
     return power / nm2joule(wavelength)
-
-
-def probability_fermi_dirac(E, Ef, T):
-    """ return the fermi dirac function (units_
-    given the energies (eV)  """
-    kT = k * T / q  # in eV
-    return 1 / (np.exp((E - Ef) / kT) + 1.0)
-
-
-def probability_maxwell_boltzmann(E, Ef, T):
-    """ Given the energies in electron volts return the fermi dirac function """
-    kT = k * T / q  # in eV
-    return 1 / (np.exp((E - Ef) / kT))
-
-
-def probability_bose_einstein(E, Ef, T):
-    """ Given the energies in electron volts return the fermi dirac function """
-    kT = k * T / q  # in eV
-    return 1 / (np.exp((E - Ef) / kT) - 1.0)
 
 
 # Solar radiation
@@ -138,12 +107,12 @@ def am_intensity(airmass):
 def air_mass(angle):
     """ return Air Mass (units)
     given the zenith angle (degrees) """
-    return 1 / np.cos(np.radians(angle))
+    return 1 / cosd(angle)
 
 
 def am_shadow(s, h):
     """ return the air mass (degrees) given a shadow length and height """
-    am = 9999
+    am = np.sqrt(1 + (s / h) ** 2)
     return am
 
 
@@ -169,27 +138,27 @@ def blackbody_spectrum(wavelength, T=6000):
     """ Return the blackbody irradaiance
     given the wavelength (nm) given the temperature (K) """
     wavelength = wavelength * 1e-9
-    F = 2 * pi * h * c ** 2 / ((wavelength ** 5) * (np.exp(h * c / (wavelength * T * k)) - 1))
+    F = 2 * π * h * c ** 2 / ((wavelength ** 5) * (np.exp(h * c / (wavelength * T * k)) - 1))
     return F * 1e-9  # convert to nm-1
 
 
 def etr_earth(day_no):
     """return extraterrestrial radiation at earth (W/m**2)
     given on the day of the year (day) """
-    return (1 + .033 * (np.cos(rad((day_no - 2.0) * (360.0 / 365.0))))) * 1353
+    return (1 + .033 * (cosd((day_no - 2.0) * (360.0 / 365.0))) * 1353)
 
 
 def declination(d):
-    """return declination angle of sun (degrees) as a function of day """
-    return 23.45 * np.sin(rad((d - 81) * (360 / 365)))
+    """return declination angle of sun (degrees) given day number
+    Jan 1 is d=1, Dec 31=365. There is no correction for leap years"""
+    return 23.45 * sind((d - 81) * (360 / 365))
 
 
 def equation_of_time(day_no):
     """return the equation of time (minutes)
     given the day number """
     B = 360.0 / 365.0 * (day_no - 81.0)
-    B = rad(B)
-    EoT = 9.87 * np.sin(2 * B) - 7.53 * np.cos(B) - 1.5 * np.sin(B)
+    EoT = 9.87 * sind(2 * B) - 7.53 * cosd(B) - 1.5 * sind(B)
     # print('EoT', EoT)
     return EoT
 
@@ -199,42 +168,46 @@ def time_correction(EoT, longitude, GMTOffset):
     given the location longitude and the GMT offset (hours)"""
     LSTM = 15.0 * GMTOffset
     TimeCorrection = 4.0 * (longitude - LSTM) + EoT
-    # print('TC',TimeCorrection)
     return TimeCorrection
 
 
-def elevation(dec, lat, hra):
-    """ Return the elevation angle of the sun
-    given declination, latitude and hour angle of sun
+def elevation(declination, latitude, local_solar_time):
+    """ Return the elevation angle of the sun (degrees)
+    given declination (degrees), latitude (degrees) and hour angle of sun (hours)
     """
-    return np.arcsin(np.sin(dec) * np.sin(lat) + np.cos(dec) * np.cos(lat) * np.cos(hra))
+    hra = 15.0 * (local_solar_time - 12.0)
+    return arcsind(sind(declination) * sind(latitude) + cosd(declination) * cosd(latitude) * cosd(hra))
 
 
-def sun_rise_set(latitude, declination, TimeCorrection):
-    """ Return the sunrise and sunset times
+def sun_rise_set(latitude, declination, time_correction):
+    """ Return the sunrise and sunset times in hours
     given the latitude (degrees) and the declination (degrees)
     """
-    lat = rad(latitude)
-    dec = rad(declination)
-    A = (np.sin(lat) * np.sin(dec)) / (np.cos(lat) * np.cos(dec))
-    HH = deg(np.arccos(A)) / 15.0
-    sunrise = 12.0 - HH - (TimeCorrection / 60.0)
-    sunset = 12 + HH - (TimeCorrection / 60.0)
+    A = -1 * (sind(latitude) * sind(declination)) / (cosd(latitude) * cosd(declination))
+    local_solar_time = arccosd(A) / 15.0
+    sunrise = 12.0 - local_solar_time - (time_correction / 60.0)
+    sunset = 12 + local_solar_time - (time_correction / 60.0)
     return sunrise, sunset
 
 
-def elev_azi(declination, latitude, LSTM):
-    'elevation is used interchangably with altitude'
-    DEC = rad(declination)
-    LAT = rad(latitude)
-    HRA = rad(15.0 * (LSTM - 12.0))
-    # print(HRA)
-    elev = np.arcsin((np.sin(DEC) * np.sin(LAT)) + (np.cos(DEC) * np.cos(LAT) * np.cos(HRA)))
-    # print('altitude',alt*toDeg)
-    azi = np.arccos((np.cos(LAT) * np.sin(DEC) - np.cos(DEC) * np.sin(LAT) * np.cos(HRA)) / np.cos(elev))
-    azi = np.where(HRA > 0, 2 * pi - azi, azi)
-    # print('azimuth',azi*toDeg)
-    return deg(elev), deg(azi)
+def elev_azi(declination, latitude, local_solar_time):
+    """Return the elevation (degrees) and azimuth (degrees)"""
+    hour_angle = 15.0 * (local_solar_time - 12.0)
+    elevation = arcsind(sind(declination) * sind(latitude) + cosd(declination) * cosd(latitude) * cosd(hour_angle))
+    azimuth = arccosd(
+        (cosd(latitude) * sind(declination) - cosd(declination) * sind(latitude) * cosd(hour_angle)) / cosd(elevation))
+    # the multiplication by 1.0 causes a single value return for single inputs, otherwise it returns an array of one element
+    azimuth = np.where(hour_angle > 0, 360.0 - azimuth, azimuth) * 1.0
+    return elevation, azimuth
+
+
+def module_direct(azimuth, elevation, module_azimuth, module_tilt):
+    """returns the faction of light on a arbtrarily tilted surface
+     given sun azimuth (degrees) where north is zero and elevation
+     module_azimuth and module_tilt, where """
+    fraction = cosd(elevation) * sind(module_tilt) * cosd(azimuth - module_azimuth) + sind(elevation) * cosd(
+        module_tilt)
+    return fraction
 
 
 def sun_position(dayNo, latitude, longitude, GMTOffset, H, M):
@@ -242,23 +215,20 @@ def sun_position(dayNo, latitude, longitude, GMTOffset, H, M):
     latitude, logitude and the GMTOffset, """
     EoT = equation_of_time(dayNo)
     TimeCorrection = time_correction(EoT, longitude, GMTOffset)
-    DEC = declination(dayNo)
-    LSTM = H + (TimeCorrection + M) / 60.0
-    elev, azi = elev_azi(DEC, latitude, LSTM)
-    # print(elev,azi)
-    # print(dayNo,DEC,latitude,LSTM, TimeCorrection)
-    return elev, azi
+    local_solar_time = H + (TimeCorrection + M) / 60.0
+    elevation, azimuth = elev_azi(declination(dayNo), latitude, local_solar_time)
+    return elevation, azimuth
 
 
 # Optics
 def snell(n1, n2, θ1):
     """ return the refracted angle
     given refractive index of incident medium, transmission medium and incident angle"""
-    θ2 = deg(np.arcsin(n1 / n2 * np.sin(np.radians(θ1))))
+    θ2 = arcsind(n1 / n2 * sind(θ1))
     return θ2
 
 
-def extinction2abs(kd, wavelength):
+def absorption_extinction(kd, wavelength):
     """absorption coefficient (cm-1) from extinction coefficient (units)
     what is the wavelength in?"""
     return 1e7 * 4 * π * kd / wavelength
@@ -369,7 +339,7 @@ def probability_bose_einstein(E, Ef, T):
     return 1 / (np.exp((E - Ef) / kT) - 1.0)
 
 
-def tau_from_L(L, D):
+def lifetime_length(L, D):
     """
     Return the lifetime (s)
     given the  diffusion length (cm) and diffusivity (cm2/s)
@@ -384,13 +354,13 @@ def diff_length(lifetime, diffusivity):
     return np.sqrt(lifetime * diffusivity)
 
 
-def tau_b_from_tau_eff(tau_eff, S, W):
-    """Return the bulk lifetime in us
-    Given tau_eff (us)
-    surface recombination, cm/s
-    W, cm
+def tau_b__tau_eff(tau_eff, S, thickness):
+    """Return the bulk lifetime (s)
+    Given tau_eff (s)
+    surface recombination (cm/s)
+    thickness (cm)
     """
-    return 9999
+    return tau_eff - thickness / (2 * S)
 
 
 def Vt(T=298.15):
@@ -412,7 +382,8 @@ def mobility(D, T=298.15):
 
 
 def mob_masetti(N):
-    """ mobility model """
+    """ mobility model
+    DOI: 10.1109/T-ED.1983.21207"""
     µmax = 1414
     µmin = 68.5
     u1 = 56.1
@@ -423,27 +394,16 @@ def mob_masetti(N):
     return µmin + (µmax - µmin) / (1 + ((N / Nref1) ** a)) - u1 / (1 + ((Nref2 / N) ** b))
 
 
-def phos_active(T):
-    """return the active limit of phosphorous from temperature (degC)"""
-    T = kelvin(T)
-    return 1.3e22 * np.exp(-0.37 * eV / (k * T))
-
-
-def phos_solubility(T):
-    """return the solubility limit of phosphorous from temperature (degC)"""
-    T = kelvin(T)
-    return 2.45e23 * np.exp(-0.62 * eV / (k * T))
-
-
 def carrier_conc(N, ni=8.6e9):
-    """return carrier concentration
+    """return carrier concentration (cm-3)
     given doping and intrinsic carrier concentration
     Typically (cm) used for all units but (m) etc would also work"""
     majority = N
     minority = N / (ni ** 2)
     return majority, minority
 
-def conductivity(n,p,ue,uh):
+
+def conductivity(n, p, ue, uh):
     return (q * ue * n) + (q * uh * p)
 
 
@@ -492,12 +452,7 @@ def mob_klassen(Nd, Na, Δn=1, T=298.16):
     me_m0 = 1
 
     T = 298.16
-    #Na = 1e15
-    #Nd = 1.0
-    #Δn = 1e15
     n0, p0 = carrier_conc(Nd)
-    #p0 = 1.3520822065981611e-05
-    #n0 = 1000000000000000.0
 
     n_i = 8.31E+09
 
@@ -579,28 +534,33 @@ def Eg0_Paessler(T=298.15):
     """ return the bandgap of Si (eV)
     given the temperature T (kelvin)
 
-    Eg0 (fundamental band gap of Si bandgap without BGN)
-    according to Pässler Phys. Rev. B 2002
-    originally from Richter
+    adapted from Richter Fraunhofer ISE
+    https://doi.org/10.1103/PhysRevB.66.085201
     """
+    # constants from Table I on page 085201-7
+    α = 3.23 * 0.0001  # (eV/K)
+    Θ = 446  # (K)
+    Δ = 0.51
+    Eg0_T0 = 1.17  # eV     band gap of Si at 0 K
 
-    Alfa = 3.23 * 0.0001  # eV/K
-    Theta = 446  # K
-    Delta = 0.51
-    Eg0_T0 = 1.17  # eV     fundamental band gap of Si at T= 0K (Sze & Prop of Si)
-
-    Tdelta = 2 * T / Theta
-    wurzel = (1 + pi ** 2 / (3 * (1 + Delta ** 2)) * Tdelta ** 2 + (
-        3 * Delta ** 2 - 1) / 4 * Tdelta ** 3 + 8 / 3 * Tdelta ** 4 + Tdelta ** 6) ** (1 / 6)
-    Eg0 = Eg0_T0 - Alfa * Theta * ((1 - 3 * Delta ** 2) / (np.exp(Theta / T) - 1) + 3 / 2 * Delta ** 2 * (wurzel - 1))
+    Tdelta = 2 * T / Θ
+    wurzel = (1 + π ** 2 / (3 * (1 + Δ ** 2)) * Tdelta ** 2 + (
+        3 * Δ ** 2 - 1) / 4 * Tdelta ** 3 + 8 / 3 * Tdelta ** 4 + Tdelta ** 6) ** (1 / 6)
+    Eg0 = Eg0_T0 - α * Θ * ((1 - 3 * Δ ** 2) / (np.exp(Θ / T) - 1) + 3 / 2 * Δ ** 2 * (wurzel - 1))
     return Eg0
+
+
+def ni_Si(T=298.15):
+    """return the intrinsic carrier concentration of silicon (cm**-3) based on temperature (K) """
+    return 9.38e19 * (T / 300) * (T / 300) * np.exp(-6884 / T)
 
 
 def ni0_Misiakos(T=298.15):
     """
     return intrinsic carrier concentration
     given the temperature (K).
-    n_i0 without BGN according to Misiakos
+    intrinsic carrier concentration without band gap narrowing according to Misiakos
+    http://dx.doi.org/10.1063/1.354551
     """
     return 5.29E+19 * (T / 300) ** 2.54 * np.exp(-6726 / T)
 
@@ -641,90 +601,6 @@ def n_ieff(N_D, N_A, Δn, T=298.15):
     return ni
 
 
-def B_altermatt(n0, p0, Δn, T=298.15):
-    """
-    Sreturn radiative recombination according to model of Trupke
-    given n0, P0
-
-    Input parameter:
-    - B_model: 2=Trupke; 3=Altermatt B(n0,p0,Δn,T)
-    - n0,p0,Δn respective densities in 1/cm³
-    """
-    B_low = 4.73E-15  # at 300K according to T. Trupke et al., J. Appl. Phys. 94, 9430 (2003)
-    n_p = n0 + p0 + 2 * Δn
-
-    b_min = 0.2 + (0 - 0.2) / (1 + (T / 320) ** 2.5)
-    b1 = 1.5E+18 + (10000000 - 1.5E+18) / (1 + (T / 550) ** 3)
-    b3 = 4E+18 + (1000000000 - 4E+18) / (1 + (T / 365) ** 3.54)
-
-    B_rel = b_min + (1 - b_min) / (1 + (0.5 * n_p / b1) ** 0.54 + (0.5 * n_p / b3) ** 1.25)
-    # Equations checked: OK -> in Param. Thomas Roth's inproved version used
-    return B_low * B_rel
-
-def recombination_SRH(n, p, Et, τ_n, τ_p,  ni_eff=8.5e9, T=298.15):
-    """return the shockley read hall recombination cm-3
-    given Et (eV) trap level from intrinsic"""
-    n1 = ni_eff * np.exp(q*Et / k / T)
-    p1 = ni_eff * np.exp(-q*Et / k / T)
-    U_SRH = (n * p - ni_eff ** 2) / (τ_p * (n + n1) + τ_n * (p + p1))
-    return U_SRH
-
-def lifetime_auger(Δn, Ca = 1.66e-30):
-    """returns the Auger lifetime (s) at high level injection
-    given the injection level (cm-3)"""
-    return 1/(Ca*Δn**2)
-
-def lifetime_richter21(n0, p0, Δn):
-    """return lifetime according to eqn 21"""
-    B_low =  4.73e-15
-    n = n0 + Δn
-    p = p0 + Δn
-    lifetime = Δn/(n * p * (8.7e-29*n0**0.91 + 6.0e-30*p0**0.94 + 3.0e-29*Δn**0.92 + B_low))
-    return lifetime
-
-def lifetime_SRH(N, Nt, Et, σ_n, σ_p, Δn, T=298.15):
-    Nv = 31000000000000000000 * (T / 300) ** 1.85
-    Nc = 28600000000000000000 * (T / 300) ** 1.58
-    Eg = 1.1246
-    vth = 11000000 * (T / 300) ** 0.5
-    p0 = N
-    n0 = (ni_Si(T) ** 2) / N
-    τ_n0 = 1 / (Nt * σ_n * vth)
-    τ_p0 = 1 / (Nt * σ_p * vth)
-    n1 = Nc * np.exp(-Et / Vt())
-    p1 = Nv * np.exp((-Et - Eg) / Vt())
-    k_ratio = σ_n / σ_p
-    τ_SRH = (τ_p0 * (n0 + n1 + Δn) + τ_n0 * (p0 + p1 + Δn)) / (n0 + p0 + Δn)
-    return τ_SRH
-
-
-def Uauger(n0, p0, Δn, ni_eff):
-    """Is this really Auger? I suspect there is a bit of non- auger thrown in"""
-    B_n0 = 2.5E-31
-    C_n0 = 13
-    D_n0 = 3.3E+17
-    exp_n0 = 0.66
-    B_p0 = 8.5E-32
-    C_p0 = 7.5
-    D_p0 = 7E+17
-    exp_p0 = 0.63
-    C_dn = 3E-29
-    D_dn = 0.92
-    np1 = (n0 + Δn) * (p0 + Δn) - ni_eff ** 2
-    U = np1 * (B_n0 * n0 * (1 + C_n0 * (1 - np.tanh((n0 / D_n0) ** exp_n0))) + B_p0 * p0 * (
-    1 + C_p0 * (1 - np.tanh((p0 / D_p0) ** exp_p0))) + C_dn * Δn ** D_dn)
-    return U
-
-def tau_rad(n0, p0, Δn):
-    """
-    Subroutine, which calculates the lifetime related to radiative recombination
-    Input parameters see subroutine get_B
-    """
-
-    B = B_altermatt(n0, p0, Δn)
-    return (B * (n0 + p0 + Δn)) ** -1  # exact equation!
-
-
 def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
     """
     returns the band gap narowing in silicon
@@ -746,6 +622,7 @@ def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
     Input parameters:
 
     ==========================================================================
+    Code adapted from Richter at Fraunhofer ISE
     """
 
     # Silicon material parameters (table 1)
@@ -802,22 +679,22 @@ def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
 
     # exchange quasi-partical shift Eq33:
     delta_xc_h = -(
-        (4 * pi) ** 3 * n_sum_xc ** 2 * ((48 * n_h / (pi * g_h)) ** (1 / 3) + c_h * np.log(1 + d_h * n_p_xc ** p_h)) + (
-            8 * pi * alfa_h / g_h) * n_h * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
-                     (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_h * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
+        (4 * π) ** 3 * n_sum_xc ** 2 * ((48 * n_h / (π * g_h)) ** (1 / 3) + c_h * np.log(1 + d_h * n_p_xc ** p_h)) + (
+            8 * π * alfa_h / g_h) * n_h * F ** 2 + np.sqrt(8 * π * n_sum_xc) * F ** (5 / 2)) / (
+                     (4 * π) ** 3 * n_sum_xc ** 2 + F ** 3 + b_h * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
                          3 / 2) * F)
     delta_xc_e = -(
-        (4 * pi) ** 3 * n_sum_xc ** 2 * ((48 * n_e / (pi * g_e)) ** (1 / 3) + c_e * np.log(1 + d_e * n_p_xc ** p_e)) + (
-            8 * pi * alfa_e / g_e) * n_e * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
-                     (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_e * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
+        (4 * π) ** 3 * n_sum_xc ** 2 * ((48 * n_e / (π * g_e)) ** (1 / 3) + c_e * np.log(1 + d_e * n_p_xc ** p_e)) + (
+            8 * π * alfa_e / g_e) * n_e * F ** 2 + np.sqrt(8 * π * n_sum_xc) * F ** (5 / 2)) / (
+                     (4 * π) ** 3 * n_sum_xc ** 2 + F ** 3 + b_e * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
                          3 / 2) * F)
 
     # ionic quasi-partical shift Eq37:
     delta_i_h = -n_ionic * (1 + Ui) / (
-        np.sqrt(0.5 * F * n_sum_i / pi) * (1 + h_h * np.log(1 + np.sqrt(n_sum_i) / F)) + j_h * Ui * n_p_i ** 0.75 * (
+        np.sqrt(0.5 * F * n_sum_i / π) * (1 + h_h * np.log(1 + np.sqrt(n_sum_i) / F)) + j_h * Ui * n_p_i ** 0.75 * (
             1 + k_h * n_p_i ** q_h))
     delta_i_e = -n_ionic * (1 + Ui) / (
-        np.sqrt(0.5 * F * n_sum_i / pi) * (1 + h_e * np.log(1 + np.sqrt(n_sum_i) / F)) + j_e * Ui * n_p_i ** 0.75 * (
+        np.sqrt(0.5 * F * n_sum_i / π) * (1 + h_e * np.log(1 + np.sqrt(n_sum_i) / F)) + j_e * Ui * n_p_i ** 0.75 * (
             1 + k_e * n_p_i ** q_e))
 
     # rescale BGN
@@ -826,16 +703,99 @@ def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
     return dE_gap_e, dE_gap_h
 
 
+# bullk recombination
+def U_radiative(n, p):
+    B_rad = 4.73e-15
+    U_radiative = n * p * B_rad
+    return U_radiative
+
+
+def U_radiative_alt(n0, p0, Δn, T=298.15):
+    n_p = n0 + p0 + 2 * Δn
+    n = n0 + Δn
+    p = p0 + Δn
+    B_low = 4.73e-15
+    b_min = 0.2 + (0 - 0.2) / (1 + (T / 320) ** 2.5)
+    b1 = 1.5E+18 + (10000000 - 1.5E+18) / (1 + (T / 550) ** 3)
+    b3 = 4E+18 + (1000000000 - 4E+18) / (1 + (T / 365) ** 3.54)
+    B_rel = b_min + (1 - b_min) / (1 + (0.5 * n_p / b1) ** 0.54 + (0.5 * n_p / b3) ** 1.25)
+    B_rad = B_low * B_rel
+    U_radiative_alt = n * p * B_rad
+    return U_radiative_alt
+
+
+def U_SRH(n, p, Et, τ_n, τ_p, ni_eff=8.5e9, T=298.15):
+    """return the shockley read hall recombination cm-3
+    given Et (eV) trap level from intrinsic"""
+    n1 = ni_eff * np.exp(q * Et / k / T)
+    p1 = ni_eff * np.exp(-q * Et / k / T)
+    U_SRH = (n * p - ni_eff ** 2) / (τ_p * (n + n1) + τ_n * (p + p1))
+    return U_SRH
+
+
+def U_auger_richter(n0, p0, Δn, ni_eff):
+    """return the auger recombination
+    18 and 19
+    https://doi.org/10.1016/j.egypro.2012.07.034"""
+    B_n0 = 2.5E-31
+    C_n0 = 13
+    D_n0 = 3.3E+17
+    exp_n0 = 0.66
+    B_p0 = 8.5E-32
+    C_p0 = 7.5
+    D_p0 = 7E+17
+    exp_p0 = 0.63
+    C_dn = 3E-29
+    D_dn = 0.92
+    g_eeh = (1 + C_n0 * (1 - np.tanh((n0 / D_n0) ** exp_n0)))
+    g_ehh = (1 + C_p0 * (1 - np.tanh((p0 / D_p0) ** exp_p0)))
+    np_ni2 = (n0 + Δn) * (p0 + Δn) - ni_eff ** 2
+    U = np_ni2 * (B_n0 * n0 * g_eeh + B_p0 * p0 * g_ehh + C_dn * Δn ** D_dn)
+    return U
+
+
+def U_low_doping(n0, p0, Δn):
+    """recombination due to Auger and radiative
+    equation 21 in DOI: 10.1103/PhysRevB.86.165202"""
+    B_low = 4.73e-15
+    n = n0 + Δn
+    p = p0 + Δn
+    U = Δn / (n * p * (8.7e-29 * n0 ** 0.91 + 6.0e-30 * p0 ** 0.94 + 3.0e-29 * Δn ** 0.92 + B_low))
+    return U
+
+
+# not sure if I should keep these
+def lifetime_auger(Δn, Ca=1.66e-30):
+    """returns the Auger lifetime (s) at high level injection
+    given the injection level (cm-3)"""
+    return 1 / (Ca * Δn ** 2)
+
+
+def lifetime_SRH(N, Nt, Et, σ_n, σ_p, Δn, T=298.15):
+    Nv = 31000000000000000000 * (T / 300) ** 1.85
+    Nc = 28600000000000000000 * (T / 300) ** 1.58
+    Eg = 1.1246
+    vth = 11000000 * (T / 300) ** 0.5
+    p0 = N
+    n0 = (ni_Si(T) ** 2) / N
+    τ_n0 = 1 / (Nt * σ_n * vth)
+    τ_p0 = 1 / (Nt * σ_p * vth)
+    n1 = Nc * np.exp(-Et / Vt())
+    p1 = Nv * np.exp((-Et - Eg) / Vt())
+    k_ratio = σ_n / σ_p
+    τ_SRH = (τ_p0 * (n0 + n1 + Δn) + τ_n0 * (p0 + p1 + Δn)) / (n0 + p0 + Δn)
+    return τ_SRH
+
+
 # surface recombination
-def recombination_surface(n,p, Sn, Sp, n1=8.3e9,p1=8.3e9, ni=8.3e9):
+def U_surface(n, p, Sn, Sp, n1=8.3e9, p1=8.3e9, ni=8.3e9):
     """return the carrier recombination (/s)
     given
     Sn, Sp: surface recombination for electrons and holes
     n1, p1 XXX
     ni XXX"""
-    U_surface = Sn*Sp*(n*p - ni ** 2)/(Sn*(n + n1)+Sp*(p+p1))
+    U_surface = Sn * Sp * (n * p - ni ** 2) / (Sn * (n + n1) + Sp * (p + p1))
     return U_surface
-
 
 
 # Solar Cells
@@ -1081,9 +1041,6 @@ def FF_RsRsh(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15):
 
 # silicon material properties
 
-def ni_Si(T=298.15):
-    """return the intrinsic carrier concentration of silicon (cm**-3) based on temperature (K) """
-    return 9.38e19 * (T / 300) * (T / 300) * np.exp(-6884 / T)
 
 
 def optical_properties(fname='OpticalPropertiesOfSilicon.txt'):
@@ -1097,5 +1054,14 @@ def optical_properties(fname='OpticalPropertiesOfSilicon.txt'):
     return wavelength, abs_coeff, nd, kd
 
 
+# processing
+def phos_active(T):
+    """return the active limit of phosphorous in silicon
+    given temperature (K)"""
+    return 1.3e22 * np.exp(-0.37 * eV / (k * T))
 
 
+def phos_solubility(T):
+    """return the solubility limit of phosphorous in silicon
+     given the temperature (K)"""
+    return 2.45e23 * np.exp(-0.62 * eV / (k * T))
