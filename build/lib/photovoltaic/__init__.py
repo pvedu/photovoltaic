@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """ Basic photovoltaic functions
-Version 0.1.1
-
-Requires numpy
 
 Typical solar units are used, NOT SI units.
 
@@ -19,13 +16,7 @@ The first line on all input files is ignored to allow for column headers
 
 Contributions by: sgbowden, richter, heraimenka,?, ? etc
 """
-
-'''
-Bugs:
-The path of data files uses os.path.dirname and may not be reliable
-'''
-
-# objective is to have as few imports as possible.
+__version__ = '0.1.2'
 
 import numpy as np
 
@@ -36,6 +27,7 @@ k = 1.38064852e-23  # (J/K)
 Wien = 2.898e-3
 Stefan_Boltzmann = 5.670367e-08  # (W m^-2 K^-4)
 π = np.pi  # yes, I use unicode
+pi = np.pi  # compatibility with class
 h = 6.62607004e-34  # (J.s)
 hbar = 6.62607004e-34 / (2 * π)  # usable
 c = 299792458.0  # (m s^-1)
@@ -941,15 +933,6 @@ def cell_params(V, I):
     return Voc, Isc, FF, Vmp, Imp
 
 
-'''
-def I_cell_lambert(V, Rs=0.01, Rsh=1000, n=1, I0=1e-12, IL=0.035):
-    exp_term = Rsh*(Rs*IL+V)/(n*Vt()*(Rs+Rsh))
-    exp_mult = (Rs*I0*Rsh)/(n*Vt()*(Rs+Rsh))
-    I=-lambertw(exp_mult*np.exp(exp_term))*n*Vt()/Rs + (Rsh*IL-V)/(Rs+Rsh)
-    return I.real
-'''
-
-
 def Pf_contact():
     return 9999
 
@@ -1040,8 +1023,6 @@ def FF_RsRsh(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15):
 
 
 # silicon material properties
-
-
 
 def optical_properties(fname='OpticalPropertiesOfSilicon.txt'):
     """returns an array with the optical properties of silicon

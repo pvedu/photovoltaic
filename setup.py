@@ -1,7 +1,8 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 setup(name='photovoltaic',
-    version='0.1.1',
-    packages=['photovoltaic'],
+    version='0.1.2',
+    packages=find_packages(),
+    platforms=['any'],
     classifiers=[
     'Development Status :: 3 - Alpha',
     'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',

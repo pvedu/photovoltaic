@@ -1,6 +1,8 @@
 import photovoltaic as pv
 import numpy as np
 
+from photovoltaic import declination
+
 print('declination',pv.declination(1))
 print('Equation of time (min): ', pv.equation_of_time(1))
 print('Time Correction (min): ', pv.time_correction(-3.71,140, 10))
