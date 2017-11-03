@@ -11,3 +11,4 @@ it most useful for coding photovoltaic simulations. Typical usage:
     print(irradiance)
 
 This would print the blackbody irradiance in W/m2/nm
+This is branch suggested
