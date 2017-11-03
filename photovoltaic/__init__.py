@@ -16,139 +16,165 @@ The first line on all input files is ignored to allow for column headers
 
 Contributions by: sgbowden, richter, heraimenka,?, ? etc
 """
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 import numpy as np
+import os
+from scipy import integrate
 
 # define constants
 q = 1.60217662e-19  # (C) (units go after the comment line)
 eV = q
 k = 1.38064852e-23  # (J/K)
-Wien = 2.898e-3
+k_eV = 8.6173303e-05 # (eV K^-1)
+Wien = 2.898e-3 # (m K)
 Stefan_Boltzmann = 5.670367e-08  # (W m^-2 K^-4)
 π = np.pi  # yes, I use unicode
 pi = np.pi  # compatibility with class
 h = 6.62607004e-34  # (J.s)
 hbar = 6.62607004e-34 / (2 * π)  # usable
 c = 299792458.0  # (m s^-1)
-hc_q = h * c / q
+hc_q = h * c / q # 1.2398419745831506e-06
 
 
-# python helpers that are not pv
+# suggested module: .helpers
 def sind(angle):
-    """return the sine of the angle(degrees)"""
+    """Return the sine of the angle(degrees)"""
     return np.sin(np.radians(angle))
 
 
 def cosd(angle):
-    """return the cosine of the angle(degrees)"""
+    """Return the cosine of the angle(degrees)"""
     return np.cos(np.radians(angle))
 
 
 def tand(angle):
-    """return the tangent of the angle(degrees)"""
+    """Return the tangent of the angle(degrees)"""
     return np.tan(np.radians(angle))
 
 
 def arcsind(x):
-    """return the arcsin (degrees)"""
+    """Return the arcsin (degrees)"""
     return np.degrees(np.arcsin(x))
 
 
 def arccosd(x):
-    """return the arccos (degrees)"""
+    """Return the arccos (degrees)"""
     return np.degrees(np.arccos(x))
 
 
-# basics
-
 def module_path():
-    # not sure how reliable this is
+    # no longer used as I put it in the individual functions
     import os
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path)
     return dir_path
 
 
+# suggested module .light
+
 def nm2eV(x):
-    """ Given wavelength of a photon in nm return the energy in eV """
+    """ Given wavelength (nm) of a photon return the energy (eV) """
     return hc_q * 1e9 / x
 
+def eV2nm(x):
+    """ Given energy (eV) of a photon return the wavelength (nm) """
+    return hc_q * 1e9 / x
 
 def nm2joule(x):
-    """ Given wavelength of a photon in nm return the energy in eV """
+    """ Given wavelength (nm) of a photon return the energy (eV) """
     return h * c * 1e9 / x
 
 
 def photon_flux(power, wavelength):
-    """ return the photon flux (/s)
-    given the power of light (watts) and wavelength (nm)
+    """Return the photon flux (/s) given the power of light (watts) and wavelength (nm)
     If power is in W/m2 then flux is in m-2s-1"""
     return power / nm2joule(wavelength)
 
 
 # Solar radiation
 def am_intensity(airmass):
-    """ return radiation intensity (W/m**2)
-    given airmass (units) """
+    """Return radiation intensity (W/m**2) given airmass (units) """
     It = 1.353 * (0.7 ** (airmass ** 0.678))
     Ig = It * 1.1
     return It, Ig
 
 
 def air_mass(angle):
-    """ return Air Mass (units)
-    given the zenith angle (degrees) """
+    """Return air mass (units) where *angle* is the zenith angle (degrees) """
     return 1 / cosd(angle)
 
 
 def am_shadow(s, h):
-    """ return the air mass (degrees) given a shadow length and height """
+    """Return the air mass (units) where h is the height of a pole and s is the length of its shadow.
+     s and h are the same length units, i.e. both in m, ft, cm etc."""
     am = np.sqrt(1 + (s / h) ** 2)
     return am
 
 
-def H0(x):
-    """ return the radiant power density (W/m²)
-    given distance (m) from sun """
-    return 2.8942e25 / (x ** 2)
 
 
 def blackbody_peak(T):
-    """Return the peak wavelength (nm)
-    given the temperature (K)"""
+    """Return the peak wavelength (nm) of a black body spectrum where T is the temperature (K)"""
     return 1e9 * Wien / T
 
 
 def blackbody_integrated(T):
-    """return Integrated Irradiance (W/m2/str from a blackbody
-    given the temperature (K)"""
+    """Return integrated irradiance (W/m2/steradian) from a blackbody where T is the temperature (K)"""
     return Stefan_Boltzmann * T ** 4
 
 
 def blackbody_spectrum(wavelength, T=6000):
-    """ Return the blackbody irradaiance
-    given the wavelength (nm) given the temperature (K) """
+    """Return the blackbody irradaiance (W/nm) at a given wavelength (nm) and temperature, T (K). """
     wavelength = wavelength * 1e-9
     F = 2 * π * h * c ** 2 / ((wavelength ** 5) * (np.exp(h * c / (wavelength * T * k)) - 1))
-    return F * 1e-9  # convert to nm-1
+    return F * 1e-9  # convert to W/m to W/nm
+
+
+def equal_spacing(x, y, x_min, x_max, x_step):
+    """Returns spectra with equal spacking and truncation (W/m2) (NOT W/m2/nm)
+    given a spectrum (W/m2/nm) as a function of wavelength (nm)
+    wavelength minimum (nm) and wavlength maximum (nm)
+    Note: would actually work for any x y data"""
+    y_integrated = integrate.cumtrapz(y, x, initial=0)
+    x_midpoint = np.arange(x_min, x_max + x_step, x_step)
+    x_extents = np.arange(x_min - x_step / 2, x_max + 3 / 2 * x_step, x_step)
+    y_spaced = np.diff(np.interp(x_extents, x, y_integrated))
+    return x_midpoint, y_spaced
+
+
+# suggested module .sun
+
+
+def space_solar_power(x):
+    """Return the radiant power density (W/m²) where x is the distance from  the sun (m)"""
+    return 2.8942e25 / (x ** 2)
+
+def solar_spectra(fname=None):
+    """Return wavelength (nm) and AM0, AM15G, AM15D (W/m²/nm)
+    of the standard spectrum.
+    reference XXX, DOI XXX"""
+    if fname is None:
+        package_path = os.path.dirname(os.path.abspath(__file__))
+        fname = os.path.join(package_path, 'ASTMG173.txt')
+    wavelength, AM0, AM15G, AM15D = np.genfromtxt(fname, skip_header=2, unpack=True)
+    return wavelength, AM0, AM15G, AM15D
 
 
 def etr_earth(day_no):
-    """return extraterrestrial radiation at earth (W/m**2)
-    given on the day of the year (day) """
+    """Return extraterrestrial radiation at earth (W/m**2) where day_no is the day of the year (day).
+     January 1 has a day_no of 1. There is no correction for leap year."""
     return (1 + .033 * (cosd((day_no - 2.0) * (360.0 / 365.0))) * 1353)
 
 
-def declination(d):
-    """return declination angle of sun (degrees) given day number
-    Jan 1 is d=1, Dec 31=365. There is no correction for leap years"""
-    return 23.45 * sind((d - 81) * (360 / 365))
+def declination(day_no):
+    """Return declination angle of sun (degrees) where day_no is the day of the year (day).
+    For Jan 1 day_no = 1, Dec 31 dayno = 365. There is no correction for leap years"""
+    return 23.45 * sind((day_no - 81) * (360 / 365))
 
 
 def equation_of_time(day_no):
-    """return the equation of time (minutes)
-    given the day number """
+    """Return the equation of time (minutes) where day_no is the day of the year (day). """
     B = 360.0 / 365.0 * (day_no - 81.0)
     EoT = 9.87 * sind(2 * B) - 7.53 * cosd(B) - 1.5 * sind(B)
     # print('EoT', EoT)
@@ -156,23 +182,22 @@ def equation_of_time(day_no):
 
 
 def time_correction(EoT, longitude, GMTOffset):
-    """ Return the time correction in minutes
-    given the location longitude and the GMT offset (hours)"""
+    """Return the time correction (minutes) where EoT is the equation of time,
+    and given location longitude (degrees) and the GMT offset (hours)"""
     LSTM = 15.0 * GMTOffset
     TimeCorrection = 4.0 * (longitude - LSTM) + EoT
     return TimeCorrection
 
 
 def elevation(declination, latitude, local_solar_time):
-    """ Return the elevation angle of the sun (degrees)
-    given declination (degrees), latitude (degrees) and hour angle of sun (hours)
-    """
+    """Return the elevation angle of the sun (degrees)
+    given declination (degrees), latitude (degrees) and local_solar_time (hours) """
     hra = 15.0 * (local_solar_time - 12.0)
     return arcsind(sind(declination) * sind(latitude) + cosd(declination) * cosd(latitude) * cosd(hra))
 
 
 def sun_rise_set(latitude, declination, time_correction):
-    """ Return the sunrise and sunset times in hours
+    """Return the sunrise and sunset times in hours
     given the latitude (degrees) and the declination (degrees)
     """
     A = -1 * (sind(latitude) * sind(declination)) / (cosd(latitude) * cosd(declination))
@@ -194,7 +219,7 @@ def elev_azi(declination, latitude, local_solar_time):
 
 
 def module_direct(azimuth, elevation, module_azimuth, module_tilt):
-    """returns the faction of light on a arbtrarily tilted surface
+    """Returns the faction of light on a arbtrarily tilted surface
      given sun azimuth (degrees) where north is zero and elevation
      module_azimuth and module_tilt, where """
     fraction = cosd(elevation) * sind(module_tilt) * cosd(azimuth - module_azimuth) + sind(elevation) * cosd(
@@ -203,7 +228,7 @@ def module_direct(azimuth, elevation, module_azimuth, module_tilt):
 
 
 def sun_position(dayNo, latitude, longitude, GMTOffset, H, M):
-    """ return the position of the sun as a elevation and azimuth given
+    """Return the position of the sun as a elevation and azimuth given
     latitude, logitude and the GMTOffset, """
     EoT = equation_of_time(dayNo)
     TimeCorrection = time_correction(EoT, longitude, GMTOffset)
@@ -212,62 +237,67 @@ def sun_position(dayNo, latitude, longitude, GMTOffset, H, M):
     return elevation, azimuth
 
 
+def spectrum_spacing(x, y, x_min, x_max, x_step):
+    """Returns spectra in W/m2 (NOT W/m2/nm) with equal spacing
+    given a spectrum (W/m2/nm) as a function of wavelength (nm)
+    wavelength minimum (nm) and wavlength maximum (nm) """
+    y_integrated = integrate.cumtrapz(y, x, initial=0)
+    x_midpoint = np.arange(x_min, x_max + x_step, x_step)
+    x_extents = np.arange(x_min - x_step / 2, x_max + 3 / 2 * x_step, x_step)
+    y_spaced = np.diff(np.interp(x_extents, x, y_integrated))
+    return x_midpoint, y_spaced
+
+
+# **** section ****
 # Optics
-def snell(n1, n2, θ1):
-    """ return the refracted angle
-    given refractive index of incident medium, transmission medium and incident angle"""
+# quick converters
+
+def k2alpha(kd, wavelength):
+    """Quick convert of extinction coefficient (units) to absorption coefficient(cm-1) given the wavelength (nm)"""
+    return 1e7 * 4 * π * kd / wavelength
+
+
+def refraction(n1, n2, θ1):
+    """Return the refracted angle of light (degrees) where n1 is the refractive index of incident medium (units),
+    n2 is the refractive index of the transmission medium (units) and θ1 is the incident angle to the normal"""
     θ2 = arcsind(n1 / n2 * sind(θ1))
     return θ2
 
 
-def absorption_extinction(kd, wavelength):
-    """absorption coefficient (cm-1) from extinction coefficient (units)
-    what is the wavelength in?"""
+def absorption_coeff(kd, wavelength):
+    """absorption coefficient (cm-1) from extinction coefficient (units) and wavelength (nm)
+    wavelength """
     return 1e7 * 4 * π * kd / wavelength
 
 
 def transmittance(abs_coeff, thickness):
-    """ return the fraction of light transmitted
-    given the absorption coefficient (cm-1) and the thickness (cm)
+    """Return the fraction of light transmitted (units) where abs_coeff is the absorption coefficient (cm-1)
+    and 'thickness' is the depth in the material (cm)
     """
     return np.exp(-abs_coeff * thickness)
 
 
-def FresReflect(ni, d):
-    """ Return the fresnel reflectivity
-    Given refractive index and the dot product XXX
-    Use with caution as this function will change
-    """
-
-    c = d
-    TI = (1 / ni) ** 2 + c ** 2 - 1
-    g = np.sqrt(TI)
-    return 0.5 * ((g - c) / (g + c)) ** 2 * (1 + ((c * (g + c) - 1) / (c * (g - c) + 1)) ** 2)
-
-
-def ARCthick(wavelength, n1):
-    """
-    return optimal AR thickness
-    given wavelength and the refractive index
-    ARCthick is in the same units as the wavelength
-    """
+def ARC_thick(wavelength, n1):
+    """Return optimal anti-reflection coating thickness (nm) at a given wavelength (nm)
+    where n1 is the refractive index of the antireflection coating.
+    The returned unit is in the same as the wavelength unit."""
     return wavelength / (4 * n1)
 
 
 def ARC_opt_n(n0, n2):
+    """Return the optimal refractive index, typically denoted as n1, for an antireflection coating (units)
+    where n0 is the refractive index of the incident medium and n2 is the refractive index of the object (units)"""
     return np.sqrt(n0 * n2)
 
 
 def ARC_refl(wavelength, n0, n1, nSemi, thickness):
+    """Return the reflectivity from a object (units) that has an anti-reflection coating.
+    Where:
+    n0 - the ambient refractive index units),
+    n1 - refractive index of the dielectric layer (units)
+    nSemi - refractive index of the semiconductor (units)
+    The reflectivity is in the range of 0 to 1.
     """
-    function to calculate the reflectivity from a semiconductor
-    Example call:
-    ARC(true,[300:10:1200],1,1.1,2,3.5,100,200);
-    n0 - ambient in units
-    n1 - refractive index of the dielectric layer 1
-    nSemi - refractive index of the semiconductor
-    """
-
     r1 = (n0 - n1) / (n0 + n1)
     r2 = (n1 - nSemi) / (n1 + nSemi)
     θ = (2 * π * n1 * thickness) / wavelength
@@ -277,11 +307,12 @@ def ARC_refl(wavelength, n0, n1, nSemi, thickness):
 
 
 def DLARC_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2):
-    """return reflectivity (units) of a double layer antireflection coating
-    n0 - ambient (units)
+    """Return the reflectivity from a object (units) that has a double layer anti-reflection coating, DLARC.
+    Where:
+    n0 - refractive index of the ambient (units)
     n1 - refractive index of the dielectric layer 1 (units)
     n2 - refractive index of the dielectric layer 2 (units)
-    nSemi - refractive index of the semicondcutor
+    nSemi - refractive index of the semiconductor (units)
     wavelength, thickness1, thickness 2 all in same units (m) or (nm) etc.
     """
     r1 = (n0 - n1) / (n0 + n1)
@@ -300,20 +331,11 @@ def DLARC_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2):
     return numerator / denominator
 
 
-def solar_spectra(fname='ASTMG173.txt'):
-    """return wavelength, AM0, AM15G, AM15D
-    of the standard A1.5G spectrum
-    W/m2/nm
-    """
-    fname = module_path() + '/' + fname
-    wavelength, AM0, AM15G, AM15D = np.genfromtxt(fname, skip_header=2, unpack=True)
-    return wavelength, AM0, AM15G, AM15D
-
-
-# Basic Semiconductors
+# suggested module .semi
+#
 
 def probability_fermi_dirac(E, Ef, T):
-    """ return the fermi dirac function
+    """Return the fermi dirac function (units) where E is the energy (), Ef is the fermi
     given the energies in electron volts  """
     kT = k * T / q  # in eV
     return 1 / (np.exp((E - Ef) / kT) + 1.0)
@@ -331,7 +353,7 @@ def probability_bose_einstein(E, Ef, T):
     return 1 / (np.exp((E - Ef) / kT) - 1.0)
 
 
-def lifetime_length(L, D):
+def lifetime_f_length(L, D):
     """
     Return the lifetime (s)
     given the  diffusion length (cm) and diffusivity (cm2/s)
@@ -339,8 +361,8 @@ def lifetime_length(L, D):
     return np.sqrt(L * D)
 
 
-def diff_length(lifetime, diffusivity):
-    """ return carrier diffusion length (cm)
+def diffusion_length(lifetime, diffusivity):
+    """Return carrier diffusion length (cm)
     given carrier lifetime(s) and diffusivity (units)
     """
     return np.sqrt(lifetime * diffusivity)
@@ -356,51 +378,63 @@ def tau_b__tau_eff(tau_eff, S, thickness):
 
 
 def Vt(T=298.15):
-    """return thermal voltage (volts) given temperature(Kelvin).
-    Default temp is 298.15 K"""
+    """Return thermal voltage (volts) at given temperature, T(Kelvin).
+    The default temperature is 298.15 K, which is equal to 25 °C"""
     return k * T / q
 
 
 def diffusivity(mobility, T=298.15):
-    """ return the mobility
-    given the diffusivity """
+    """Return the diffusivity (cm²/s) given the mobility (cm²/Vs)
+    This is also known as the Einstein relation"""
     return mobility * k * T / q
 
 
 def mobility(D, T=298.15):
-    """ return the mobility
-    given the diffusivity """
+    """Return the mobility of carriers (cm²/Vs) where D is the diffusivity (cm²/s). 
+    This is also known as the Einstein relation"""
     return D * q / (k * T)
 
 
-def mob_masetti(N):
-    """ mobility model
-    DOI: 10.1109/T-ED.1983.21207"""
-    µmax = 1414
-    µmin = 68.5
-    u1 = 56.1
-    Nref1 = 9.20e16
-    Nref2 = 3.41e20
-    a = 0.711
-    b = 1.98
-    return µmin + (µmax - µmin) / (1 + ((N / Nref1) ** a)) - u1 / (1 + ((Nref2 / N) ** b))
-
-
-def carrier_conc(N, ni=8.6e9):
-    """return carrier concentration (cm-3)
-    given doping and intrinsic carrier concentration
-    Typically (cm) used for all units but (m) etc would also work"""
+def equilibrium_carrier(N, ni=8.6e9):
+    """Return the majority and minority carrier concentrations (cm-3) of a semiconductor at equilibrium
+    where N is the doping level (cm-3) and ni is the intrinsic carrier concentratoin (cm-3)
+    Strictly N and ni just have to be in the same units but (cm-3 is almost always used."""
     majority = N
     minority = N / (ni ** 2)
     return majority, minority
 
 
 def conductivity(n, p, ue, uh):
-    return (q * ue * n) + (q * uh * p)
+    """Return the conductivity of a material(siemens)
+    Where:
+    n - concentration of electrons (cm-3)
+    p - concentration of holes (cm-3)
+    ue - electron mobility (cm²/Vs)
+    uh - hole mobility (cm²/Vs)"""
+    return q * ue * n + q * uh * p
+
+
+def resistivity_Si_n(Ndonor):
+    """Return the resistivity of n-type silicon (ohm cm)
+    given the doping of donors(cm-3)"""
+    n_minority = ni_Si() ** 2 / Ndonor
+    return 1 / ((q * mob_thurber(Ndonor, False) * Ndonor) + (q * mob_thurber(n_minority, False, False) * n_minority))
+
+
+def resistivity_Si_p(Nacceptor):
+    """Return the resistivity of p-type silicon (ohm cm)
+    given the doping of acceptors(cm-3)"""
+    n_minority = ni_Si() ** 2 / Nacceptor
+    return 1 / ((q * mob_thurber(Nacceptor) * Nacceptor) + (q * mob_thurber(n_minority, True, False) * n_minority))
 
 
 def mob_thurber(N, p_type=True, majority=True):
-    """ mobility of electrons as minority carriers in silicon based on doping (cm**-3) """
+    """Return the mobility of carriers in silicon according to the model of Thurbur as a function of doping
+    Where:
+    N - doping level (cm-3)
+    p_type is True or 1 for p doped material and False or 0 for n-type.
+    majority is True or 1 for majority carriers and False or 0 for minority carriers.
+    https://archive.org/details/relationshipbetw4006thur"""
     i = 2 * p_type + majority
     # n-type minority, n-type majority, p-type minority, p-type majority
     umax = [1417, 1417, 470, 470][i]
@@ -410,20 +444,22 @@ def mob_thurber(N, p_type=True, majority=True):
     return umin + (umax - umin) / (1 + ((N / Nref) ** a))
 
 
-def resistivity_Si_n(Ndonor):
-    """resistivity of silicon as a function of doping """
-    n_minority = ni_Si() ** 2 / Ndonor
-    return 1 / ((q * mob_thurber(Ndonor, False) * Ndonor) + (q * mob_thurber(n_minority, False, False) * n_minority))
-
-
-def resistivity_Si_p(Nacceptor):
-    """resistivity of silicon as a function of doping """
-    n_minority = ni_Si() ** 2 / Nacceptor
-    return 1 / ((q * mob_thurber(Nacceptor) * Nacceptor) + (q * mob_thurber(n_minority, True, False) * n_minority))
+def mob_masetti_phos(N):
+    """Return the mobility of carriers (cm²/Vs) in phosphorus doped silicon accoording to the model of Masetti1983.
+    Where N is the doping (cm-3)
+    http://dx.doi.org/10.1109%2FT-ED.1983.21207"""
+    µmax = 1414
+    µmin = 68.5
+    u1 = 56.1
+    Cr = 9.20e16
+    Cs = 3.41e20
+    a = 0.711
+    b = 1.98
+    return µmin + (µmax - µmin) / (1 + ((N / Cr) ** a)) - u1 / (1 + ((Cs / N) ** b))
 
 
 def mob_klassen(Nd, Na, Δn=1, T=298.16):
-    """ return the mobility (cm2/Vs)
+    """Return the mobility (cm2/Vs)
     given the doping etc."""
     s1 = 0.89233
     s2 = 0.41372
@@ -444,7 +480,7 @@ def mob_klassen(Nd, Na, Δn=1, T=298.16):
     me_m0 = 1
 
     T = 298.16
-    n0, p0 = carrier_conc(Nd)
+    n0, p0 = equilibrium_carrier(Nd)
 
     n_i = 8.31E+09
 
@@ -523,10 +559,8 @@ def mob_klassen(Nd, Na, Δn=1, T=298.16):
 
 
 def Eg0_Paessler(T=298.15):
-    """ return the bandgap of Si (eV)
-    given the temperature T (kelvin)
-
-    adapted from Richter Fraunhofer ISE
+    """Return the bandgap of silicon (eV) according to Paessler2002, where T is the temperature (K).
+    Code adapted from Richter Fraunhofer ISE
     https://doi.org/10.1103/PhysRevB.66.085201
     """
     # constants from Table I on page 085201-7
@@ -543,22 +577,22 @@ def Eg0_Paessler(T=298.15):
 
 
 def ni_Si(T=298.15):
-    """return the intrinsic carrier concentration of silicon (cm**-3) based on temperature (K) """
+    """Return the intrinsic carrier concentration of silicon (cm**-3) according to Sproul94, where T is the temperature (K)
+    http://dx.doi.org/10.1063/1.357521"""
     return 9.38e19 * (T / 300) * (T / 300) * np.exp(-6884 / T)
 
 
 def ni0_Misiakos(T=298.15):
     """
-    return intrinsic carrier concentration
-    given the temperature (K).
-    intrinsic carrier concentration without band gap narrowing according to Misiakos
-    http://dx.doi.org/10.1063/1.354551
+    Return the intrinsic carrier concentration (cm-3) without band gap narrowing according to Misiakos,
+    where T is the temperature (K).
+    DOI http://dx.doi.org/10.1063/1.354551
     """
     return 5.29E+19 * (T / 300) ** 2.54 * np.exp(-6726 / T)
 
 
 def n_ieff(N_D, N_A, Δn, T=298.15):
-    """return effective ni (cm-3)
+    """Return effective ni (cm-3)
     given
     donor concentration N_D=n0 (1/cm³)      only one dopant type possible
     acceptor concentration N_A=p0 (1/cm³)    only one dopant type possible
@@ -615,6 +649,7 @@ def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
 
     ==========================================================================
     Code adapted from Richter at Fraunhofer ISE
+    http://dx.doi.org/10.1063%2F1.368545
     """
 
     # Silicon material parameters (table 1)
@@ -717,7 +752,7 @@ def U_radiative_alt(n0, p0, Δn, T=298.15):
 
 
 def U_SRH(n, p, Et, τ_n, τ_p, ni_eff=8.5e9, T=298.15):
-    """return the shockley read hall recombination cm-3
+    """Return the shockley read hall recombination cm-3
     given Et (eV) trap level from intrinsic"""
     n1 = ni_eff * np.exp(q * Et / k / T)
     p1 = ni_eff * np.exp(-q * Et / k / T)
@@ -726,7 +761,7 @@ def U_SRH(n, p, Et, τ_n, τ_p, ni_eff=8.5e9, T=298.15):
 
 
 def U_auger_richter(n0, p0, Δn, ni_eff):
-    """return the auger recombination
+    """Return the auger recombination
     18 and 19
     https://doi.org/10.1016/j.egypro.2012.07.034"""
     B_n0 = 2.5E-31
@@ -756,9 +791,15 @@ def U_low_doping(n0, p0, Δn):
     return U
 
 
+def lifetime(U, Δn):
+    """Return the lifetime (seconds) where U is the recombination  and Δn is the excess minority carrier density.
+        This is the definition of lifetime"""
+    return Δn / U
+
+
 # not sure if I should keep these
 def lifetime_auger(Δn, Ca=1.66e-30):
-    """returns the Auger lifetime (s) at high level injection
+    """Returns the Auger lifetime (s) at high level injection
     given the injection level (cm-3)"""
     return 1 / (Ca * Δn ** 2)
 
@@ -781,11 +822,11 @@ def lifetime_SRH(N, Nt, Et, σ_n, σ_p, Δn, T=298.15):
 
 # surface recombination
 def U_surface(n, p, Sn, Sp, n1=8.3e9, p1=8.3e9, ni=8.3e9):
-    """return the carrier recombination (/s)
-    given
+    """Return the carrier recombination (/s) at a surface.
+    Where.
     Sn, Sp: surface recombination for electrons and holes
     n1, p1 XXX
-    ni XXX"""
+    ni - intrinsice carrier concentratoin (cm-3)"""
     U_surface = Sn * Sp * (n * p - ni ** 2) / (Sn * (n + n1) + Sp * (p + p1))
     return U_surface
 
@@ -794,6 +835,13 @@ def U_surface(n, p, Sn, Sp, n1=8.3e9, p1=8.3e9, ni=8.3e9):
 
 
 def IQE_emitter(ab, We, Le, De, Se):
+    """Return the internal quantum efficiency of a solar cell emitter
+    Where:
+    ab - absorption coefficient (/cm)
+    We - thickness of the emitter (cm)
+    De - diffusivty of carriers in the emitter (cm²/s)
+    Se - recombination at the front surface (cm/s)
+    Hovel, I think."""
     GF = ((Se * Le / De) + ab * Le - np.exp(-ab * We) * ((Se * Le / De) * np.cosh(We / Le) + np.sinh(We / Le))) / (
         (Se * Le / De) * np.sinh(We / Le) + np.cosh(We / Le)) - Le * ab * np.exp(-ab * We)
     QEE = (Le * ab / (ab * ab * Le * Le - 1)) * GF
@@ -801,12 +849,12 @@ def IQE_emitter(ab, We, Le, De, Se):
 
 
 def IQE_base(ab, We_Wd, Wb, Lb, Db, Sb):
-    """return quantum efficiency of the base
-    Given:
-    ab - (cm) absorption coefficient
+    """Return quantum efficiency of the base of a solar cell
+    where:
+    ab -  absorption coefficient (cm)
     We_Wd - junction depth (cm)
     Sb - surface recombination velocity (cm/s)
-    Lb - diffusion lenght of minority carrier in the base (cm)
+    Lb - diffusion length of minority carrier in the base (cm)
     Db - diffusivity of minority carriers in the base (cm²/Vs)
     """
     GF = (ab * Lb - (
@@ -833,7 +881,7 @@ def IQE(ab, Wd, Se, Le, De, We, Sb, Wb, Lb, Db):
 
 def QE2SR(wavelength, QE):
     """'converts a QE in units to spectral response
-    assumes that the wavelength is in nm"""
+    given the wavelength (nm)"""
     spectral_response = QE * wavelength / 1239.8
     return spectral_response
 
@@ -846,21 +894,31 @@ def SR2QE(wavelength, spectral_response):
 
 
 def impliedV(Δn, N, T=298.15):
-    """return voltage
-    given doping and excess carrier concentration """
+    """Return voltage (V) where Δn is the excess carrier concentration (cm-3), N is the doping (cm-3) and
+    T is the temperature (K). Implied voltage is often used to convert the carrier concentration in a lifetime
+    tester to voltage."""
     return Vt(T) * np.log((Δn + N) * Δn / ni_Si(T) ** 2)
 
 
-def implied_carrier(V, N, ni=8.3e9, T=298.15):
-    """ return carrier concentration
+def implied_carrier(V, N, ni=8.6e9, T=298.15):
+    """Return excess carrier concentration (cm-3)
     Given voltage and doping determine """
     Δn = (-N + np.sqrt(N ** 2 + 4 * ni ** 2 * np.exp(V / Vt(T)))) / 2
     return Δn
 
 
-def J0side(ni, W, N, D, L, S):
+def J0_layer(W, N, D, L, S, ni=8.6e9):
+    """Return the saturation current density (A/cm2) for the narrow case.
+    Whete:
+    W - layer thickness (cm)
+    N - doping (cm-3)
+    L - diffusion length (cm)
+    S - surface recombination velocity (cm/s)
+    Optional:
+    ni - intrinsic carrier concentration (cm-3)
+    """
     F = (S * np.cosh(W / L) + D / L * np.sinh(W * L)) / (D / L * np.cosh(W * L) + S * np.sinh(W / L))
-    return q * ni ** 2 * (F * D / (L * N))
+    return q * ni ** 2 * F * D / (L * N)
 
 
 # def J0(ni, We, Ne, De, Le, Se, Nb, Wb, Db, Lb, Sb):
@@ -872,28 +930,28 @@ def J0side(ni, W, N, D, L, S):
 #    return J0
 
 def efficiency(Voc, Isc, FF, A=1):
-    """Return efficiency
-    given Voc (volts), Isc in (amps), FF
+    """Return the efficiency of a solar cell (units not percentage)given Voc (volts), Isc in (amps) and  FF (units).
     also works for Jsc since area of 1 is assumed
     """
     return 1000 * Voc * Isc * FF / A
 
 
 def current2gen(I):
-    """return generation (eh pairs/s)
+    """Return generation (eh pairs/s)
     given current (amps)
     """
     return I / q
 
 
 def I_diode(V, I0, T=298.15):
-    """ideal diode equation
-    Return the current given the voltage and saturation"""
-    return I0 * np.exp(V / Vt(T))
+    """Return the current (A) in an ideal diode where I0 is the saturation current (A),
+    V is the voltage across the junction (volts), T is the temperature (K) and n is the ideallity factor (units).
+    For current density. I0 is in A/cm² and current density is returned"""
+    return I0 * np.exp(V / Vt(T) - 1)
 
 
 def I_cell(V, IL, I0, T=298.15):
-    """ return current (amps) of a solar cell
+    """Return current (amps) of a solar cell
     given voltage, light generated current, I0
     also works for J0
     """
@@ -901,12 +959,17 @@ def I_cell(V, IL, I0, T=298.15):
 
 
 def I_cell_Rshunt(V, IL, I0, Rshunt, T=298.15):
-    """ return current (A) of a solar cell from   """
+    """Return current (A) of a solar cell from   """
     return IL - I0 * np.exp(V / Vt(T)) - V / Rshunt
 
 
+def V_Rseries(voltage, I, Rs):
+    """Returns the voltage of a solar cells under the effect of series resistance"""
+    return voltage - I * Rs
+
+
 def Voc(IL, I0, n=1, T=298.15):
-    """return the open circuit voltage, Voc, (volts) from IL(A) and I0(A).
+    """Return the open circuit voltage, Voc, (volts) from IL(A) and I0(A).
     IL and Io must be in the same units, Eg, (A), (mA) etc
     Using (mA/cm**2) uses J0 and JL instead.
     """
@@ -914,15 +977,18 @@ def Voc(IL, I0, n=1, T=298.15):
 
 
 def V_cell(I, IL, I0, T=298.15):
-    """return cell voltage (volts)
-    given current (amps), IL, I0
-    """
+    """Return the voltage (V) in an ideal solar cell where I0 is the saturation current (A),
+    I is the current (A), T is the temperature (K) and n is the ideallity factor (units).
+    For current density. I0 is in A/cm² and current density is returned"""
     return Vt(T) * np.log((IL - I) / I0 + 1)
 
 
 def cell_params(V, I):
-    """ return Voc (V), Isc (A), FF, Vmp(V), Imp(A)
-
+    """Return key parameters of a solar cell IV curve where V is a voltage array and
+    I is a current array, both with type numpy.array.
+    Voc (V), Isc (A), FF, Vmp(V), Imp(A) given voltage vector in (volts)
+    current vector in (amps) or (A/cm²)
+    If I is in (A/cm²) then Isc will be Jsc and Imp will be Jmp. No attempt is made to fit the fill factor.
     """
     Voc = np.interp(0, -I, V)
     Isc = np.interp(0, V, I)
@@ -933,12 +999,8 @@ def cell_params(V, I):
     return Voc, Isc, FF, Vmp, Imp
 
 
-def Pf_contact():
-    return 9999
-
-
 def Pf_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp):
-    """return the % resistivity loss in a finger
+    """Return the % resistivity loss in a finger
     Given:
         L: finger length (cm)
         Jmp: currrent density at the max power point in A/cm2
@@ -956,7 +1018,7 @@ def Pf_sheet(Sf, Jmp, Rsheet, Vmp):
 
 
 def Pf_total(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp):
-    """return the % resistivity loss in a finger
+    """Return the % resistivity loss in a finger
     Given:
         L: finger length (cm)
         Jmp: currrent density at the max power point in A/cm2
@@ -968,21 +1030,23 @@ def Pf_total(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp):
     return Presistivity + Pshading + Psheet, Presistivity, Pshading, Psheet
 
 
-def FF(Vmp, Jmp, Voc, Isc):
-    return (Vmp * Jmp) / (Voc * Isc)
+def FF(Vmp, Imp, Voc, Isc):
+    """Return FFv the fill factor of a solar cell.
+    given Voc - open circuit voltage (volts)"""
+    return (Vmp * Imp) / (Voc * Isc)
 
 
 def FF_ideal(Voc, ideality=1, T=298.15):
     """Return the FF (units)
-    Given:
-        Voc - open circuit voltage (volts)
-    """
+    given Voc - open circuit voltage (volts), ideality factor, defaults to 1 (units) """
     voc = normalised_Voc(Voc, ideality, T)
     FF0 = (voc - np.log(voc + 0.72)) / (voc + 1)
     return FF0
 
 
 def normalised_Voc(Voc, ideality, T=298.15):
+    """Return the normalised voc of a solar cell where Voc is the open-circuit voltage, 'ideality' is the ideality factor
+     and T is the temperature (K)"""
     return Voc / (ideality * Vt(T))
 
 
@@ -990,6 +1054,10 @@ def FF_Rs(Voc, Isc, Rseries, ideality=1, T=298.15):
     """Return the FF (units)
     Given:
         Voc - open circuit voltage (volts)
+        Isc - short circuit current (amps)
+        Rseries - series resistance (ohms)
+        ideality factor (units)
+        T - temperature (K)
     """
     # voc = normalised_Voc(Voc, ideality, T)
     RCH = Voc / Isc
@@ -1024,25 +1092,30 @@ def FF_RsRsh(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15):
 
 # silicon material properties
 
-def optical_properties(fname='OpticalPropertiesOfSilicon.txt'):
-    """returns an array with the optical properties of silicon
-    wavelngth in  nm
-    absorption coeff in (/cm)
-    usage: wavelength, abs_coeff, n, k = optical_properties()
+def optical_properties(fname=None):
+    """Returns an array with the optical properties of a material
+    column 0 - wavelngth (nm)
+    column 1 - absorption coefficient (/cm)
+    column 2 - real refractive index
+    column 3 - imaginary refractive index
+    if so file is given then silicon is used
+    Eg: wavelength, abs_coeff, n, k = optical_properties()
     """
-    fname = module_path() + '/' + fname
+    if fname is None:
+        package_path = os.path.dirname(os.path.abspath(__file__))
+        fname = os.path.join(package_path, 'OpticalPropertiesOfSilicon.txt')
     wavelength, abs_coeff, nd, kd = np.loadtxt(fname, skiprows=1, unpack=True)
     return wavelength, abs_coeff, nd, kd
 
 
 # processing
 def phos_active(T):
-    """return the active limit of phosphorous in silicon
+    """Return the active limit of phosphorous in silicon
     given temperature (K)"""
     return 1.3e22 * np.exp(-0.37 * eV / (k * T))
 
 
 def phos_solubility(T):
-    """return the solubility limit of phosphorous in silicon
+    """Return the solubility limit of phosphorous in silicon
      given the temperature (K)"""
     return 2.45e23 * np.exp(-0.62 * eV / (k * T))
