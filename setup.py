@@ -13,8 +13,10 @@ setup(name='photovoltaic',
     license='GPLv3',
     author='Stuart Bowden',
     author_email='sgbowden@asu.edu',
+    include_package_data=True,
     description='Set of commonly used functions in photovoltaics',
     keywords='solar photovoltaic semiconductor',
     install_requires=[
           'numpy',
+          'scipy',
     ])
