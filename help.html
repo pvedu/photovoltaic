@@ -1,0 +1,507 @@
+Help on package photovoltaic:
+
+NAME
+    photovoltaic
+
+DESCRIPTION
+    Basic photovoltaic functions
+    Provides the formulas and equations typically used in an introductory photocoltaics textbook.
+    
+    Typical solar units are used, NOT SI units. The units are denoted in parenthesis on the comment lines.
+    wavelength (nm)
+    Energy of  photon (eV)
+    semiconductor dimensions (cm)
+    degrees instead of radians.
+    Temperature of 298.15 K (25 degC) not 300 K
+    
+    The first line on all input files is ignored to allow for column headers
+    # denotes a comment in input files and is ignored.
+    
+    Contributions by: sgbowden, richter, heraimenka, jhul etc
+    
+    Variables and acronyms
+    ARC - anti-reflection coating
+
+PACKAGE CONTENTS
+
+
+FUNCTIONS
+    ARC_opt_n(n0, n2)
+        Return the optimal refractive index, typically denoted as n1, for an antireflection coating (units)
+        where n0 is the refractive index of the incident medium and n2 is the refractive index of the object (units)
+    
+    ARC_refl(wavelength, n0, n1, nSemi, thickness)
+        Return the reflectivity from a object (units) that has an anti-reflection coating.
+        Where:
+        n0 - the ambient refractive index units),
+        n1 - refractive index of the dielectric layer (units)
+        nSemi - refractive index of the semiconductor (units)
+        The reflectivity is in the range of 0 to 1.
+    
+    ARC_thick(wavelength, n1)
+        Return optimal anti-reflection coating thickness (nm) at a given wavelength (nm)
+        where n1 is the refractive index of the antireflection coating.
+        The returned unit is in the same as the wavelength unit.
+    
+    DLARC_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2)
+        Return the reflectivity from a object (units) that has a double layer anti-reflection coating, DLARC.
+        Where:
+        n0 - refractive index of the ambient (units)
+        n1 - refractive index of the dielectric layer 1 (units)
+        n2 - refractive index of the dielectric layer 2 (units)
+        nSemi - refractive index of the semiconductor (units)
+        wavelength, thickness1, thickness 2 all in same units (m) or (nm) etc.
+    
+    Eg0_paessler(T=298.15)
+        Return the bandgap of silicon (eV) according to Paessler2002, where T is the temperature (K).
+        Code adapted from Richter Fraunhofer ISE
+        https://doi.org/10.1103/PhysRevB.66.085201
+    
+    FF(Vmp, Imp, Voc, Isc)
+        Return FFv the fill factor of a solar cell.
+        given Voc - open circuit voltage (volts)
+    
+    FF_Rs(Voc, Isc, Rseries, ideality=1, T=298.15)
+        Return the FF (units)
+        Given:
+            Voc - open circuit voltage (volts)
+            Isc - short circuit current (amps)
+            Rseries - series resistance (ohms)
+            ideality factor (units)
+            T - temperature (K)
+    
+    FF_RsRsh(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15)
+    
+    FF_Rsh(Voc, Isc, Rshunt, ideality=1, T=298.15)
+        Return the FF (units)
+        Given:
+            Voc - open circuit voltage (volts)
+    
+    FF_ideal(Voc, ideality=1, T=298.15)
+        Return the FF (units)
+        given Voc - open circuit voltage (volts), ideality factor, defaults to 1 (units)
+    
+    IQE(ab, Wd, Se, Le, De, We, Sb, Wb, Lb, Db)
+        We is the thickness of emitter and start of the junction
+    
+    IQE_base(ab, We_Wd, Wb, Lb, Db, Sb)
+        Return quantum efficiency of the base of a solar cell
+        where:
+        ab -  absorption coefficient (cm)
+        We_Wd - junction depth (cm)
+        Sb - surface recombination velocity (cm/s)
+        Lb - diffusion length of minority carrier in the base (cm)
+        Db - diffusivity of minority carriers in the base (cm²/Vs)
+    
+    IQE_depletion(ab, We, Wd)
+    
+    IQE_emitter(ab, We, Le, De, Se)
+        Return the internal quantum efficiency of a solar cell emitter
+        Where:
+        ab - absorption coefficient (/cm)
+        We - thickness of the emitter (cm)
+        De - diffusivty of carriers in the emitter (cm²/s)
+        Se - recombination at the front surface (cm/s)
+        Hovel, I think.
+    
+    I_cell(V, IL, I0, T=298.15)
+        Return current (amps) of a solar cell
+        given voltage, light generated current, I0
+        also works for J0
+    
+    I_cell_Rshunt(V, IL, I0, Rshunt, T=298.15)
+        Return current (A) of a solar cell from
+    
+    I_diode(V, I0, T=298.15)
+        Return the current (A) in an ideal diode where I0 is the saturation current (A),
+        V is the voltage across the junction (volts), T is the temperature (K) and n is the ideallity factor (units).
+        For current density. I0 is in A/cm² and current density is returned
+    
+    J0_layer(W, N, D, L, S, ni=8600000000.0)
+        Return the saturation current density (A/cm2) for the narrow case.
+        Whete:
+        W - layer thickness (cm)
+        N - doping (cm-3)
+        L - diffusion length (cm)
+        S - surface recombination velocity (cm/s)
+        Optional:
+        ni - intrinsic carrier concentration (cm-3)
+    
+    QE2SR(wavelength, QE)
+        'converts a QE in units to spectral response
+        given the wavelength (nm)
+    
+    SR2QE(wavelength, spectral_response)
+        convert SR (A/W) to QE (unit 0 to 1)
+        assumes that the wavelegth is in  nm
+    
+    U_SRH(n, p, Et, \u03c4_n, \u03c4_p, ni_eff=8500000000.0, T=298.15)
+        Return the shockley read hall recombination cm-3
+        given Et (eV) trap level from intrinsic
+    
+    U_auger_richter(n0, p0, \u0394n, ni_eff)
+        Return the auger recombination
+        18 and 19
+        https://doi.org/10.1016/j.egypro.2012.07.034
+    
+    U_low_doping(n0, p0, \u0394n)
+        recombination due to Auger and radiative
+        equation 21 in DOI: 10.1103/PhysRevB.86.165202
+    
+    U_radiative(n, p)
+        # ******** SubSection: Bulk Recombination *********
+    
+    U_radiative_alt(n0, p0, \u0394n, T=298.15)
+    
+    U_surface(n, p, Sn, Sp, n1=8300000000.0, p1=8300000000.0, ni=8300000000.0)
+        Return the carrier recombination (/s) at a surface.
+        Where.
+        Sn, Sp: surface recombination for electrons and holes
+        n1, p1 XXX
+        ni - intrinsice carrier concentratoin (cm-3)
+    
+    V_Rseries(voltage, I, Rs)
+        Returns the voltage of a solar cells under the effect of series resistance
+    
+    V_cell(I, IL, I0, T=298.15)
+        Return the voltage (V) in an ideal solar cell where I0 is the saturation current (A),
+        I is the current (A), T is the temperature (K) and n is the ideallity factor (units).
+        For current density. I0 is in A/cm² and current density is returned
+    
+    Voc(IL, I0, n=1, T=298.15)
+        Return the open circuit voltage, Voc, (volts) from IL(A) and I0(A).
+        IL and Io must be in the same units, Eg, (A), (mA) etc
+        Using (mA/cm**2) uses J0 and JL instead.
+    
+    Vt(T=298.15)
+        Return thermal voltage (volts) at given temperature, T(Kelvin).
+        The default temperature is 298.15 K, which is equal to 25 °C
+    
+    absorption_coeff(kd, wavelength)
+        absorption coefficient (cm-1) from extinction coefficient (units) and wavelength (nm)
+        wavelength
+    
+    air_mass(angle)
+        Return air mass (units) where *angle* is the zenith angle (degrees)
+    
+    am_intensity(airmass)
+        Return radiation intensity (W/m**2) given airmass (units)
+    
+    am_shadow(s, h)
+        Return the air mass (units) where h is the height of a pole and s is the length of its shadow.
+        s and h are the same length units, i.e. both in m, ft, cm etc.
+    
+    arccosd(x)
+        Return the arccos (degrees)
+    
+    arcsind(x)
+        Return the arcsin (degrees)
+    
+    bandgap_schenk(n_e, n_h, N_D, N_A, \u0394n, T=298.15)
+        returns the band gap narowing in silicon
+        delta conduction band, delta valence band in eV
+        given:
+        
+        n_e => total electron density with \u0394n (1/cm³)
+        n_h => total hole density with \u0394n (1/cm³)
+        N_A => acceptor concentration (1/cm³)
+        N_D => donor concentration (1/cm³)
+        \u0394n  => excess carrier density (1/cm³)
+        T   => temperature (K)
+        
+        Band-gap narrowing after Schenk 1998, JAP 84(3689))
+        model descriped very well in K. McIntosh IEEE PVSC 2010
+        model confirmed by Glunz2001 & Altermatt2003
+        nomenclatur and formula no. according to McIntosh2010, table no. according to Schenk1998
+        ==========================================================================
+        Input parameters:
+        
+        ==========================================================================
+        Code adapted from Richter at Fraunhofer ISE
+        http://dx.doi.org/10.1063%2F1.368545
+    
+    blackbody_integrated(T)
+        Return integrated irradiance (W/m2/steradian) from a blackbody where T is the temperature (K)
+    
+    blackbody_peak(T)
+        Return the peak wavelength (nm) of a black body spectrum where T is the temperature (K)
+    
+    blackbody_spectrum(wavelength, T=6000)
+        Return the blackbody irradaiance (W/nm) at a given wavelength (nm) and temperature, T (K).
+    
+    cell_params(V, I)
+        Return key parameters of a solar cell IV curve where V is a voltage array and
+        I is a current array, both with type numpy.array.
+        Voc (V), Isc (A), FF, Vmp(V), Imp(A) given voltage vector in (volts)
+        current vector in (amps) or (A/cm²)
+        If I is in (A/cm²) then Isc will be Jsc and Imp will be Jmp. No attempt is made to fit the fill factor.
+    
+    conductivity(n, p, ue, uh)
+        Return the conductivity of a material(siemens)
+        Where:
+        n - concentration of electrons (cm-3)
+        p - concentration of holes (cm-3)
+        ue - electron mobility (cm²/Vs)
+        uh - hole mobility (cm²/Vs)
+    
+    cosd(angle)
+        Return the cosine of the angle(degrees)
+    
+    current2gen(I)
+        Return generation (eh pairs/s)
+        given current (amps)
+    
+    declination(day_no)
+        Return declination angle of sun (degrees) where day_no is the day of the year (day).
+        For Jan 1 day_no = 1, Dec 31 dayno = 365. There is no correction for leap years
+    
+    diffusion_length(lifetime, diffusivity)
+        Return carrier diffusion length (cm)
+        given carrier lifetime(s) and diffusivity (units)
+    
+    diffusivity(mobility, T=298.15)
+        Return the diffusivity (cm²/s) given the mobility (cm²/Vs)
+        This is also known as the Einstein relation
+    
+    eV2nm(x)
+        Given energy (eV) of a photon return the wavelength (nm)
+    
+    efficiency(Voc, Isc, FF, A=1)
+        Return the efficiency of a solar cell (units not percentage)given Voc (volts), Isc in (amps) and  FF (units).
+        also works for Jsc since area of 1 is assumed
+    
+    elev_azi(declination, latitude, local_solar_time)
+        Return the elevation (degrees) and azimuth (degrees)
+    
+    elevation(declination, latitude, local_solar_time)
+        Return the elevation angle of the sun (degrees)
+        given declination (degrees), latitude (degrees) and local_solar_time (hours)
+    
+    equal_spacing(x, y, x_min, x_max, x_step)
+        Returns spectra with equal spacking and truncation (W/m2) (NOT W/m2/nm)
+        given a spectrum (W/m2/nm) as a function of wavelength (nm)
+        wavelength minimum (nm) and wavlength maximum (nm)
+        Note: would actually work for any x y data
+    
+    equation_of_time(day_no)
+        Return the equation of time (minutes) where day_no is the day of the year (day).
+    
+    equilibrium_carrier(N, ni=8600000000.0)
+        Return the majority and minority carrier concentrations (cm-3) of a semiconductor at equilibrium
+        where N is the doping level (cm-3) and ni is the intrinsic carrier concentratoin (cm-3)
+        Strictly N and ni just have to be in the same units but (cm-3 is almost always used.
+    
+    etr_earth(day_no)
+        Return extraterrestrial radiation at earth (W/m**2) where day_no is the day of the year (day).
+        January 1 has a day_no of 1. There is no correction for leap year.
+    
+    finger_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp)
+        Return the fractional resistivity power loss in a finger (0 to 1)
+        Given:
+            L: finger length (cm)
+            Jmp: currrent density at the max power point in A/cm2
+            Sf: finger spacing (cm)
+    
+    finger_shading(wf, Sf)
+        Return the fractional power loss due to finger shading (0 to 1) where wf is the wideth of the finger and Sf is the finger spacing.
+    
+    finger_sheet(Sf, Jmp, Rsheet, Vmp)
+    
+    finger_total_loss(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp)
+        Return the fractional power loss in a finger
+        Given:
+            L: finger length (cm)
+            Jmp: currrent density at the max power point in A/cm2
+            Sf: finger spacing (cm)
+    
+    impliedV(\u0394n, N, T=298.15)
+        Return voltage (V) where \u0394n is the excess carrier concentration (cm-3), N is the doping (cm-3) and
+        T is the temperature (K). Implied voltage is often used to convert the carrier concentration in a lifetime
+        tester to voltage.
+    
+    implied_carrier(V, N, ni=8600000000.0, T=298.15)
+        Return excess carrier concentration (cm-3)
+        Given voltage and doping determine
+    
+    k2alpha(kd, wavelength)
+        Quick convert of extinction coefficient (units) to absorption coefficient(cm-1) given the wavelength (nm)
+    
+    lifetime(U, \u0394n)
+        Return the lifetime (seconds) where U is the recombination  and \u0394n is the excess minority carrier density.
+        This is the definition of lifetime
+    
+    lifetime_SRH(N, Nt, Et, \u03c3_n, \u03c3_p, \u0394n, T=298.15)
+    
+    lifetime_auger(\u0394n, Ca=1.66e-30)
+        Returns the Auger lifetime (s) at high level injection
+        given the injection level (cm-3)
+    
+    lifetime_f_length(L, D)
+        Return the lifetime (s)
+        given the  diffusion length (cm) and diffusivity (cm2/s)
+    
+    mob_klassen(Nd, Na, \u0394n=1, T=298.16)
+        Return the mobility (cm2/Vs)
+        given the doping etc.
+    
+    mob_masetti_phos(N)
+        Return the mobility of carriers (cm²/Vs) in phosphorus doped silicon accoording to the model of Masetti1983.
+        Where N is the doping (cm-3)
+        http://dx.doi.org/10.1109%2FT-ED.1983.21207
+    
+    mob_thurber(N, p_type=True, majority=True)
+        Return the mobility of carriers in silicon according to the model of Thurbur as a function of doping
+        Where:
+        N - doping level (cm-3)
+        p_type is True or 1 for p doped material and False or 0 for n-type.
+        majority is True or 1 for majority carriers and False or 0 for minority carriers.
+        https://archive.org/details/relationshipbetw4006thur
+    
+    mobility(D, T=298.15)
+        Return the mobility of carriers (cm²/Vs) where D is the diffusivity (cm²/s). 
+        This is also known as the Einstein relation
+    
+    module_direct(azimuth, elevation, module_azimuth, module_tilt)
+        Returns the faction of light on a arbtrarily tilted surface
+        given sun azimuth (degrees) where north is zero and elevation
+        module_azimuth and module_tilt, where
+    
+    module_path()
+    
+    n_ieff(N_D, N_A, \u0394n, T=298.15)
+        Return effective ni (cm-3)
+        given
+        donor concentration N_D=n0 (1/cm³)      only one dopant type possible
+        acceptor concentration N_A=p0 (1/cm³)    only one dopant type possible
+        excess carrier density (1/cm³)
+        temperature (K)
+        calculation of the effective intrinsic concentration n_ieff including BGN
+        according to Altermatt JAP 2003
+    
+    ni_Si(T=298.15)
+        Return the intrinsic carrier concentration of silicon (cm**-3) according to Sproul94, where T is the temperature (K)
+        http://dx.doi.org/10.1063/1.357521
+    
+    ni_misiakos(T=298.15)
+        Return the intrinsic carrier concentration (cm-3) without band gap narrowing according to Misiakos,
+        where T is the temperature (K).
+        DOI http://dx.doi.org/10.1063/1.354551
+    
+    nm2eV(x)
+        Given wavelength (nm) of a photon return the energy (eV)
+    
+    nm2joule(x)
+        Given wavelength (nm) of a photon return the energy (eV)
+    
+    normalised_Voc(Voc, ideality, T=298.15)
+        Return the normalised voc of a solar cell where Voc is the open-circuit voltage, 'ideality' is the ideality factor
+        and T is the temperature (K)
+    
+    optical_properties(fname=None)
+        Returns an array with the optical properties of a material
+        column 0 - wavelngth (nm)
+        column 1 - absorption coefficient (/cm)
+        column 2 - real refractive index
+        column 3 - imaginary refractive index
+        if so file is given then silicon is used
+        Eg: wavelength, abs_coeff, n, k = optical_properties()
+    
+    phos_active(T)
+        Return the active limit of phosphorous in silicon
+        given temperature (K)
+    
+    phos_solubility(T)
+        Return the solubility limit of phosphorous in silicon
+        given the temperature (K)
+    
+    photon_flux(power, wavelength)
+        Return the photon flux (/s) given the power of light (watts) and wavelength (nm)
+        If power is in W/m2 then flux is in m-2s-1
+    
+    probability_bose_einstein(E, Ef, T)
+        Given the energies in electron volts return the fermi dirac function
+    
+    probability_fermi_dirac(E, Ef, T)
+        Return the fermi dirac function (units) where E is the energy (), Ef is the fermi
+        given the energies in electron volts
+    
+    probability_maxwell_boltzmann(E, Ef, T)
+        Given the energies in electron volts return the fermi dirac function
+    
+    refraction(n1, n2, \u03b81)
+        Return the refracted angle of light (degrees) where n1 is the refractive index of incident medium (units),
+        n2 is the refractive index of the transmission medium (units) and \u03b81 is the incident angle to the normal
+    
+    resistivity_Si_n(Ndonor)
+        Return the resistivity of n-type silicon (ohm cm)
+        given the doping of donors(cm-3)
+    
+    resistivity_Si_p(Nacceptor)
+        Return the resistivity of p-type silicon (ohm cm)
+        given the doping of acceptors(cm-3)
+    
+    sind(angle)
+        Return the sine of the angle(degrees)
+        Example:
+        >>>sind(0)
+        0
+    
+    solar_spectra(fname=None)
+        Return wavelength (nm) and AM0, AM15G, AM15D (W/m²/nm)
+        of the standard spectrum.
+        reference XXX, DOI XXX
+    
+    space_solar_power(x)
+        Return the radiant power density (W/m²) where x is the distance from  the sun (m)
+    
+    spectrum_spacing(x, y, x_min, x_max, x_step)
+        Returns spectra in W/m2 (NOT W/m2/nm) with equal spacing
+        given a spectrum (W/m2/nm) as a function of wavelength (nm)
+        wavelength minimum (nm) and wavlength maximum (nm)
+    
+    sun_position(dayNo, latitude, longitude, GMTOffset, H, M)
+        Return the position of the sun as a elevation and azimuth given
+        latitude, logitude and the GMTOffset,
+    
+    sun_rise_set(latitude, declination, time_correction)
+        Return the sunrise and sunset times in hours
+        given the latitude (degrees) and the declination (degrees)
+    
+    tand(angle)
+        Return the tangent of the angle(degrees)
+    
+    tau_b__tau_eff(tau_eff, S, thickness)
+        Return the bulk lifetime (s)
+        Given tau_eff (s)
+        surface recombination (cm/s)
+        thickness (cm)
+    
+    time_correction(EoT, longitude, GMTOffset)
+        Return the time correction (minutes) where EoT is the equation of time,
+        and given location longitude (degrees) and the GMT offset (hours)
+    
+    transmittance(abs_coeff, thickness)
+        Return the fraction of light transmitted (units) where abs_coeff is the absorption coefficient (cm-1)
+        and 'thickness' is the depth in the material (cm)
+
+DATA
+    Stefan_Boltzmann = 5.670367e-08
+    Wien = 0.002898
+    c = 299792458.0
+    eV = 1.60217662e-19
+    h = 6.62607004e-34
+    hbar = 1.0545718001391127e-34
+    hc_q = 1.2398419745831506e-06
+    k = 1.38064852e-23
+    k_eV = 8.6173303e-05
+    pi = 3.141592653589793
+    q = 1.60217662e-19
+    \u03c\u03c0 = 3.141592653589793
+
+VERSION
+    0.1.3
+
+FILE
+    c:\u\cloudstation\python\photovoltaic\photovoltaic\__init__.py
+
+

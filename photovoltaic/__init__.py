@@ -1,20 +1,22 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """ Basic photovoltaic functions
+Provides the formulas and equations typically used in an introductory photocoltaics textbook.
 
-Typical solar units are used, NOT SI units.
-
+Typical solar units are used, NOT SI units. The units are denoted in parenthesis on the comment lines.
 wavelength (nm)
 Energy of  photon (eV)
 semiconductor dimensions (cm)
 degrees instead of radians.
 Temperature of 298.15 K (25 degC) not 300 K
 
-to do is listed as 9999
-
 The first line on all input files is ignored to allow for column headers
 # denotes a comment in input files and is ignored.
 
-Contributions by: sgbowden, richter, heraimenka,?, ? etc
+Contributions by: sgbowden, richter, heraimenka, jhul etc
+
+Variables and acronyms
+ARC - anti-reflection coating
 """
 __version__ = '0.1.3'
 
@@ -23,23 +25,27 @@ import os
 from scipy import integrate
 
 # define constants
-q = 1.60217662e-19  # (C) (units go after the comment line)
+q = 1.60217662e-19  # (coulombs) (units go after the comment line)
 eV = q
 k = 1.38064852e-23  # (J/K)
-k_eV = 8.6173303e-05 # (eV K^-1)
-Wien = 2.898e-3 # (m K)
+k_eV = 8.6173303e-05  # (eV K^-1)
+Wien = 2.898e-3  # (m K)
 Stefan_Boltzmann = 5.670367e-08  # (W m^-2 K^-4)
 π = np.pi  # yes, I use unicode
 pi = np.pi  # compatibility with class
 h = 6.62607004e-34  # (J.s)
 hbar = 6.62607004e-34 / (2 * π)  # usable
 c = 299792458.0  # (m s^-1)
-hc_q = h * c / q # 1.2398419745831506e-06
+hc_q = h * c / q  # 1.2398419745831506e-06
 
 
-# suggested module: .helpers
+# ******** Section: helpers *********
 def sind(angle):
-    """Return the sine of the angle(degrees)"""
+    """Return the sine of the angle(degrees)
+    Example:
+    >>>sind(0)
+    0
+    """
     return np.sin(np.radians(angle))
 
 
@@ -71,28 +77,7 @@ def module_path():
     return dir_path
 
 
-# suggested module .light
-
-def nm2eV(x):
-    """ Given wavelength (nm) of a photon return the energy (eV) """
-    return hc_q * 1e9 / x
-
-def eV2nm(x):
-    """ Given energy (eV) of a photon return the wavelength (nm) """
-    return hc_q * 1e9 / x
-
-def nm2joule(x):
-    """ Given wavelength (nm) of a photon return the energy (eV) """
-    return h * c * 1e9 / x
-
-
-def photon_flux(power, wavelength):
-    """Return the photon flux (/s) given the power of light (watts) and wavelength (nm)
-    If power is in W/m2 then flux is in m-2s-1"""
-    return power / nm2joule(wavelength)
-
-
-# Solar radiation
+# ******** Section: Solar Radiation *********
 def am_intensity(airmass):
     """Return radiation intensity (W/m**2) given airmass (units) """
     It = 1.353 * (0.7 ** (airmass ** 0.678))
@@ -110,8 +95,6 @@ def am_shadow(s, h):
      s and h are the same length units, i.e. both in m, ft, cm etc."""
     am = np.sqrt(1 + (s / h) ** 2)
     return am
-
-
 
 
 def blackbody_peak(T):
@@ -143,12 +126,10 @@ def equal_spacing(x, y, x_min, x_max, x_step):
     return x_midpoint, y_spaced
 
 
-# suggested module .sun
-
-
 def space_solar_power(x):
     """Return the radiant power density (W/m²) where x is the distance from  the sun (m)"""
     return 2.8942e25 / (x ** 2)
+
 
 def solar_spectra(fname=None):
     """Return wavelength (nm) and AM0, AM15G, AM15D (W/m²/nm)
@@ -248,9 +229,28 @@ def spectrum_spacing(x, y, x_min, x_max, x_step):
     return x_midpoint, y_spaced
 
 
-# **** section ****
-# Optics
-# quick converters
+# ******** Section: Light *********
+
+def nm2eV(x):
+    """ Given wavelength (nm) of a photon return the energy (eV) """
+    return hc_q * 1e9 / x
+
+
+def eV2nm(x):
+    """ Given energy (eV) of a photon return the wavelength (nm) """
+    return hc_q * 1e9 / x
+
+
+def nm2joule(x):
+    """ Given wavelength (nm) of a photon return the energy (eV) """
+    return h * c * 1e9 / x
+
+
+def photon_flux(power, wavelength):
+    """Return the photon flux (/s) given the power of light (watts) and wavelength (nm)
+    If power is in W/m2 then flux is in m-2s-1"""
+    return power / nm2joule(wavelength)
+
 
 def k2alpha(kd, wavelength):
     """Quick convert of extinction coefficient (units) to absorption coefficient(cm-1) given the wavelength (nm)"""
@@ -331,8 +331,8 @@ def DLARC_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2):
     return numerator / denominator
 
 
-# suggested module .semi
-#
+# ******** Section: Semiconductors *********
+
 
 def probability_fermi_dirac(E, Ef, T):
     """Return the fermi dirac function (units) where E is the energy (), Ef is the fermi
@@ -558,7 +558,7 @@ def mob_klassen(Nd, Na, Δn=1, T=298.16):
     return µe, µh
 
 
-def Eg0_Paessler(T=298.15):
+def Eg0_paessler(T=298.15):
     """Return the bandgap of silicon (eV) according to Paessler2002, where T is the temperature (K).
     Code adapted from Richter Fraunhofer ISE
     https://doi.org/10.1103/PhysRevB.66.085201
@@ -582,7 +582,7 @@ def ni_Si(T=298.15):
     return 9.38e19 * (T / 300) * (T / 300) * np.exp(-6884 / T)
 
 
-def ni0_Misiakos(T=298.15):
+def ni_misiakos(T=298.15):
     """
     Return the intrinsic carrier concentration (cm-3) without band gap narrowing according to Misiakos,
     where T is the temperature (K).
@@ -602,11 +602,11 @@ def n_ieff(N_D, N_A, Δn, T=298.15):
     according to Altermatt JAP 2003
     """
     # calculation of fundamental band gap according to Pässler2002
-    Eg0 = Eg0_Paessler(T)
+    Eg0 = Eg0_paessler(T)
 
     # n_i without BGN according to Misiakos93, parameterization fits very well
     # to value of Altermatt2003 at 300K
-    ni0 = ni0_Misiakos(T)
+    ni0 = ni_misiakos(T)
 
     ni = ni0  # ni0 as starting value for n_ieff for calculation of n0 & p0
 
@@ -618,7 +618,7 @@ def n_ieff(N_D, N_A, Δn, T=298.15):
     for i in range(5):  # lazy programmer as it converges pretty fast anyway
         n = n0 + Δn
         p = p0 + Δn
-        dEc, dEv = BGN_Schenk(n, p, N_A, N_D, Δn, T)
+        dEc, dEv = bandgap_schenk(n, p, N_A, N_D, Δn, T)
         ni = ni0 * np.exp(q * (dEc + dEv) / (2 * k * T))  # there is something wrong here as the units don't match up.
         n0 = np.where(N_D > N_A, N_D, N_A / ni ** 2)
         p0 = np.where(N_D > N_A, N_D / ni ** 2, N_A)
@@ -627,7 +627,7 @@ def n_ieff(N_D, N_A, Δn, T=298.15):
     return ni
 
 
-def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
+def bandgap_schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
     """
     returns the band gap narowing in silicon
     delta conduction band, delta valence band in eV
@@ -730,7 +730,7 @@ def BGN_Schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
     return dE_gap_e, dE_gap_h
 
 
-# bullk recombination
+# ******** SubSection: Bulk Recombination *********
 def U_radiative(n, p):
     B_rad = 4.73e-15
     U_radiative = n * p * B_rad
@@ -831,7 +831,7 @@ def U_surface(n, p, Sn, Sp, n1=8.3e9, p1=8.3e9, ni=8.3e9):
     return U_surface
 
 
-# Solar Cells
+# ******** Section: Solar Cells *********
 
 
 def IQE_emitter(ab, We, Le, De, Se):
@@ -999,8 +999,8 @@ def cell_params(V, I):
     return Voc, Isc, FF, Vmp, Imp
 
 
-def Pf_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp):
-    """Return the % resistivity loss in a finger
+def finger_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp):
+    """Return the fractional resistivity power loss in a finger (0 to 1)
     Given:
         L: finger length (cm)
         Jmp: currrent density at the max power point in A/cm2
@@ -1009,24 +1009,25 @@ def Pf_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp):
     return (L ** 2 * Jmp * Sf * resistivity) / (3 * wf * df * Vmp) * 100.0
 
 
-def Pf_shading(wf, Sf):
+def finger_shading(wf, Sf):
+    """Return the fractional power loss due to finger shading (0 to 1) where wf is the wideth of the finger and Sf is the finger spacing."""
     return (wf / Sf) * 100.0
 
 
-def Pf_sheet(Sf, Jmp, Rsheet, Vmp):
+def finger_sheet(Sf, Jmp, Rsheet, Vmp):
     return (Sf ** 2 * Jmp * Rsheet) / (12 * Vmp) * 100.0
 
 
-def Pf_total(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp):
-    """Return the % resistivity loss in a finger
+def finger_total_loss(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp):
+    """Return the fractional power loss in a finger
     Given:
         L: finger length (cm)
         Jmp: currrent density at the max power point in A/cm2
         Sf: finger spacing (cm)
     """
-    Presistivity = Pf_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp)
-    Pshading = Pf_shading(wf, Sf)
-    Psheet = Pf_sheet(Sf, Jmp, Rsheet, Vmp)
+    Presistivity = finger_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp)
+    Pshading = finger_shading(wf, Sf)
+    Psheet = finger_sheet(Sf, Jmp, Rsheet, Vmp)
     return Presistivity + Pshading + Psheet, Presistivity, Pshading, Psheet
 
 
@@ -1090,6 +1091,7 @@ def FF_RsRsh(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15):
     return FFRsRsh
 
 
+# ******** Section: silicon material properties *********
 # silicon material properties
 
 def optical_properties(fname=None):
@@ -1103,7 +1105,7 @@ def optical_properties(fname=None):
     """
     if fname is None:
         package_path = os.path.dirname(os.path.abspath(__file__))
-        fname = os.path.join(package_path, 'OpticalPropertiesOfSilicon.txt')
+        fname = os.path.join(package_path, 'silicon_optical_properties.txt')
     wavelength, abs_coeff, nd, kd = np.loadtxt(fname, skiprows=1, unpack=True)
     return wavelength, abs_coeff, nd, kd
 

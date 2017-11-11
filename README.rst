@@ -2,8 +2,7 @@
 photovoltaic
 ===========
 
-photovoltaic provides basic function used in photovoltaics. You might find
-it most useful for coding photovoltaic simulations. Typical usage:
+photovoltaic provides basic function used in photovoltaics. Typical usage:
 
     import photovoltaic as pv
 
@@ -11,4 +10,6 @@ it most useful for coding photovoltaic simulations. Typical usage:
     print(irradiance)
 
 This would print the blackbody irradiance in W/m2/nm
-This is branch suggested
+
+There are many more examples on github at:
+https://github.com/trautsned/photovoltaic/tree/master/examples
