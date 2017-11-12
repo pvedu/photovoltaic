@@ -14,19 +14,35 @@ Typical usage:
 
     print(irradiance)
 
-This would print the blackbody irradiance at 800 nm with the default temperature of 6000K in W/m2/nm.
+This would print the blackbody irradiance at 800 nm with the default temperature of 6000 K in W/m2/nm.
 
 
 Installation
 ---------------
 
-Installation is via pip and pypi:
+Installation is via pip from the pypi repositry. From a command propmpt:
 
     pip install photovoltaic
+	
+Tha above command should also install the latest scipy and numpy packages. They can also be installed directly with:
+
+	pip install numpy
+	
+	pip install scipy
 
 Requirements
 ------------
 Known to work under plain vanilla Python 3.6 using the standard IDLE editor with Numpy and Scipy installed. The examples also make use of matplotlib. It should also work with the  various Python systems such as Anaconda Jupyter etc.
+
+
+Anaconda includes a wealth of scientific packagkes and is available at: https://www.anaconda.com/download/ 
+
+Standard Python is at https://www.python.org/downloads/
+
+For the graphs, Matplotlib is needed in addition to the above numpy and scipy packages:
+	pip install matplotlib
+
+
 
 Examples
 --------
