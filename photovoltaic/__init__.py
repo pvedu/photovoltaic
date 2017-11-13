@@ -390,7 +390,7 @@ def diffusivity(mobility, T=298.15):
 
 
 def mobility(D, T=298.15):
-    """Return the mobility of carriers (cm²/Vs) where D is the diffusivity (cm²/s). 
+    """Return the mobility of carriers (cm²/Vs) where D is the diffusivity (cm²/s).
     This is also known as the Einstein relation"""
     return D * q / (k * T)
 
@@ -1121,3 +1121,15 @@ def phos_solubility(T):
     """Return the solubility limit of phosphorous in silicon
      given the temperature (K)"""
     return 2.45e23 * np.exp(-0.62 * eV / (k * T))
+#pedro new stuff
+def Derivative(f,x):
+    first_time=1
+    for i,j in zip(f,x):
+        if (first_time):
+            previous_i=i
+            previous_j=j
+            first_time=0
+        else:
+            print((i-previous_i)/(j-previous_j))
+            previous_i=i
+            previous_j=j
