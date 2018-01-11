@@ -22,7 +22,7 @@ __version__ = '0.1.3'
 
 import numpy as np
 import os
-from scipy import integrate
+"""from scipy import integrate"""
 
 # define constants
 q = 1.60217662e-19  # (coulombs) (units go after the comment line)
@@ -390,7 +390,7 @@ def diffusivity(mobility, T=298.15):
 
 
 def mobility(D, T=298.15):
-    """Return the mobility of carriers (cm²/Vs) where D is the diffusivity (cm²/s). 
+    """Return the mobility of carriers (cm²/Vs) where D is the diffusivity (cm²/s).
     This is also known as the Einstein relation"""
     return D * q / (k * T)
 
@@ -1121,3 +1121,25 @@ def phos_solubility(T):
     """Return the solubility limit of phosphorous in silicon
      given the temperature (K)"""
     return 2.45e23 * np.exp(-0.62 * eV / (k * T))
+
+# modules(Pedro)
+def read_cell_info(selected):
+    package_path = os.path.dirname(os.path.abspath(__file__))
+    fname = os.path.join(package_path, 'cell_info.txt')
+
+    with open(fname,"r") as f:
+        for line in f:
+            col1, col2, col3, col4 = line.split()
+            if (col1==selected):
+                semicondutor=col1
+                J_SC=float(col2)
+                V_OC=float(col3)
+                J_0=float(col4)
+    return semicondutor,J_SC,V_OC,J_0
+def module_current(M,N,T,material):
+    semicondutor,J_SC,V_OC,J_0 = read_cell_info(material)
+    I_0=J_0*15.6*15.6
+    I_L=J_SC*15.6*15.6
+    V_T=V_OC*N
+    I_total = M*(I_L-I_0*np.exp((q*V_T/N)/(k_eV*T)-1))
+    return I_total
