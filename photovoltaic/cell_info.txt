@@ -1,0 +1,3 @@
+Material J_sc V_oc J_0
+GaP 2 3 4
+Si 39 0.67 1.8e-10
