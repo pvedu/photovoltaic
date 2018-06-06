@@ -10,7 +10,7 @@ Typical usage:
 
     import photovoltaic as pv
 
-    irradiance = pv.blackbody_spectrum(800)
+    irradiance = pv.sun.blackbody_spectrum(800)
 
     print(irradiance)
 
@@ -49,3 +49,11 @@ Examples
 
 There are many more examples on github at:
 https://github.com/trautsned/photovoltaic/tree/master/examples
+
+Other
+-----
+f is used to mean from in some of the function names. For example:
+
+nmfeV() converts the energy of a photon from electron volts to a nm.
+
+This follows the conventions of other python functions such as strfdatetime.

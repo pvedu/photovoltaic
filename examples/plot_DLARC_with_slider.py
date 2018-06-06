@@ -9,7 +9,7 @@ Eg = 1.12 # (eV) bandgap of silicon
 Wg = 1239.8 / Eg # wavelength at the bandgap of silicon
 
 # read standard specta
-wavelength, AM0, AM15G, AM15D = pv.solar_spectra()
+wavelength, AM0, AM15G, AM15D = pv.sun.solar_spectra()
 # truncate to wavelengths below bandgap
 wavelength_Eg = wavelength[wavelength < Wg]
 AM15G_Eg = AM15G[wavelength < Wg]
@@ -61,7 +61,7 @@ def update(val):  # why do we need a val?
     t2 = s3.val
     n2 = s4.val
     # print(t1,n1,t2,n2)
-    refl = pv.DLARC_refl(wavelength_Eg, n0, n1, n2, nSemi, t1, t2)
+    refl = pv.optic.DLARC_refl(wavelength_Eg, n0, n1, n2, nSemi, t1, t2)
     # refl = pv.ARC_refl(wavelength_Eg, n0, n1, nSemi, t1) / 100
     Jsc_loss = np.trapz(photons * refl, wavelength_Eg)  # A/m
     R_weighted = Jsc_loss / Jsc_total

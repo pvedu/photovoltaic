@@ -3,7 +3,7 @@ import numpy as np
 import photovoltaic as pv
 
 print('reading spectrum')
-wavelength, AM0, AM15G, AM15D = pv.solar_spectra()
+wavelength, AM0, AM15G, AM15D = pv.sun.solar_spectra()
 
 #spectral irradiance vs wavelength
 
