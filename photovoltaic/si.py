@@ -1,6 +1,6 @@
 import numpy as np
 
-from .core import π, Vt, k, q, eV
+from .core import pi, Vt, k, q, eV
 import os
 
 def resistivity_Si_n(Ndonor):
@@ -161,7 +161,7 @@ def Eg0_paessler(T=298.15):
     Eg0_T0 = 1.17  # eV     band gap of Si at 0 K
 
     Tdelta = 2 * T / Θ
-    wurzel = (1 + π ** 2 / (3 * (1 + Δ ** 2)) * Tdelta ** 2 + (
+    wurzel = (1 + pi ** 2 / (3 * (1 + Δ ** 2)) * Tdelta ** 2 + (
         3 * Δ ** 2 - 1) / 4 * Tdelta ** 3 + 8 / 3 * Tdelta ** 4 + Tdelta ** 6) ** (1 / 6)
     Eg0 = Eg0_T0 - α * Θ * ((1 - 3 * Δ ** 2) / (np.exp(Θ / T) - 1) + 3 / 2 * Δ ** 2 * (wurzel - 1))
     return Eg0
@@ -297,22 +297,22 @@ def bandgap_schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
 
     # exchange quasi-partical shift Eq33:
     delta_xc_h = -(
-        (4 * π) ** 3 * n_sum_xc ** 2 * ((48 * n_h / (π * g_h)) ** (1 / 3) + c_h * np.log(1 + d_h * n_p_xc ** p_h)) + (
-            8 * π * alfa_h / g_h) * n_h * F ** 2 + np.sqrt(8 * π * n_sum_xc) * F ** (5 / 2)) / (
-                     (4 * π) ** 3 * n_sum_xc ** 2 + F ** 3 + b_h * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
+        (4 * pi) ** 3 * n_sum_xc ** 2 * ((48 * n_h / (pi * g_h)) ** (1 / 3) + c_h * np.log(1 + d_h * n_p_xc ** p_h)) + (
+            8 * pi * alfa_h / g_h) * n_h * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
+                     (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_h * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
                          3 / 2) * F)
     delta_xc_e = -(
-        (4 * π) ** 3 * n_sum_xc ** 2 * ((48 * n_e / (π * g_e)) ** (1 / 3) + c_e * np.log(1 + d_e * n_p_xc ** p_e)) + (
-            8 * π * alfa_e / g_e) * n_e * F ** 2 + np.sqrt(8 * π * n_sum_xc) * F ** (5 / 2)) / (
-                     (4 * π) ** 3 * n_sum_xc ** 2 + F ** 3 + b_e * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
+        (4 * pi) ** 3 * n_sum_xc ** 2 * ((48 * n_e / (pi * g_e)) ** (1 / 3) + c_e * np.log(1 + d_e * n_p_xc ** p_e)) + (
+            8 * pi * alfa_e / g_e) * n_e * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
+                     (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_e * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
                          3 / 2) * F)
 
     # ionic quasi-partical shift Eq37:
     delta_i_h = -n_ionic * (1 + Ui) / (
-        np.sqrt(0.5 * F * n_sum_i / π) * (1 + h_h * np.log(1 + np.sqrt(n_sum_i) / F)) + j_h * Ui * n_p_i ** 0.75 * (
+        np.sqrt(0.5 * F * n_sum_i / pi) * (1 + h_h * np.log(1 + np.sqrt(n_sum_i) / F)) + j_h * Ui * n_p_i ** 0.75 * (
             1 + k_h * n_p_i ** q_h))
     delta_i_e = -n_ionic * (1 + Ui) / (
-        np.sqrt(0.5 * F * n_sum_i / π) * (1 + h_e * np.log(1 + np.sqrt(n_sum_i) / F)) + j_e * Ui * n_p_i ** 0.75 * (
+        np.sqrt(0.5 * F * n_sum_i / pi) * (1 + h_e * np.log(1 + np.sqrt(n_sum_i) / F)) + j_e * Ui * n_p_i ** 0.75 * (
             1 + k_e * n_p_i ** q_e))
 
     # rescale BGN

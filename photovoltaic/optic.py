@@ -1,4 +1,4 @@
-from .core import arcsind, sind, joulefnm, pi, π, k, q
+from .core import arcsind, sind, joulefnm, pi
 import numpy as np
 
 def photon_flux(power, wavelength):
@@ -22,7 +22,7 @@ def refraction(n1, n2, θ1):
 def absorption_coeff(kd, wavelength):
     """absorption coefficient (cm-1) from extinction coefficient (units) and wavelength (nm)
     wavelength """
-    return 1e7 * 4 * π * kd / wavelength
+    return 1e7 * 4 * pi * kd / wavelength
 
 
 def transmittance(abs_coeff, thickness):
@@ -55,7 +55,7 @@ def ARC_refl(wavelength, n0, n1, nSemi, thickness):
     """
     r1 = (n0 - n1) / (n0 + n1)
     r2 = (n1 - nSemi) / (n1 + nSemi)
-    θ = (2 * π * n1 * thickness) / wavelength
+    θ = (2 * pi * n1 * thickness) / wavelength
     reflectivity = 100 * (r1 * r1 + r2 * r2 + 2 * r1 * r2 * np.cos(2 * θ)) / (
         1 + r1 * r1 * r2 * r2 + 2 * r1 * r2 * np.cos(2 * θ))
     return reflectivity
@@ -73,8 +73,8 @@ def DLARC_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2):
     r1 = (n0 - n1) / (n0 + n1)
     r2 = (n1 - n2) / (n1 + n2)
     r3 = (n2 - nSemi) / (n2 + nSemi)
-    θ1 = (2 * π * n1 * thickness1) / wavelength
-    θ2 = (2 * π * n2 * thickness2) / wavelength
+    θ1 = (2 * pi * n1 * thickness1) / wavelength
+    θ2 = (2 * pi * n2 * thickness2) / wavelength
 
     numerator = r1 * r1 + r2 * r2 + r3 * r3 + r1 * r1 * r2 * r2 * r3 * r3 + 2 * r1 * r2 * (1 + r3 * r3) * np.cos(
         2 * θ1) + 2 * r2 * r3 * (1 + r1 * r1) * np.cos(2 * θ2) + 2 * r1 * r3 * np.cos(

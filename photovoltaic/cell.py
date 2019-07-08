@@ -85,7 +85,7 @@ def J0_layer(W, N, D, L, S, ni=8.6e9):
     Optional:
     ni - intrinsic carrier concentration (cm-3)
     """
-    F = (S * np.cosh(W / L) + D / L * np.sinh(W * L)) / (D / L * np.cosh(W * L) + S * np.sinh(W / L))
+    F = (S * np.cosh(W / L) + D / L * np.sinh(W / L)) / (D / L * np.cosh(W / L) + S * np.sinh(W / L))
     return q * ni ** 2 * F * D / (L * N)
 
 

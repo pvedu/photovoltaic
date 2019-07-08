@@ -11,3 +11,4 @@ examples/photovoltaic.py
 
 .dev/
 /build/
+.idea

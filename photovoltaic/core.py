@@ -7,7 +7,6 @@ k = 1.38064852e-23  # (J/K)
 k_eV = 8.6173303e-05  # (eV K^-1)
 Wien = 2.898e-3  # (m K)
 Stefan_Boltzmann = 5.670367e-08  # (W m^-2 K^-4)
-π = np.pi  # yes, I use unicode
 pi = np.pi  #
 h = 6.62607004e-34  # (J.s)
 hbar = 6.62607004e-34 / (2 * π)  # usable

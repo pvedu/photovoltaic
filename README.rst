@@ -2,8 +2,9 @@
 photovoltaic
 ============
 
-photovoltaic is a library of python functions used in photovoltaics. Individual functions are in photovoltaic.html, shich can be viewed at:
+photovoltaic is a library of python functions used in photovoltaics. Individual functions are in photovoltaic.html, which can be viewed at:
 http://htmlpreview.github.io/?https://github.com/trautsned/photovoltaic/blob/master/photovoltaic.html
+
 
 Typical usage:
 
@@ -57,3 +58,6 @@ f is used to mean from in some of the function names. For example:
 nmfeV() converts the energy of a photon from electron volts to a nm.
 
 This follows the conventions of other python functions such as strfdatetime.
+
+
+The library is designed to be as simple as possible and an "algorithm that runs". As such, most of the library is unashamedly procedural for simplicity. The syntax of object orientated code varies from language to language.
