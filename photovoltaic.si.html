@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module photovoltaic.si</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="photovoltaic.html"><font color="#ffffff">photovoltaic</font></a>.si</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cu%5Ccloudstation%5Cpython%5Cphotovoltaic%5Cphotovoltaic%5Csi.py">c:\u\cloudstation\python\photovoltaic\photovoltaic\si.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-Eg0_paessler"><strong>Eg0_paessler</strong></a>(T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;bandgap&nbsp;of&nbsp;silicon&nbsp;(eV)&nbsp;according&nbsp;to&nbsp;Paessler2002,&nbsp;where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K).<br>
+Code&nbsp;adapted&nbsp;from&nbsp;Richter&nbsp;Fraunhofer&nbsp;ISE<br>
+https://doi.org/10.1103/PhysRevB.66.085201</tt></dd></dl>
+ <dl><dt><a name="-U_SRH"><strong>U_SRH</strong></a>(n, p, Et, τ_n, τ_p, ni_eff=8500000000.0, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;shockley&nbsp;read&nbsp;hall&nbsp;recombination&nbsp;cm-3<br>
+given&nbsp;Et&nbsp;(eV)&nbsp;trap&nbsp;level&nbsp;from&nbsp;intrinsic</tt></dd></dl>
+ <dl><dt><a name="-U_auger_richter"><strong>U_auger_richter</strong></a>(n0, p0, Δn, ni_eff)</dt><dd><tt>Return&nbsp;the&nbsp;auger&nbsp;recombination<br>
+18&nbsp;and&nbsp;19<br>
+https://doi.org/10.1016/j.egypro.2012.07.034</tt></dd></dl>
+ <dl><dt><a name="-U_low_doping"><strong>U_low_doping</strong></a>(n0, p0, Δn)</dt><dd><tt>recombination&nbsp;due&nbsp;to&nbsp;Auger&nbsp;and&nbsp;radiative<br>
+equation&nbsp;21&nbsp;in&nbsp;DOI:&nbsp;10.1103/PhysRevB.86.165202</tt></dd></dl>
+ <dl><dt><a name="-U_radiative"><strong>U_radiative</strong></a>(n, p)</dt><dd><tt>#&nbsp;********&nbsp;SubSection:&nbsp;Bulk&nbsp;Recombination&nbsp;*********</tt></dd></dl>
+ <dl><dt><a name="-U_radiative_alt"><strong>U_radiative_alt</strong></a>(n0, p0, Δn, T=298.15)</dt></dl>
+ <dl><dt><a name="-U_surface"><strong>U_surface</strong></a>(n, p, Sn, Sp, n1=8300000000.0, p1=8300000000.0, ni=8300000000.0)</dt><dd><tt>Return&nbsp;the&nbsp;carrier&nbsp;recombination&nbsp;(/s)&nbsp;at&nbsp;a&nbsp;surface.<br>
+Where.<br>
+Sn,&nbsp;Sp:&nbsp;surface&nbsp;recombination&nbsp;for&nbsp;electrons&nbsp;and&nbsp;holes<br>
+n1,&nbsp;p1&nbsp;XXX<br>
+ni&nbsp;-&nbsp;intrinsice&nbsp;carrier&nbsp;concentratoin&nbsp;(cm-3)</tt></dd></dl>
+ <dl><dt><a name="-bandgap_schenk"><strong>bandgap_schenk</strong></a>(n_e, n_h, N_D, N_A, Δn, T=298.15)</dt><dd><tt>returns&nbsp;the&nbsp;band&nbsp;gap&nbsp;narowing&nbsp;in&nbsp;silicon<br>
+delta&nbsp;conduction&nbsp;band,&nbsp;delta&nbsp;valence&nbsp;band&nbsp;in&nbsp;eV<br>
+given:<br>
+&nbsp;<br>
+n_e&nbsp;=&gt;&nbsp;total&nbsp;electron&nbsp;density&nbsp;with&nbsp;Δn&nbsp;(1/cm³)<br>
+n_h&nbsp;=&gt;&nbsp;total&nbsp;hole&nbsp;density&nbsp;with&nbsp;Δn&nbsp;(1/cm³)<br>
+N_A&nbsp;=&gt;&nbsp;acceptor&nbsp;concentration&nbsp;(1/cm³)<br>
+N_D&nbsp;=&gt;&nbsp;donor&nbsp;concentration&nbsp;(1/cm³)<br>
+Δn&nbsp;&nbsp;=&gt;&nbsp;excess&nbsp;carrier&nbsp;density&nbsp;(1/cm³)<br>
+T&nbsp;&nbsp;&nbsp;=&gt;&nbsp;temperature&nbsp;(K)<br>
+&nbsp;<br>
+Band-gap&nbsp;narrowing&nbsp;after&nbsp;Schenk&nbsp;1998,&nbsp;JAP&nbsp;84(3689))<br>
+model&nbsp;descriped&nbsp;very&nbsp;well&nbsp;in&nbsp;K.&nbsp;McIntosh&nbsp;IEEE&nbsp;PVSC&nbsp;2010<br>
+model&nbsp;confirmed&nbsp;by&nbsp;Glunz2001&nbsp;&amp;&nbsp;Altermatt2003<br>
+nomenclatur&nbsp;and&nbsp;formula&nbsp;no.&nbsp;according&nbsp;to&nbsp;McIntosh2010,&nbsp;table&nbsp;no.&nbsp;according&nbsp;to&nbsp;Schenk1998<br>
+==========================================================================<br>
+Input&nbsp;parameters:<br>
+&nbsp;<br>
+==========================================================================<br>
+Code&nbsp;adapted&nbsp;from&nbsp;Richter&nbsp;at&nbsp;Fraunhofer&nbsp;ISE<br>
+<a href="http://dx.doi.org/10.1063%2F1.368545">http://dx.doi.org/10.1063%2F1.368545</a></tt></dd></dl>
+ <dl><dt><a name="-lifetime_SRH"><strong>lifetime_SRH</strong></a>(N, Nt, Et, σ_n, σ_p, Δn, T=298.15)</dt></dl>
+ <dl><dt><a name="-lifetime_auger"><strong>lifetime_auger</strong></a>(Δn, Ca=1.66e-30)</dt><dd><tt>Returns&nbsp;the&nbsp;Auger&nbsp;lifetime&nbsp;(s)&nbsp;at&nbsp;high&nbsp;level&nbsp;injection<br>
+given&nbsp;the&nbsp;injection&nbsp;level&nbsp;(cm-3)</tt></dd></dl>
+ <dl><dt><a name="-mob_klassen"><strong>mob_klassen</strong></a>(Nd, Na, Δn=1, T=298.16)</dt><dd><tt>Return&nbsp;the&nbsp;mobility&nbsp;(cm2/Vs)<br>
+given&nbsp;the&nbsp;doping&nbsp;etc.</tt></dd></dl>
+ <dl><dt><a name="-mob_masetti_phos"><strong>mob_masetti_phos</strong></a>(N)</dt><dd><tt>Return&nbsp;the&nbsp;mobility&nbsp;of&nbsp;carriers&nbsp;(cm²/Vs)&nbsp;in&nbsp;phosphorus&nbsp;doped&nbsp;silicon&nbsp;accoording&nbsp;to&nbsp;the&nbsp;model&nbsp;of&nbsp;Masetti1983.<br>
+Where&nbsp;N&nbsp;is&nbsp;the&nbsp;doping&nbsp;(cm-3)<br>
+<a href="http://dx.doi.org/10.1109%2FT-ED.1983.21207">http://dx.doi.org/10.1109%2FT-ED.1983.21207</a></tt></dd></dl>
+ <dl><dt><a name="-mob_thurber"><strong>mob_thurber</strong></a>(N, p_type=True, majority=True)</dt><dd><tt>Return&nbsp;the&nbsp;mobility&nbsp;of&nbsp;carriers&nbsp;in&nbsp;silicon&nbsp;according&nbsp;to&nbsp;the&nbsp;model&nbsp;of&nbsp;Thurbur&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;doping<br>
+Where:<br>
+N&nbsp;-&nbsp;doping&nbsp;level&nbsp;(cm-3)<br>
+p_type&nbsp;is&nbsp;True&nbsp;or&nbsp;1&nbsp;for&nbsp;p&nbsp;doped&nbsp;material&nbsp;and&nbsp;False&nbsp;or&nbsp;0&nbsp;for&nbsp;n-type.<br>
+majority&nbsp;is&nbsp;True&nbsp;or&nbsp;1&nbsp;for&nbsp;majority&nbsp;carriers&nbsp;and&nbsp;False&nbsp;or&nbsp;0&nbsp;for&nbsp;minority&nbsp;carriers.<br>
+https://archive.org/details/relationshipbetw4006thur</tt></dd></dl>
+ <dl><dt><a name="-n_ieff"><strong>n_ieff</strong></a>(N_D, N_A, Δn, T=298.15)</dt><dd><tt>Return&nbsp;effective&nbsp;ni&nbsp;(cm-3)<br>
+given<br>
+donor&nbsp;concentration&nbsp;N_D=n0&nbsp;(1/cm³)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only&nbsp;one&nbsp;dopant&nbsp;type&nbsp;possible<br>
+acceptor&nbsp;concentration&nbsp;N_A=p0&nbsp;(1/cm³)&nbsp;&nbsp;&nbsp;&nbsp;only&nbsp;one&nbsp;dopant&nbsp;type&nbsp;possible<br>
+excess&nbsp;carrier&nbsp;density&nbsp;(1/cm³)<br>
+temperature&nbsp;(K)<br>
+calculation&nbsp;of&nbsp;the&nbsp;effective&nbsp;intrinsic&nbsp;concentration&nbsp;n_ieff&nbsp;including&nbsp;BGN<br>
+according&nbsp;to&nbsp;Altermatt&nbsp;JAP&nbsp;2003</tt></dd></dl>
+ <dl><dt><a name="-ni_misiakos"><strong>ni_misiakos</strong></a>(T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;intrinsic&nbsp;carrier&nbsp;concentration&nbsp;(cm-3)&nbsp;without&nbsp;band&nbsp;gap&nbsp;narrowing&nbsp;according&nbsp;to&nbsp;Misiakos,<br>
+where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K).<br>
+DOI&nbsp;<a href="http://dx.doi.org/10.1063/1.354551">http://dx.doi.org/10.1063/1.354551</a></tt></dd></dl>
+ <dl><dt><a name="-ni_sproul"><strong>ni_sproul</strong></a>(T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;intrinsic&nbsp;carrier&nbsp;concentration&nbsp;of&nbsp;silicon&nbsp;(cm**-3)&nbsp;according&nbsp;to&nbsp;Sproul94,&nbsp;where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)<br>
+<a href="http://dx.doi.org/10.1063/1.357521">http://dx.doi.org/10.1063/1.357521</a></tt></dd></dl>
+ <dl><dt><a name="-optical_properties"><strong>optical_properties</strong></a>(fname=None)</dt><dd><tt>Returns&nbsp;an&nbsp;array&nbsp;with&nbsp;the&nbsp;optical&nbsp;properties&nbsp;of&nbsp;a&nbsp;material<br>
+column&nbsp;0&nbsp;-&nbsp;wavelngth&nbsp;(nm)<br>
+column&nbsp;1&nbsp;-&nbsp;absorption&nbsp;coefficient&nbsp;(/cm)<br>
+column&nbsp;2&nbsp;-&nbsp;real&nbsp;refractive&nbsp;index<br>
+column&nbsp;3&nbsp;-&nbsp;imaginary&nbsp;refractive&nbsp;index<br>
+if&nbsp;so&nbsp;file&nbsp;is&nbsp;given&nbsp;then&nbsp;silicon&nbsp;is&nbsp;used<br>
+Eg:&nbsp;wavelength,&nbsp;abs_coeff,&nbsp;n,&nbsp;k&nbsp;=&nbsp;<a href="#-optical_properties">optical_properties</a>()</tt></dd></dl>
+ <dl><dt><a name="-phos_active"><strong>phos_active</strong></a>(T)</dt><dd><tt>Return&nbsp;the&nbsp;active&nbsp;limit&nbsp;of&nbsp;phosphorous&nbsp;in&nbsp;silicon<br>
+given&nbsp;temperature&nbsp;(K)</tt></dd></dl>
+ <dl><dt><a name="-phos_solubility"><strong>phos_solubility</strong></a>(T)</dt><dd><tt>Return&nbsp;the&nbsp;solubility&nbsp;limit&nbsp;of&nbsp;phosphorous&nbsp;in&nbsp;silicon<br>
+given&nbsp;the&nbsp;temperature&nbsp;(K)</tt></dd></dl>
+ <dl><dt><a name="-resistivity_Si_n"><strong>resistivity_Si_n</strong></a>(Ndonor)</dt><dd><tt>Return&nbsp;the&nbsp;resistivity&nbsp;of&nbsp;n-type&nbsp;silicon&nbsp;(ohm&nbsp;cm)<br>
+given&nbsp;the&nbsp;doping&nbsp;of&nbsp;donors(cm-3)</tt></dd></dl>
+ <dl><dt><a name="-resistivity_Si_p"><strong>resistivity_Si_p</strong></a>(Nacceptor)</dt><dd><tt>Return&nbsp;the&nbsp;resistivity&nbsp;of&nbsp;p-type&nbsp;silicon&nbsp;(ohm&nbsp;cm)<br>
+given&nbsp;the&nbsp;doping&nbsp;of&nbsp;acceptors(cm-3)</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>eV</strong> = 1.60217662e-19<br>
+<strong>k</strong> = 1.38064852e-23<br>
+<strong>pi</strong> = 3.141592653589793<br>
+<strong>q</strong> = 1.60217662e-19</td></tr></table>
+</body></html>

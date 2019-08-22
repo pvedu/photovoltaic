@@ -1,4 +1,4 @@
-from .core import q, k, h, c, Stefan_Boltzmann, cosd, sind, arcsind, arccosd, Wien, π
+from .core import q, k, h, c, Stefan_Boltzmann, cosd, sind, arcsind, arccosd, Wien
 from scipy import integrate
 import numpy as np
 import os

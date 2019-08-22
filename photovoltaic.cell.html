@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module photovoltaic.cell</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="photovoltaic.html"><font color="#ffffff">photovoltaic</font></a>.cell</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cu%5Ccloudstation%5Cpython%5Cphotovoltaic%5Cphotovoltaic%5Ccell.py">c:\u\cloudstation\python\photovoltaic\photovoltaic\cell.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-FF"><strong>FF</strong></a>(Vmp, Imp, Voc, Isc)</dt><dd><tt>Return&nbsp;FFv&nbsp;the&nbsp;fill&nbsp;factor&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell.<br>
+given&nbsp;Voc&nbsp;-&nbsp;open&nbsp;circuit&nbsp;voltage&nbsp;(volts)</tt></dd></dl>
+ <dl><dt><a name="-FF_Rs"><strong>FF_Rs</strong></a>(Voc, Isc, Rseries, ideality=1, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;FF&nbsp;(units)<br>
+Given:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Voc&nbsp;-&nbsp;open&nbsp;circuit&nbsp;voltage&nbsp;(volts)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Isc&nbsp;-&nbsp;short&nbsp;circuit&nbsp;current&nbsp;(amps)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Rseries&nbsp;-&nbsp;series&nbsp;resistance&nbsp;(ohms)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ideality&nbsp;factor&nbsp;(units)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;T&nbsp;-&nbsp;temperature&nbsp;(K)</tt></dd></dl>
+ <dl><dt><a name="-FF_RsRsh"><strong>FF_RsRsh</strong></a>(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15)</dt></dl>
+ <dl><dt><a name="-FF_Rsh"><strong>FF_Rsh</strong></a>(Voc, Isc, Rshunt, ideality=1, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;FF&nbsp;(units)<br>
+Given:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Voc&nbsp;-&nbsp;open&nbsp;circuit&nbsp;voltage&nbsp;(volts)</tt></dd></dl>
+ <dl><dt><a name="-FF_ideal"><strong>FF_ideal</strong></a>(Voc, ideality=1, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;FF&nbsp;(units)<br>
+given&nbsp;Voc&nbsp;-&nbsp;open&nbsp;circuit&nbsp;voltage&nbsp;(volts),&nbsp;ideality&nbsp;factor,&nbsp;defaults&nbsp;to&nbsp;1&nbsp;(units)</tt></dd></dl>
+ <dl><dt><a name="-IQE"><strong>IQE</strong></a>(ab, Wd, Se, Le, De, We, Sb, Wb, Lb, Db)</dt><dd><tt>We&nbsp;is&nbsp;the&nbsp;thickness&nbsp;of&nbsp;emitter&nbsp;and&nbsp;start&nbsp;of&nbsp;the&nbsp;junction</tt></dd></dl>
+ <dl><dt><a name="-IQE_base"><strong>IQE_base</strong></a>(ab, We_Wd, Wb, Lb, Db, Sb)</dt><dd><tt>Return&nbsp;quantum&nbsp;efficiency&nbsp;of&nbsp;the&nbsp;base&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell<br>
+where:<br>
+ab&nbsp;-&nbsp;&nbsp;absorption&nbsp;coefficient&nbsp;(cm)<br>
+We_Wd&nbsp;-&nbsp;junction&nbsp;depth&nbsp;(cm)<br>
+Sb&nbsp;-&nbsp;surface&nbsp;recombination&nbsp;velocity&nbsp;(cm/s)<br>
+Lb&nbsp;-&nbsp;diffusion&nbsp;length&nbsp;of&nbsp;minority&nbsp;carrier&nbsp;in&nbsp;the&nbsp;base&nbsp;(cm)<br>
+Db&nbsp;-&nbsp;diffusivity&nbsp;of&nbsp;minority&nbsp;carriers&nbsp;in&nbsp;the&nbsp;base&nbsp;(cm²/Vs)</tt></dd></dl>
+ <dl><dt><a name="-IQE_depletion"><strong>IQE_depletion</strong></a>(ab, We, Wd)</dt></dl>
+ <dl><dt><a name="-IQE_emitter"><strong>IQE_emitter</strong></a>(ab, We, Le, De, Se)</dt><dd><tt>Return&nbsp;the&nbsp;internal&nbsp;quantum&nbsp;efficiency&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell&nbsp;emitter<br>
+Where:<br>
+ab&nbsp;-&nbsp;absorption&nbsp;coefficient&nbsp;(/cm)<br>
+We&nbsp;-&nbsp;thickness&nbsp;of&nbsp;the&nbsp;emitter&nbsp;(cm)<br>
+De&nbsp;-&nbsp;diffusivty&nbsp;of&nbsp;carriers&nbsp;in&nbsp;the&nbsp;emitter&nbsp;(cm²/s)<br>
+Se&nbsp;-&nbsp;recombination&nbsp;at&nbsp;the&nbsp;front&nbsp;surface&nbsp;(cm/s)<br>
+Hovel,&nbsp;I&nbsp;think.</tt></dd></dl>
+ <dl><dt><a name="-I_cell"><strong>I_cell</strong></a>(V, IL, I0, T=298.15)</dt><dd><tt>Return&nbsp;current&nbsp;(amps)&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell<br>
+given&nbsp;voltage,&nbsp;light&nbsp;generated&nbsp;current,&nbsp;I0<br>
+also&nbsp;works&nbsp;for&nbsp;J0</tt></dd></dl>
+ <dl><dt><a name="-I_cell_Rshunt"><strong>I_cell_Rshunt</strong></a>(V, IL, I0, Rshunt, T=298.15)</dt><dd><tt>Return&nbsp;current&nbsp;(A)&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell&nbsp;from</tt></dd></dl>
+ <dl><dt><a name="-I_diode"><strong>I_diode</strong></a>(V, I0, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;current&nbsp;(A)&nbsp;in&nbsp;an&nbsp;ideal&nbsp;diode&nbsp;where&nbsp;I0&nbsp;is&nbsp;the&nbsp;saturation&nbsp;current&nbsp;(A),<br>
+V&nbsp;is&nbsp;the&nbsp;voltage&nbsp;across&nbsp;the&nbsp;junction&nbsp;(volts),&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)&nbsp;and&nbsp;n&nbsp;is&nbsp;the&nbsp;ideallity&nbsp;factor&nbsp;(units).<br>
+For&nbsp;current&nbsp;density.&nbsp;I0&nbsp;is&nbsp;in&nbsp;A/cm²&nbsp;and&nbsp;current&nbsp;density&nbsp;is&nbsp;returned</tt></dd></dl>
+ <dl><dt><a name="-J0_layer"><strong>J0_layer</strong></a>(W, N, D, L, S, ni=8600000000.0)</dt><dd><tt>Return&nbsp;the&nbsp;saturation&nbsp;current&nbsp;density&nbsp;(A/cm2)&nbsp;for&nbsp;the&nbsp;narrow&nbsp;case.<br>
+Whete:<br>
+W&nbsp;-&nbsp;layer&nbsp;thickness&nbsp;(cm)<br>
+N&nbsp;-&nbsp;doping&nbsp;(cm-3)<br>
+L&nbsp;-&nbsp;diffusion&nbsp;length&nbsp;(cm)<br>
+S&nbsp;-&nbsp;surface&nbsp;recombination&nbsp;velocity&nbsp;(cm/s)<br>
+Optional:<br>
+ni&nbsp;-&nbsp;intrinsic&nbsp;carrier&nbsp;concentration&nbsp;(cm-3)</tt></dd></dl>
+ <dl><dt><a name="-V_Rseries"><strong>V_Rseries</strong></a>(voltage, I, Rs)</dt><dd><tt>Returns&nbsp;the&nbsp;voltage&nbsp;of&nbsp;a&nbsp;solar&nbsp;cells&nbsp;under&nbsp;the&nbsp;effect&nbsp;of&nbsp;series&nbsp;resistance</tt></dd></dl>
+ <dl><dt><a name="-V_cell"><strong>V_cell</strong></a>(I, IL, I0, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;voltage&nbsp;(V)&nbsp;in&nbsp;an&nbsp;ideal&nbsp;solar&nbsp;cell&nbsp;where&nbsp;I0&nbsp;is&nbsp;the&nbsp;saturation&nbsp;current&nbsp;(A),<br>
+I&nbsp;is&nbsp;the&nbsp;current&nbsp;(A),&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)&nbsp;and&nbsp;n&nbsp;is&nbsp;the&nbsp;ideallity&nbsp;factor&nbsp;(units).<br>
+For&nbsp;current&nbsp;density.&nbsp;I0&nbsp;is&nbsp;in&nbsp;A/cm²&nbsp;and&nbsp;current&nbsp;density&nbsp;is&nbsp;returned</tt></dd></dl>
+ <dl><dt><a name="-Voc"><strong>Voc</strong></a>(IL, I0, n=1, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;open&nbsp;circuit&nbsp;voltage,&nbsp;Voc,&nbsp;(volts)&nbsp;from&nbsp;IL(A)&nbsp;and&nbsp;I0(A).<br>
+IL&nbsp;and&nbsp;Io&nbsp;must&nbsp;be&nbsp;in&nbsp;the&nbsp;same&nbsp;units,&nbsp;Eg,&nbsp;(A),&nbsp;(mA)&nbsp;etc<br>
+Using&nbsp;(mA/cm**2)&nbsp;uses&nbsp;J0&nbsp;and&nbsp;JL&nbsp;instead.</tt></dd></dl>
+ <dl><dt><a name="-cell_params"><strong>cell_params</strong></a>(V, I)</dt><dd><tt>Return&nbsp;key&nbsp;parameters&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell&nbsp;IV&nbsp;curve&nbsp;where&nbsp;V&nbsp;is&nbsp;a&nbsp;voltage&nbsp;array&nbsp;and<br>
+I&nbsp;is&nbsp;a&nbsp;current&nbsp;array,&nbsp;both&nbsp;with&nbsp;type&nbsp;numpy.array.<br>
+Voc&nbsp;(V),&nbsp;Isc&nbsp;(A),&nbsp;FF,&nbsp;Vmp(V),&nbsp;Imp(A)&nbsp;given&nbsp;voltage&nbsp;vector&nbsp;in&nbsp;(volts)<br>
+current&nbsp;vector&nbsp;in&nbsp;(amps)&nbsp;or&nbsp;(A/cm²)<br>
+If&nbsp;I&nbsp;is&nbsp;in&nbsp;(A/cm²)&nbsp;then&nbsp;Isc&nbsp;will&nbsp;be&nbsp;Jsc&nbsp;and&nbsp;Imp&nbsp;will&nbsp;be&nbsp;Jmp.&nbsp;No&nbsp;attempt&nbsp;is&nbsp;made&nbsp;to&nbsp;fit&nbsp;the&nbsp;fill&nbsp;factor.</tt></dd></dl>
+ <dl><dt><a name="-current2gen"><strong>current2gen</strong></a>(current)</dt><dd><tt>Return&nbsp;generation&nbsp;(eh&nbsp;pairs/s)&nbsp;given&nbsp;current&nbsp;(amps)</tt></dd></dl>
+ <dl><dt><a name="-efficiency"><strong>efficiency</strong></a>(Voc, Isc, FF, A=1)</dt><dd><tt>Return&nbsp;the&nbsp;efficiency&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell&nbsp;(units&nbsp;not&nbsp;percentage)given&nbsp;Voc&nbsp;(volts),&nbsp;Isc&nbsp;in&nbsp;(amps)&nbsp;and&nbsp;&nbsp;FF&nbsp;(units).<br>
+also&nbsp;works&nbsp;for&nbsp;Jsc&nbsp;since&nbsp;area&nbsp;of&nbsp;1&nbsp;is&nbsp;assumed</tt></dd></dl>
+ <dl><dt><a name="-finger_resistivity"><strong>finger_resistivity</strong></a>(L, Jmp, Sf, resistivity, wf, df, Vmp)</dt><dd><tt>Return&nbsp;the&nbsp;fractional&nbsp;resistivity&nbsp;power&nbsp;loss&nbsp;in&nbsp;a&nbsp;finger&nbsp;(0&nbsp;to&nbsp;1)<br>
+Given:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;L:&nbsp;finger&nbsp;length&nbsp;(cm)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Jmp:&nbsp;currrent&nbsp;density&nbsp;at&nbsp;the&nbsp;max&nbsp;power&nbsp;point&nbsp;in&nbsp;A/cm2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Sf:&nbsp;finger&nbsp;spacing&nbsp;(cm)</tt></dd></dl>
+ <dl><dt><a name="-finger_shading"><strong>finger_shading</strong></a>(wf, Sf)</dt><dd><tt>Return&nbsp;the&nbsp;fractional&nbsp;power&nbsp;loss&nbsp;due&nbsp;to&nbsp;finger&nbsp;shading&nbsp;(0&nbsp;to&nbsp;1)&nbsp;where&nbsp;wf&nbsp;is&nbsp;the&nbsp;wideth&nbsp;of&nbsp;the&nbsp;finger&nbsp;and&nbsp;Sf&nbsp;is&nbsp;the&nbsp;finger&nbsp;spacing.</tt></dd></dl>
+ <dl><dt><a name="-finger_sheet"><strong>finger_sheet</strong></a>(Sf, Jmp, Rsheet, Vmp)</dt></dl>
+ <dl><dt><a name="-finger_total_loss"><strong>finger_total_loss</strong></a>(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp)</dt><dd><tt>Return&nbsp;the&nbsp;fractional&nbsp;power&nbsp;loss&nbsp;in&nbsp;a&nbsp;finger<br>
+Given:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;L:&nbsp;finger&nbsp;length&nbsp;(cm)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Jmp:&nbsp;currrent&nbsp;density&nbsp;at&nbsp;the&nbsp;max&nbsp;power&nbsp;point&nbsp;in&nbsp;A/cm2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Sf:&nbsp;finger&nbsp;spacing&nbsp;(cm)</tt></dd></dl>
+ <dl><dt><a name="-impliedV"><strong>impliedV</strong></a>(Δn, N, T=298.15)</dt><dd><tt>Return&nbsp;voltage&nbsp;(V)&nbsp;where&nbsp;Δn&nbsp;is&nbsp;the&nbsp;excess&nbsp;carrier&nbsp;concentration&nbsp;(cm-3),&nbsp;N&nbsp;is&nbsp;the&nbsp;doping&nbsp;(cm-3)&nbsp;and<br>
+T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K).&nbsp;Implied&nbsp;voltage&nbsp;is&nbsp;often&nbsp;used&nbsp;to&nbsp;convert&nbsp;the&nbsp;carrier&nbsp;concentration&nbsp;in&nbsp;a&nbsp;lifetime<br>
+tester&nbsp;to&nbsp;voltage.</tt></dd></dl>
+ <dl><dt><a name="-implied_carrier"><strong>implied_carrier</strong></a>(V, N, ni=8600000000.0, T=298.15)</dt><dd><tt>Return&nbsp;excess&nbsp;carrier&nbsp;concentration&nbsp;(cm-3)<br>
+Given&nbsp;voltage&nbsp;and&nbsp;doping&nbsp;determine</tt></dd></dl>
+ <dl><dt><a name="-normalised_Voc"><strong>normalised_Voc</strong></a>(Voc, ideality, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;normalised&nbsp;voc&nbsp;of&nbsp;a&nbsp;solar&nbsp;cell&nbsp;where&nbsp;Voc&nbsp;is&nbsp;the&nbsp;open-circuit&nbsp;voltage,&nbsp;'ideality'&nbsp;is&nbsp;the&nbsp;ideality&nbsp;factor<br>
+and&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)</tt></dd></dl>
+ <dl><dt><a name="-qefsr"><strong>qefsr</strong></a>(wavelength, spectral_response)</dt><dd><tt>convert&nbsp;SR&nbsp;(A/W)&nbsp;to&nbsp;QE&nbsp;(unit&nbsp;0&nbsp;to&nbsp;1)<br>
+assumes&nbsp;that&nbsp;the&nbsp;wavelegth&nbsp;is&nbsp;in&nbsp;&nbsp;nm</tt></dd></dl>
+ <dl><dt><a name="-spectral_mismatch"><strong>spectral_mismatch</strong></a>(spectrum, lamp, ref_SR, device_SR)</dt><dd><tt>returns&nbsp;the&nbsp;spectral&nbsp;mismatch.&nbsp;Where&nbsp;spectrum&nbsp;is&nbsp;the&nbsp;reference&nbsp;spectrum&nbsp;in&nbsp;W/m2&nbsp;or&nbsp;similar,<br>
+lamp&nbsp;is&nbsp;the&nbsp;spectrum&nbsp;of&nbsp;the&nbsp;lamp&nbsp;in&nbsp;W/m2&nbsp;or&nbsp;similar,<br>
+ref_SR&nbsp;is&nbsp;the&nbsp;spectral&nbsp;response&nbsp;of&nbsp;the&nbsp;reference&nbsp;cell&nbsp;used&nbsp;for&nbsp;calibration&nbsp;in&nbsp;A/W&nbsp;and<br>
+device_SR&nbsp;is&nbsp;the&nbsp;spectral&nbsp;response&nbsp;of&nbsp;the&nbsp;device&nbsp;under&nbsp;test&nbsp;in&nbsp;A/W.</tt></dd></dl>
+ <dl><dt><a name="-srfqe"><strong>srfqe</strong></a>(wavelength, QE)</dt><dd><tt>'converts&nbsp;a&nbsp;QE&nbsp;in&nbsp;units&nbsp;to&nbsp;spectral&nbsp;response<br>
+given&nbsp;the&nbsp;wavelength&nbsp;(nm)</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>pi</strong> = 3.141592653589793<br>
+<strong>q</strong> = 1.60217662e-19</td></tr></table>
+</body></html>

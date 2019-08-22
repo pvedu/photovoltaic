@@ -4,5 +4,5 @@ python setup.py sdist
 python setup.py bdist_wheel
 
 pip uninstall photovoltaic
-pip install dist\photovoltaic-0.1.5-py3-none-any.whl
+pip install dist\photovoltaic-0.1.8-py3-none-any.whl
 pause

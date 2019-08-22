@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module photovoltaic.sun</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="photovoltaic.html"><font color="#ffffff">photovoltaic</font></a>.sun</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cu%5Ccloudstation%5Cpython%5Cphotovoltaic%5Cphotovoltaic%5Csun.py">c:\u\cloudstation\python\photovoltaic\photovoltaic\sun.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="scipy.integrate.html">scipy.integrate</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-air_mass"><strong>air_mass</strong></a>(angle)</dt><dd><tt>Return&nbsp;air&nbsp;mass&nbsp;(units)&nbsp;where&nbsp;*angle*&nbsp;is&nbsp;the&nbsp;zenith&nbsp;angle&nbsp;(degrees)</tt></dd></dl>
+ <dl><dt><a name="-am_intensity"><strong>am_intensity</strong></a>(airmass)</dt><dd><tt>Return&nbsp;radiation&nbsp;intensity&nbsp;(W/m**2)&nbsp;given&nbsp;airmass&nbsp;(units)</tt></dd></dl>
+ <dl><dt><a name="-am_shadow"><strong>am_shadow</strong></a>(s, h)</dt><dd><tt>Return&nbsp;the&nbsp;air&nbsp;mass&nbsp;(units)&nbsp;where&nbsp;h&nbsp;is&nbsp;the&nbsp;height&nbsp;of&nbsp;a&nbsp;pole&nbsp;and&nbsp;s&nbsp;is&nbsp;the&nbsp;length&nbsp;of&nbsp;its&nbsp;shadow.<br>
+s&nbsp;and&nbsp;h&nbsp;are&nbsp;the&nbsp;same&nbsp;length&nbsp;units,&nbsp;i.e.&nbsp;both&nbsp;in&nbsp;m,&nbsp;ft,&nbsp;cm&nbsp;etc.</tt></dd></dl>
+ <dl><dt><a name="-blackbody_integrated"><strong>blackbody_integrated</strong></a>(T)</dt><dd><tt>Return&nbsp;integrated&nbsp;irradiance&nbsp;(W/m2/steradian)&nbsp;from&nbsp;a&nbsp;blackbody&nbsp;where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)</tt></dd></dl>
+ <dl><dt><a name="-blackbody_peak"><strong>blackbody_peak</strong></a>(T)</dt><dd><tt>Return&nbsp;the&nbsp;peak&nbsp;wavelength&nbsp;(nm)&nbsp;of&nbsp;a&nbsp;black&nbsp;body&nbsp;spectrum&nbsp;where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)</tt></dd></dl>
+ <dl><dt><a name="-blackbody_spectrum"><strong>blackbody_spectrum</strong></a>(wavelength, T=6000)</dt><dd><tt>Return&nbsp;the&nbsp;blackbody&nbsp;irradaiance&nbsp;(W/m2/nm)&nbsp;at&nbsp;a&nbsp;given&nbsp;wavelength&nbsp;(nm)&nbsp;and&nbsp;temperature,&nbsp;T&nbsp;(K).</tt></dd></dl>
+ <dl><dt><a name="-declination"><strong>declination</strong></a>(day_no)</dt><dd><tt>Return&nbsp;declination&nbsp;angle&nbsp;of&nbsp;sun&nbsp;(degrees)&nbsp;where&nbsp;day_no&nbsp;is&nbsp;the&nbsp;day&nbsp;of&nbsp;the&nbsp;year&nbsp;(day).<br>
+For&nbsp;Jan&nbsp;1&nbsp;day_no&nbsp;=&nbsp;1,&nbsp;Dec&nbsp;31&nbsp;dayno&nbsp;=&nbsp;365.&nbsp;There&nbsp;is&nbsp;no&nbsp;correction&nbsp;for&nbsp;leap&nbsp;years</tt></dd></dl>
+ <dl><dt><a name="-elev_azi"><strong>elev_azi</strong></a>(declination, latitude, local_solar_time)</dt><dd><tt>Return&nbsp;the&nbsp;elevation&nbsp;(degrees)&nbsp;and&nbsp;azimuth&nbsp;(degrees)</tt></dd></dl>
+ <dl><dt><a name="-elevation"><strong>elevation</strong></a>(declination, latitude, local_solar_time)</dt><dd><tt>Return&nbsp;the&nbsp;elevation&nbsp;angle&nbsp;of&nbsp;the&nbsp;sun&nbsp;(degrees)<br>
+given&nbsp;declination&nbsp;(degrees),&nbsp;latitude&nbsp;(degrees)&nbsp;and&nbsp;local_solar_time&nbsp;(hours)</tt></dd></dl>
+ <dl><dt><a name="-equal_spacing"><strong>equal_spacing</strong></a>(x, y, x_min, x_max, x_step)</dt><dd><tt>Returns&nbsp;spectra&nbsp;with&nbsp;equal&nbsp;spacking&nbsp;and&nbsp;truncation&nbsp;(W/m2)&nbsp;(NOT&nbsp;W/m2/nm)<br>
+given&nbsp;a&nbsp;spectrum&nbsp;(W/m2/nm)&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;wavelength&nbsp;(nm)<br>
+wavelength&nbsp;minimum&nbsp;(nm)&nbsp;and&nbsp;wavlength&nbsp;maximum&nbsp;(nm)<br>
+Note:&nbsp;would&nbsp;actually&nbsp;work&nbsp;for&nbsp;any&nbsp;x&nbsp;y&nbsp;data</tt></dd></dl>
+ <dl><dt><a name="-equation_of_time"><strong>equation_of_time</strong></a>(day_no)</dt><dd><tt>Return&nbsp;the&nbsp;equation&nbsp;of&nbsp;time&nbsp;(minutes)&nbsp;where&nbsp;day_no&nbsp;is&nbsp;the&nbsp;day&nbsp;of&nbsp;the&nbsp;year&nbsp;(day).</tt></dd></dl>
+ <dl><dt><a name="-etr_earth"><strong>etr_earth</strong></a>(day_no)</dt><dd><tt>Return&nbsp;extraterrestrial&nbsp;radiation&nbsp;at&nbsp;earth&nbsp;(W/m**2)&nbsp;where&nbsp;day_no&nbsp;is&nbsp;the&nbsp;day&nbsp;of&nbsp;the&nbsp;year&nbsp;(day).<br>
+January&nbsp;1&nbsp;has&nbsp;a&nbsp;day_no&nbsp;of&nbsp;1.&nbsp;There&nbsp;is&nbsp;no&nbsp;correction&nbsp;for&nbsp;leap&nbsp;year.</tt></dd></dl>
+ <dl><dt><a name="-module_direct"><strong>module_direct</strong></a>(azimuth, elevation, module_azimuth, module_tilt)</dt><dd><tt>Returns&nbsp;the&nbsp;faction&nbsp;of&nbsp;light&nbsp;on&nbsp;a&nbsp;arbtrarily&nbsp;tilted&nbsp;surface<br>
+given&nbsp;sun&nbsp;azimuth&nbsp;(degrees)&nbsp;where&nbsp;north&nbsp;is&nbsp;zero&nbsp;and&nbsp;elevation<br>
+module_azimuth&nbsp;and&nbsp;module_tilt,&nbsp;where</tt></dd></dl>
+ <dl><dt><a name="-solar_spectra"><strong>solar_spectra</strong></a>(fname=None)</dt><dd><tt>Return&nbsp;wavelength&nbsp;(nm)&nbsp;and&nbsp;AM0,&nbsp;AM15G,&nbsp;AM15D&nbsp;(W/m²/nm)<br>
+of&nbsp;the&nbsp;standard&nbsp;spectrum.<br>
+reference&nbsp;XXX,&nbsp;DOI&nbsp;XXX</tt></dd></dl>
+ <dl><dt><a name="-space_solar_power"><strong>space_solar_power</strong></a>(x)</dt><dd><tt>Return&nbsp;the&nbsp;radiant&nbsp;power&nbsp;density&nbsp;(W/m²)&nbsp;where&nbsp;x&nbsp;is&nbsp;the&nbsp;distance&nbsp;from&nbsp;&nbsp;the&nbsp;sun&nbsp;(m)</tt></dd></dl>
+ <dl><dt><a name="-sun_position"><strong>sun_position</strong></a>(dayNo, latitude, longitude, GMTOffset, H, M)</dt><dd><tt>Return&nbsp;the&nbsp;position&nbsp;of&nbsp;the&nbsp;sun&nbsp;as&nbsp;a&nbsp;elevation&nbsp;and&nbsp;azimuth&nbsp;given<br>
+latitude,&nbsp;logitude&nbsp;and&nbsp;the&nbsp;GMTOffset,</tt></dd></dl>
+ <dl><dt><a name="-sun_rise_set"><strong>sun_rise_set</strong></a>(latitude, declination, time_correction)</dt><dd><tt>Return&nbsp;the&nbsp;sunrise&nbsp;and&nbsp;sunset&nbsp;times&nbsp;in&nbsp;hours<br>
+given&nbsp;the&nbsp;latitude&nbsp;(degrees)&nbsp;and&nbsp;the&nbsp;declination&nbsp;(degrees)</tt></dd></dl>
+ <dl><dt><a name="-time_correction"><strong>time_correction</strong></a>(EoT, longitude, GMTOffset)</dt><dd><tt>Return&nbsp;the&nbsp;time&nbsp;correction&nbsp;(minutes)&nbsp;where&nbsp;EoT&nbsp;is&nbsp;the&nbsp;equation&nbsp;of&nbsp;time,<br>
+and&nbsp;given&nbsp;location&nbsp;longitude&nbsp;(degrees)&nbsp;and&nbsp;the&nbsp;GMT&nbsp;offset&nbsp;(hours)</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Stefan_Boltzmann</strong> = 5.670367e-08<br>
+<strong>Wien</strong> = 0.002898<br>
+<strong>c</strong> = 299792458.0<br>
+<strong>h</strong> = 6.62607004e-34<br>
+<strong>k</strong> = 1.38064852e-23<br>
+<strong>q</strong> = 1.60217662e-19</td></tr></table>
+</body></html>

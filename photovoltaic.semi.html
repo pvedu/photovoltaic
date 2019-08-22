@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module photovoltaic.semi</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="photovoltaic.html"><font color="#ffffff">photovoltaic</font></a>.semi</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cu%5Ccloudstation%5Cpython%5Cphotovoltaic%5Cphotovoltaic%5Csemi.py">c:\u\cloudstation\python\photovoltaic\photovoltaic\semi.py</a></font></td></tr></table>
+    <p><tt>"Basic&nbsp;semiconductor&nbsp;equations.&nbsp;The&nbsp;cell&nbsp;module&nbsp;contains&nbsp;code&nbsp;related&nbsp;to&nbsp;solar&nbsp;cells&nbsp;and&nbsp;devices.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-U_SRH"><strong>U_SRH</strong></a>(n, p, Et, τ_n, τ_p, ni_eff=8500000000.0, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;shockley&nbsp;read&nbsp;hall&nbsp;recombination&nbsp;cm-3<br>
+given&nbsp;Et&nbsp;(eV)&nbsp;trap&nbsp;level&nbsp;from&nbsp;intrinsic</tt></dd></dl>
+ <dl><dt><a name="-Vt"><strong>Vt</strong></a>(T=298.15)</dt><dd><tt>Return&nbsp;thermal&nbsp;voltage&nbsp;(volts)&nbsp;at&nbsp;given&nbsp;temperature,&nbsp;T(Kelvin).<br>
+The&nbsp;default&nbsp;temperature&nbsp;is&nbsp;298.15&nbsp;K,&nbsp;which&nbsp;is&nbsp;equal&nbsp;to&nbsp;25&nbsp;°C</tt></dd></dl>
+ <dl><dt><a name="-bulkfeffective"><strong>bulkfeffective</strong></a>(tau_eff, S, thickness)</dt><dd><tt>Return&nbsp;the&nbsp;bulk&nbsp;lifetime&nbsp;(s)&nbsp;where&nbsp;taus<br>
+Given&nbsp;tau_eff&nbsp;(s)<br>
+surface&nbsp;recombination&nbsp;(cm/s)<br>
+thickness&nbsp;(cm)</tt></dd></dl>
+ <dl><dt><a name="-conductivity"><strong>conductivity</strong></a>(n, p, ue, uh)</dt><dd><tt>Return&nbsp;the&nbsp;conductivity&nbsp;of&nbsp;a&nbsp;material(siemens)<br>
+Where:<br>
+n&nbsp;-&nbsp;concentration&nbsp;of&nbsp;electrons&nbsp;(cm-3)<br>
+p&nbsp;-&nbsp;concentration&nbsp;of&nbsp;holes&nbsp;(cm-3)<br>
+ue&nbsp;-&nbsp;electron&nbsp;mobility&nbsp;(cm²/Vs)<br>
+uh&nbsp;-&nbsp;hole&nbsp;mobility&nbsp;(cm²/Vs)</tt></dd></dl>
+ <dl><dt><a name="-diffusivity"><strong>diffusivity</strong></a>(mobility, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;diffusivity&nbsp;(cm²/s)&nbsp;given&nbsp;the&nbsp;mobility&nbsp;(cm²/Vs)<br>
+This&nbsp;is&nbsp;also&nbsp;known&nbsp;as&nbsp;the&nbsp;Einstein&nbsp;relation</tt></dd></dl>
+ <dl><dt><a name="-equilibrium_carrier"><strong>equilibrium_carrier</strong></a>(N, ni=8600000000.0)</dt><dd><tt>Return&nbsp;the&nbsp;majority&nbsp;and&nbsp;minority&nbsp;carrier&nbsp;concentrations&nbsp;(cm-3)&nbsp;of&nbsp;a&nbsp;semiconductor&nbsp;at&nbsp;equilibrium<br>
+where&nbsp;N&nbsp;is&nbsp;the&nbsp;doping&nbsp;level&nbsp;(cm-3)&nbsp;and&nbsp;ni&nbsp;is&nbsp;the&nbsp;intrinsic&nbsp;carrier&nbsp;concentratoin&nbsp;(cm-3)<br>
+Strictly&nbsp;N&nbsp;and&nbsp;ni&nbsp;just&nbsp;have&nbsp;to&nbsp;be&nbsp;in&nbsp;the&nbsp;same&nbsp;units&nbsp;but&nbsp;(cm-3&nbsp;is&nbsp;almost&nbsp;always&nbsp;used.</tt></dd></dl>
+ <dl><dt><a name="-length2lifetime"><strong>length2lifetime</strong></a>(length, diffusivity)</dt><dd><tt>Convert&nbsp;the&nbsp;carrier&nbsp;diffusion&nbsp;length,&nbsp;L&nbsp;(cm),&nbsp;to&nbsp;minority&nbsp;lifetime&nbsp;(s),&nbsp;given&nbsp;the&nbsp;D,&nbsp;the&nbsp;diffusivity&nbsp;(cm2/s).</tt></dd></dl>
+ <dl><dt><a name="-lengthflifetime"><strong>lengthflifetime</strong></a>(lifetime, diffusivity)</dt><dd><tt>Convert&nbsp;the&nbsp;carrier&nbsp;diffusion&nbsp;length,&nbsp;L&nbsp;(cm),&nbsp;to&nbsp;minority&nbsp;lifetime&nbsp;(s),&nbsp;given&nbsp;the&nbsp;D,&nbsp;the&nbsp;diffusivity&nbsp;(cm2/s).</tt></dd></dl>
+ <dl><dt><a name="-lifetime"><strong>lifetime</strong></a>(U, Δn)</dt><dd><tt>Return&nbsp;the&nbsp;lifetime&nbsp;(seconds)&nbsp;where&nbsp;U&nbsp;is&nbsp;the&nbsp;recombination&nbsp;&nbsp;and&nbsp;Δn&nbsp;is&nbsp;the&nbsp;excess&nbsp;minority&nbsp;carrier&nbsp;density.<br>
+This&nbsp;is&nbsp;the&nbsp;definition&nbsp;of&nbsp;lifetime</tt></dd></dl>
+ <dl><dt><a name="-mobility"><strong>mobility</strong></a>(D, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;mobility&nbsp;of&nbsp;carriers&nbsp;(cm²/Vs)&nbsp;given&nbsp;D&nbsp;is&nbsp;the&nbsp;diffusivity&nbsp;(cm²/s).<br>
+This&nbsp;is&nbsp;also&nbsp;known&nbsp;as&nbsp;the&nbsp;Einstein&nbsp;relation</tt></dd></dl>
+ <dl><dt><a name="-probability_bose_einstein"><strong>probability_bose_einstein</strong></a>(E, Ef, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;Maxwell&nbsp;Bolzman&nbsp;dirac&nbsp;function&nbsp;(units)&nbsp;where&nbsp;E&nbsp;is&nbsp;the&nbsp;energy&nbsp;(eV),&nbsp;Ef&nbsp;is&nbsp;the&nbsp;fermi&nbsp;energy&nbsp;(eV)</tt></dd></dl>
+ <dl><dt><a name="-probability_fermi_dirac"><strong>probability_fermi_dirac</strong></a>(E, Ef, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;fermi&nbsp;dirac&nbsp;function&nbsp;(units)&nbsp;where&nbsp;E&nbsp;is&nbsp;the&nbsp;energy&nbsp;(eV),&nbsp;Ef&nbsp;is&nbsp;the&nbsp;fermi&nbsp;energy&nbsp;(eV)</tt></dd></dl>
+ <dl><dt><a name="-probability_maxwell_boltzmann"><strong>probability_maxwell_boltzmann</strong></a>(E, Ef, T=298.15)</dt><dd><tt>Return&nbsp;the&nbsp;Maxwell&nbsp;Bolzman&nbsp;dirac&nbsp;function&nbsp;(units)&nbsp;where&nbsp;E&nbsp;is&nbsp;the&nbsp;energy&nbsp;(eV),&nbsp;Ef&nbsp;is&nbsp;the&nbsp;fermi&nbsp;energy&nbsp;(eV)</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>k</strong> = 1.38064852e-23<br>
+<strong>q</strong> = 1.60217662e-19</td></tr></table>
+</body></html>

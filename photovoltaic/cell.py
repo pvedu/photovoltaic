@@ -1,4 +1,4 @@
-from .core import q, pi, π, Vt
+from .core import q, pi, Vt
 from  .si import ni_sproul
 import numpy as np
 
@@ -47,19 +47,26 @@ def IQE(ab, Wd, Se, Le, De, We, Sb, Wb, Lb, Db):
     return QEE, QEB, QED, IQEt
 
 
-def QE2SR(wavelength, QE):
+def srfqe(wavelength, QE):
     """'converts a QE in units to spectral response
     given the wavelength (nm)"""
     spectral_response = QE * wavelength / 1239.8
     return spectral_response
 
 
-def SR2QE(wavelength, spectral_response):
+def qefsr(wavelength, spectral_response):
     """convert SR (A/W) to QE (unit 0 to 1)
     assumes that the wavelegth is in  nm"""
     QE = spectral_response * wavelength / 1239.8
     return QE
 
+def spectral_mismatch(spectrum, lamp, ref_SR, device_SR):
+    '''returns the spectral mismatch. Where spectrum is the reference spectrum in W/m2 or similar,
+    lamp is the spectrum of the lamp in W/m2 or similar,
+    ref_SR is the spectral response of the reference cell used for calibration in A/W and
+    device_SR is the spectral response of the device under test in A/W. '''
+    M = (np.sum(lamp * device_SR) / np.sum(lamp * ref_SR)) * (np.sum(spectrum * ref_SR) / np.sum(spectrum * device_SR))
+    return M
 
 def impliedV(Δn, N, T=298.15):
     """Return voltage (V) where Δn is the excess carrier concentration (cm-3), N is the doping (cm-3) and

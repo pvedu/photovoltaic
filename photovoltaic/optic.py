@@ -8,8 +8,8 @@ def photon_flux(power, wavelength):
 
 
 def absorptionfextinction(kd, wavelength):
-    """Quick convert of extinction coefficient (units) to absorption coefficient(cm-1) given the wavelength (nm)"""
-    return 1e7 * 4 * π * kd / wavelength
+    """return the absorption coefficient (cm-1) given the extinction coeffcienct,k (units)"""
+    return 1e7 * 4 *pi * kd / wavelength
 
 
 def refraction(n1, n2, θ1):
@@ -56,7 +56,7 @@ def ARC_refl(wavelength, n0, n1, nSemi, thickness):
     r1 = (n0 - n1) / (n0 + n1)
     r2 = (n1 - nSemi) / (n1 + nSemi)
     θ = (2 * pi * n1 * thickness) / wavelength
-    reflectivity = 100 * (r1 * r1 + r2 * r2 + 2 * r1 * r2 * np.cos(2 * θ)) / (
+    reflectivity = (r1 * r1 + r2 * r2 + 2 * r1 * r2 * np.cos(2 * θ)) / (
         1 + r1 * r1 * r2 * r2 + 2 * r1 * r2 * np.cos(2 * θ))
     return reflectivity
 

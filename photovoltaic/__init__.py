@@ -18,7 +18,7 @@ Contributions by: sgbowden, richter, heraimenka, jhul etc
 Variables and acronyms
 ARC - anti-reflection coating
 """
-__version__ = '0.1.5'
+__version__ = '0.1.8'
 
 #import the submodules
 
@@ -27,6 +27,7 @@ from . import sun
 from . import si
 from . import money
 from . import cell
+from . import semi
 
 #import the basic definitions
 from .core import *

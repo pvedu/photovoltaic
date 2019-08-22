@@ -86,3 +86,11 @@ def conductivity(n, p, ue, uh):
     ue - electron mobility (cm²/Vs)
     uh - hole mobility (cm²/Vs)"""
     return q * ue * n + q * uh * p
+	
+def U_SRH(n, p, Et, τ_n, τ_p, ni_eff=8.5e9, T=298.15):
+    """Return the shockley read hall recombination cm-3
+    given Et (eV) trap level from intrinsic"""
+    n1 = ni_eff * np.exp(q * Et / k / T)
+    p1 = ni_eff * np.exp(-q * Et / k / T)
+    U_SRH = (n * p - ni_eff ** 2) / (τ_p * (n + n1) + τ_n * (p + p1))
+    return U_SRH

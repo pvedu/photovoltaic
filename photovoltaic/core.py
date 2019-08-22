@@ -9,7 +9,7 @@ Wien = 2.898e-3  # (m K)
 Stefan_Boltzmann = 5.670367e-08  # (W m^-2 K^-4)
 pi = np.pi  #
 h = 6.62607004e-34  # (J.s)
-hbar = 6.62607004e-34 / (2 * π)  # usable
+hbar = 6.62607004e-34 / (2 * pi)  # usable
 c = 299792458.0  # (m s^-1)
 hc_q = h * c / q  # 1.2398419745831506e-06
 
