@@ -2,8 +2,9 @@
 photovoltaic
 ============
 
-photovoltaic is a library of python functions used in photovoltaics. Individual functions are in photovoltaic.html, which can be viewed at:
-http://htmlpreview.github.io/?https://github.com/trautsned/photovoltaic/blob/master/photovoltaic.html
+photovoltaic is a library of python functions used in photovoltaics.
+
+Help Index: http://htmlpreview.github.io/?https://github.com/trautsned/photovoltaic/blob/master/html/photovoltaic.html
 
 
 Typical usage:
