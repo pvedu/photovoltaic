@@ -9,7 +9,7 @@ n0 = 1
 
 nSemi = 3.5
 Eg = 1.12 # (eV)
-Wg = pv.nm2eV(Eg) # (nm) the wavelength corresponding to Eg
+Wg = pv.eVfnm(Eg) # (nm) the wavelength corresponding to Eg
 
 # read standard specta
 wavelength, AMO, AM15G, AM15D = pv.sun.solar_spectra()
@@ -18,7 +18,7 @@ wavelength_Eg = wavelength[wavelength < Wg] # wavelengths with photon greater th
 AM15G_Eg = AM15G[wavelength < Wg] # corresponding spectrum
 
 # current to band gap
-photons = AM15G_Eg / (pv.nm2eV(wavelength_Eg))
+photons = AM15G_Eg / (pv.eVfnm(wavelength_Eg))
 Jsc_total = np.trapz(photons, wavelength_Eg)
 print('Jsc for photons above bandgap: {:.1f} A/m2'.format(Jsc_total))
 

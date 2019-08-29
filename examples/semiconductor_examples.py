@@ -8,13 +8,13 @@ print('Silicon ni at 300 K {:.3e} cm-3'.format(pv.si.ni_misiakos(300)))
 
 print('n-type cell with doping level of 2e15')
 ni = pv.si.ni_misiakos()
-n0, p0 = pv.si.equilibrium_carrier(2e15, ni)  # n-type dioping at 1e15
+n0, p0 = pv.semi.equilibrium_carrier(2e15, ni)  # n-type dioping at 1e15
 print('Majority n {:.3e}, Minority p: {:.3e}'.format(n0, p0))
 dn = 1e15
 dEc, dEv = pv.si.bandgap_schenk(n0 + dn, p0 + dn, n0, p0, dn)
 print('BGN Ec: {:.2e} eV, Ev {:.2e} eV'.format(dEc, dEv))
 
-print('nieff {:.3e}'.format(pv.n_ieff(n0, p0, 1e15)))
+print('nieff {:.3e}'.format(pv.si.n_ieff(n0, p0, 1e15)))
 B = pv.si.U_radiative_alt(n0, p0, dn)
 print('radiative: {:.3}'.format(B))
 print('Mobility of electrons as minority carriers: ', pv.u_Si_e_min(1e15))
