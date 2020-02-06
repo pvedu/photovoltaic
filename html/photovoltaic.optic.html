@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="photovoltaic.html"><font color="#ffffff">photovoltaic</font></a>.optic</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href="..">index</a><br><a href="file:c%3A%5Cu%5Ccloudstation%5Cpython%5Cphotovoltaic%5Cphotovoltaic%5Coptic.py">c:\u\cloudstation\python\photovoltaic\photovoltaic\optic.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:t%3A%5Cpycharm%5Cphotovoltaic%5Cphotovoltaic%5Coptic.py">t:\pycharm\photovoltaic\photovoltaic\optic.py</a></font></td></tr></table>
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -25,28 +25,29 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-ARC_opt_n"><strong>ARC_opt_n</strong></a>(n0, n2)</dt><dd><tt>Return&nbsp;the&nbsp;optimal&nbsp;refractive&nbsp;index,&nbsp;typically&nbsp;denoted&nbsp;as&nbsp;n1,&nbsp;for&nbsp;an&nbsp;antireflection&nbsp;coating&nbsp;(units)<br>
+<td width="100%"><dl><dt><a name="-absorptionfextinction"><strong>absorptionfextinction</strong></a>(kd, wavelength)</dt><dd><tt>return&nbsp;the&nbsp;absorption&nbsp;coefficient&nbsp;(cm-1)&nbsp;given&nbsp;the&nbsp;extinction&nbsp;coeffcienct,k&nbsp;(units)</tt></dd></dl>
+ <dl><dt><a name="-arc_opt_n"><strong>arc_opt_n</strong></a>(n0, n2)</dt><dd><tt>Return&nbsp;the&nbsp;optimal&nbsp;refractive&nbsp;index,&nbsp;typically&nbsp;denoted&nbsp;as&nbsp;n1,&nbsp;for&nbsp;an&nbsp;antireflection&nbsp;coating&nbsp;(units)<br>
 where&nbsp;n0&nbsp;is&nbsp;the&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;incident&nbsp;medium&nbsp;and&nbsp;n2&nbsp;is&nbsp;the&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;object&nbsp;(units)</tt></dd></dl>
- <dl><dt><a name="-ARC_refl"><strong>ARC_refl</strong></a>(wavelength, n0, n1, nSemi, thickness)</dt><dd><tt>Return&nbsp;the&nbsp;reflectivity&nbsp;from&nbsp;a&nbsp;object&nbsp;(units)&nbsp;that&nbsp;has&nbsp;an&nbsp;anti-reflection&nbsp;coating.<br>
+ <dl><dt><a name="-arc_refl"><strong>arc_refl</strong></a>(wavelength, n0, n1, nSemi, thickness)</dt><dd><tt>Return&nbsp;the&nbsp;reflectivity&nbsp;from&nbsp;a&nbsp;object&nbsp;(units)&nbsp;that&nbsp;has&nbsp;an&nbsp;anti-reflection&nbsp;coating.<br>
 Where:<br>
 n0&nbsp;-&nbsp;the&nbsp;ambient&nbsp;refractive&nbsp;index&nbsp;units),<br>
 n1&nbsp;-&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;dielectric&nbsp;layer&nbsp;(units)<br>
 nSemi&nbsp;-&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;semiconductor&nbsp;(units)<br>
 The&nbsp;reflectivity&nbsp;is&nbsp;in&nbsp;the&nbsp;range&nbsp;of&nbsp;0&nbsp;to&nbsp;1.</tt></dd></dl>
- <dl><dt><a name="-ARC_thick"><strong>ARC_thick</strong></a>(wavelength, n1)</dt><dd><tt>Return&nbsp;optimal&nbsp;anti-reflection&nbsp;coating&nbsp;thickness&nbsp;(nm)&nbsp;at&nbsp;a&nbsp;given&nbsp;wavelength&nbsp;(nm)<br>
+ <dl><dt><a name="-arc_thick"><strong>arc_thick</strong></a>(wavelength, n1)</dt><dd><tt>Return&nbsp;optimal&nbsp;anti-reflection&nbsp;coating&nbsp;thickness&nbsp;(nm)&nbsp;at&nbsp;a&nbsp;given&nbsp;wavelength&nbsp;(nm)<br>
 where&nbsp;n1&nbsp;is&nbsp;the&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;antireflection&nbsp;coating.<br>
 The&nbsp;returned&nbsp;unit&nbsp;is&nbsp;in&nbsp;the&nbsp;same&nbsp;as&nbsp;the&nbsp;wavelength&nbsp;unit.</tt></dd></dl>
- <dl><dt><a name="-DLARC_refl"><strong>DLARC_refl</strong></a>(wavelength, n0, n1, n2, nSemi, thickness1, thickness2)</dt><dd><tt>Return&nbsp;the&nbsp;reflectivity&nbsp;from&nbsp;a&nbsp;object&nbsp;(units)&nbsp;that&nbsp;has&nbsp;a&nbsp;double&nbsp;layer&nbsp;anti-reflection&nbsp;coating,&nbsp;DLARC.<br>
+ <dl><dt><a name="-dlarc_refl"><strong>dlarc_refl</strong></a>(wavelength, n0, n1, n2, nSemi, thickness1, thickness2)</dt><dd><tt>Return&nbsp;the&nbsp;reflectivity&nbsp;from&nbsp;a&nbsp;object&nbsp;(units)&nbsp;that&nbsp;has&nbsp;a&nbsp;double&nbsp;layer&nbsp;anti-reflection&nbsp;coating,&nbsp;DLARC.<br>
 Where:<br>
 n0&nbsp;-&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;ambient&nbsp;(units)<br>
 n1&nbsp;-&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;dielectric&nbsp;layer&nbsp;1&nbsp;(units)<br>
 n2&nbsp;-&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;dielectric&nbsp;layer&nbsp;2&nbsp;(units)<br>
 nSemi&nbsp;-&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;semiconductor&nbsp;(units)<br>
 wavelength,&nbsp;thickness1,&nbsp;thickness&nbsp;2&nbsp;all&nbsp;in&nbsp;same&nbsp;units&nbsp;(m)&nbsp;or&nbsp;(nm)&nbsp;etc.</tt></dd></dl>
- <dl><dt><a name="-absorption_coeff"><strong>absorption_coeff</strong></a>(kd, wavelength)</dt><dd><tt>absorption&nbsp;coefficient&nbsp;(cm-1)&nbsp;from&nbsp;extinction&nbsp;coefficient&nbsp;(units)&nbsp;and&nbsp;wavelength&nbsp;(nm)<br>
-wavelength</tt></dd></dl>
- <dl><dt><a name="-absorptionfextinction"><strong>absorptionfextinction</strong></a>(kd, wavelength)</dt><dd><tt>Quick&nbsp;convert&nbsp;of&nbsp;extinction&nbsp;coefficient&nbsp;(units)&nbsp;to&nbsp;absorption&nbsp;coefficient(cm-1)&nbsp;given&nbsp;the&nbsp;wavelength&nbsp;(nm)</tt></dd></dl>
- <dl><dt><a name="-photon_flux"><strong>photon_flux</strong></a>(power, wavelength)</dt><dd><tt>Return&nbsp;the&nbsp;photon&nbsp;flux&nbsp;(/s)&nbsp;given&nbsp;the&nbsp;power&nbsp;of&nbsp;light&nbsp;(watts)&nbsp;and&nbsp;wavelength&nbsp;(nm)<br>
+ <dl><dt><a name="-photon_flux"><strong>photon_flux</strong></a>(power, wavelength)</dt><dd><tt>Return&nbsp;the&nbsp;photon&nbsp;flux&nbsp;(/s)<br>
+Given:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;power&nbsp;of&nbsp;light&nbsp;(watts)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;wavelength&nbsp;(nm)<br>
 If&nbsp;power&nbsp;is&nbsp;in&nbsp;W/m2&nbsp;then&nbsp;flux&nbsp;is&nbsp;in&nbsp;m-2s-1</tt></dd></dl>
  <dl><dt><a name="-refraction"><strong>refraction</strong></a>(n1, n2, θ1)</dt><dd><tt>Return&nbsp;the&nbsp;refracted&nbsp;angle&nbsp;of&nbsp;light&nbsp;(degrees)&nbsp;where&nbsp;n1&nbsp;is&nbsp;the&nbsp;refractive&nbsp;index&nbsp;of&nbsp;incident&nbsp;medium&nbsp;(units),<br>
 n2&nbsp;is&nbsp;the&nbsp;refractive&nbsp;index&nbsp;of&nbsp;the&nbsp;transmission&nbsp;medium&nbsp;(units)&nbsp;and&nbsp;θ1&nbsp;is&nbsp;the&nbsp;incident&nbsp;angle&nbsp;to&nbsp;the&nbsp;normal</tt></dd></dl>

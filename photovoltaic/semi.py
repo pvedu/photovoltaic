@@ -4,21 +4,27 @@
 from .core import k, q
 import numpy as np
 
-def Ei(Eg, Nc, Nv, T):
+def Ei(Eg, Nc, Nv, T=298.15):
+    """Return Ei (eV) the intrinsic Fermi level
+    Given:
+        Nc (cm-3) density of states in the conduction band
+        Nv (cm-3) density of states in the valence band
+        Eg (eV) band gap"""
     return Eg/2 + 0.5*k*T*np.log(Nv/Nc)
 
 
 def U_SRH(n, p, τ_n0, τ_p0, Et, Ei = 0.561, ni_eff=8.5e9, T=298.15):
-    """Return the shockley read hall recombination cm-3
-    where: n (cm-3) is the total concentration of electrons,
-      p (cm-3) is the total concentration of holes,
-      Et (eV) is energy level of the trap from VALENCE band.
-      Ei (eV) energy level of the intrinsic level,
-      τ_n0 (s) lifetime of electrons,
-      τ_p0 (s) lifetime of holes,
-      ni_eff the intrinsic carrier concentration,
-      T (K)) temperature.
-      """
+    """Return the Shockley Read Hall recombination cm-3
+    Given:
+        n (cm-3) is the total concentration of electrons,
+        p (cm-3) is the total concentration of holes,
+        Et (eV) is energy level of the trap from VALENCE band.
+        Ei (eV) energy level of the intrinsic level,
+        τ_n0 (s) lifetime of electrons,
+        τ_p0 (s) lifetime of holes,
+        ni_eff the intrinsic carrier concentration,
+        T (K)) temperature.
+    """
     n1 = ni_eff * np.exp(q * (Et - Ei) / (k*T))
     p1 = ni_eff * np.exp(-q * (Et - Ei) / (k * T))
     U_SRH = (n * p - ni_eff ** 2) / (τ_p0 * (n + n1) + τ_n0 * (p + p1))
@@ -33,20 +39,21 @@ def Vt(T=298.15):
 
 def bulkfeffective(tau_eff, S, thickness):
     """Return the bulk lifetime (s) where taus
-    Given tau_eff (s)
-    surface recombination (cm/s)
-    thickness (cm)
+    Given:
+        tau_eff (s)
+        surface recombination (cm/s)
+        thickness (cm)
     """
     return tau_eff - thickness / (2 * S)
 
 
 def conductivity(n, p, ue, uh):
     """Return the conductivity of a material(siemens)
-    Where:
-    n - concentration of electrons (cm-3)
-    p - concentration of holes (cm-3)
-    ue - electron mobility (cm²/Vs)
-    uh - hole mobility (cm²/Vs)"""
+    Given:
+        n (cm-3) concentration of electrons
+        p (cm-3) concentration of holes
+        ue (cm²/Vs) electron mobility
+        uh (cm²/Vs) hole mobility """
     return q * ue * n + q * uh * p
 
 def diffusivity(mobility, T=298.15):
@@ -65,7 +72,10 @@ def equilibrium_carrier(N, ni=8.6e9):
 
 
 def lengthflifetime(lifetime, diffusivity):
-    """Convert the carrier diffusion length, L (cm), to minority lifetime (s), given the D, the diffusivity (cm2/s).
+    """Return carrier diffusion length, L (cm)
+    Given:
+        minority lifetime (s),
+        diffusivity (cm2/s).
     """
     return np.sqrt(lifetime * diffusivity)
 
@@ -76,11 +86,11 @@ def lifetime(U, Δn):
     return Δn / U
 
 
-def lifetime0(Nt, sigma, vth=1.1e7):
+def lifetime0(Nt, sigma, vth=2e7):
     """Return the SRH fundemetal lifetime (s) for a trap level
     Given: Nt (/cm3) trap density
     signma - capture cross section
-    vth (cm/s) themal velocity of carriers )"""
+    vth (cm/s) thermal velocity of carriers )"""
     return 1 / (Nt * sigma * vth)
 
 

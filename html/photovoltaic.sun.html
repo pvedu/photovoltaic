@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="photovoltaic.html"><font color="#ffffff">photovoltaic</font></a>.sun</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href="..">index</a><br><a href="file:c%3A%5Cu%5Ccloudstation%5Cpython%5Cphotovoltaic%5Cphotovoltaic%5Csun.py">c:\u\cloudstation\python\photovoltaic\photovoltaic\sun.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:t%3A%5Cpycharm%5Cphotovoltaic%5Cphotovoltaic%5Csun.py">t:\pycharm\photovoltaic\photovoltaic\sun.py</a></font></td></tr></table>
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -33,7 +33,7 @@
 s&nbsp;and&nbsp;h&nbsp;are&nbsp;the&nbsp;same&nbsp;length&nbsp;units,&nbsp;i.e.&nbsp;both&nbsp;in&nbsp;m,&nbsp;ft,&nbsp;cm&nbsp;etc.</tt></dd></dl>
  <dl><dt><a name="-blackbody_integrated"><strong>blackbody_integrated</strong></a>(T)</dt><dd><tt>Return&nbsp;integrated&nbsp;irradiance&nbsp;(W/m2/steradian)&nbsp;from&nbsp;a&nbsp;blackbody&nbsp;where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)</tt></dd></dl>
  <dl><dt><a name="-blackbody_peak"><strong>blackbody_peak</strong></a>(T)</dt><dd><tt>Return&nbsp;the&nbsp;peak&nbsp;wavelength&nbsp;(nm)&nbsp;of&nbsp;a&nbsp;black&nbsp;body&nbsp;spectrum&nbsp;where&nbsp;T&nbsp;is&nbsp;the&nbsp;temperature&nbsp;(K)</tt></dd></dl>
- <dl><dt><a name="-blackbody_spectrum"><strong>blackbody_spectrum</strong></a>(wavelength, T=6000)</dt><dd><tt>Return&nbsp;the&nbsp;blackbody&nbsp;irradaiance&nbsp;(W/m2/nm)&nbsp;at&nbsp;a&nbsp;given&nbsp;wavelength&nbsp;(nm)&nbsp;and&nbsp;temperature,&nbsp;T&nbsp;(K).</tt></dd></dl>
+ <dl><dt><a name="-blackbody_spectrum"><strong>blackbody_spectrum</strong></a>(wavelength, T=6000)</dt><dd><tt>Return&nbsp;the&nbsp;blackbody&nbsp;irradiance&nbsp;(W/m2/nm)&nbsp;at&nbsp;a&nbsp;given&nbsp;wavelength&nbsp;(nm)&nbsp;and&nbsp;temperature,&nbsp;T&nbsp;(K).</tt></dd></dl>
  <dl><dt><a name="-declination"><strong>declination</strong></a>(day_no)</dt><dd><tt>Return&nbsp;declination&nbsp;angle&nbsp;of&nbsp;sun&nbsp;(degrees)&nbsp;where&nbsp;day_no&nbsp;is&nbsp;the&nbsp;day&nbsp;of&nbsp;the&nbsp;year&nbsp;(day).<br>
 For&nbsp;Jan&nbsp;1&nbsp;day_no&nbsp;=&nbsp;1,&nbsp;Dec&nbsp;31&nbsp;dayno&nbsp;=&nbsp;365.&nbsp;There&nbsp;is&nbsp;no&nbsp;correction&nbsp;for&nbsp;leap&nbsp;years</tt></dd></dl>
  <dl><dt><a name="-elev_azi"><strong>elev_azi</strong></a>(declination, latitude, local_solar_time)</dt><dd><tt>Return&nbsp;the&nbsp;elevation&nbsp;(degrees)&nbsp;and&nbsp;azimuth&nbsp;(degrees)</tt></dd></dl>
@@ -53,8 +53,8 @@ module_azimuth&nbsp;and&nbsp;module_tilt,&nbsp;where</tt></dd></dl>
 of&nbsp;the&nbsp;standard&nbsp;spectrum.<br>
 reference&nbsp;XXX,&nbsp;DOI&nbsp;XXX</tt></dd></dl>
  <dl><dt><a name="-space_solar_power"><strong>space_solar_power</strong></a>(x)</dt><dd><tt>Return&nbsp;the&nbsp;radiant&nbsp;power&nbsp;density&nbsp;(W/m²)&nbsp;where&nbsp;x&nbsp;is&nbsp;the&nbsp;distance&nbsp;from&nbsp;&nbsp;the&nbsp;sun&nbsp;(m)</tt></dd></dl>
- <dl><dt><a name="-sun_position"><strong>sun_position</strong></a>(dayNo, latitude, longitude, GMTOffset, H, M)</dt><dd><tt>Return&nbsp;the&nbsp;position&nbsp;of&nbsp;the&nbsp;sun&nbsp;as&nbsp;a&nbsp;elevation&nbsp;and&nbsp;azimuth&nbsp;given<br>
-latitude,&nbsp;logitude&nbsp;and&nbsp;the&nbsp;GMTOffset,</tt></dd></dl>
+ <dl><dt><a name="-sun_position"><strong>sun_position</strong></a>(dayNo, latitude, longitude, GMTOffset, H, M)</dt><dd><tt>Return&nbsp;the&nbsp;position&nbsp;of&nbsp;the&nbsp;sun&nbsp;as&nbsp;a&nbsp;<a href="#-elevation">elevation</a>(degrees)&nbsp;and&nbsp;azimuth(degrees)&nbsp;given<br>
+latitude(degrees),&nbsp;logitude(degrees)&nbsp;and&nbsp;the&nbsp;GMTOffset(hours),</tt></dd></dl>
  <dl><dt><a name="-sun_rise_set"><strong>sun_rise_set</strong></a>(latitude, declination, time_correction)</dt><dd><tt>Return&nbsp;the&nbsp;sunrise&nbsp;and&nbsp;sunset&nbsp;times&nbsp;in&nbsp;hours<br>
 given&nbsp;the&nbsp;latitude&nbsp;(degrees)&nbsp;and&nbsp;the&nbsp;declination&nbsp;(degrees)</tt></dd></dl>
  <dl><dt><a name="-time_correction"><strong>time_correction</strong></a>(EoT, longitude, GMTOffset)</dt><dd><tt>Return&nbsp;the&nbsp;time&nbsp;correction&nbsp;(minutes)&nbsp;where&nbsp;EoT&nbsp;is&nbsp;the&nbsp;equation&nbsp;of&nbsp;time,<br>
@@ -71,5 +71,6 @@ and&nbsp;given&nbsp;location&nbsp;longitude&nbsp;(degrees)&nbsp;and&nbsp;the&nbs
 <strong>c</strong> = 299792458.0<br>
 <strong>h</strong> = 6.62607004e-34<br>
 <strong>k</strong> = 1.38064852e-23<br>
+<strong>pi</strong> = 3.141592653589793<br>
 <strong>q</strong> = 1.60217662e-19</td></tr></table>
 </body></html>

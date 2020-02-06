@@ -14,13 +14,8 @@ c = 299792458.0  # (m s^-1)
 hc_q = h * c / q  # 1.2398419745831506e-06
 
 
-
-
 def sind(angle):
     """Return the sine of the angle(degrees)
-    Example:
-    >>>sind(0)
-    0
     """
     return np.sin(np.radians(angle))
 

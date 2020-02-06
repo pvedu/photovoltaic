@@ -4,21 +4,27 @@ import numpy as np
 
 
 def FF(Vmp, Imp, Voc, Isc):
-    """Return FFv the fill factor of a solar cell.
-    given Voc - open circuit voltage (volts)"""
+    """Return FF (units) the fill factor of a solar cell or module.
+    Given:
+        Vmp (volts) voltage at maximum power point
+        Imp (amps) current at maximum power point
+        Voc (volts) open circuit voltage
+        Isc (amps) short circuit current
+    """
     return (Vmp * Imp) / (Voc * Isc)
 
 
 def FF_Rs(Voc, Isc, Rseries, ideality=1, T=298.15):
-    """Return the FF (units)
+    """Return FF_Rs (units) fill factor of a cell or module
     Given:
-        Voc - open circuit voltage (volts)
-        Isc - short circuit current (amps)
-        Rseries - series resistance (ohms)
+        Voc (volts) open circuit voltage
+        Isc (amps) short circuit current
+        Rseries (ohms) series resistance
         ideality factor (units)
-        T - temperature (K)
+        T (K) temperature
+    Note:
+        If using Jsc (amps/cm²) then Rseries is in (ohm cm²)
     """
-    # voc = normalised_Voc(Voc, ideality, T)
     RCH = Voc / Isc
     rs = Rseries / RCH
     FF0 = FF_ideal(Voc, ideality, T)
@@ -27,19 +33,35 @@ def FF_Rs(Voc, Isc, Rseries, ideality=1, T=298.15):
 
 
 def FF_RsRsh(Voc, Isc, Rseries, Rshunt, ideality=1, T=298.15):
+    """Return FF_RsRsh (units) fill factor of a cell or module
+    Given:
+        Voc (volts) open circuit voltage
+        Isc (amps) short circuit current
+        Rseries (ohms) series resistance
+        Rshunt (ohms) shunt resistance
+        ideality factor (units)
+        T (K) temperature
+    Note:
+        If using Jsc (amps/cm²) then Rseries and Rshunt are in (ohm cm²)
+    """
     voc = normalised_Voc(Voc, ideality, T)
     RCH = Voc / Isc
     rsh = Rshunt / RCH
-    FF0 = FF_ideal(Voc, ideality, T)
     FFRs = FF_Rs(Voc, Isc, Rseries, ideality=1, T=298.15)
     FFRsRsh = FFRs * (1 - ((voc + 0.7) * FFRs) / (voc * rsh))
     return FFRsRsh
 
 
 def FF_Rsh(Voc, Isc, Rshunt, ideality=1, T=298.15):
-    """Return the FF (units)
+    """Return FF_Rsh (units) fill factor of a cell or module
     Given:
-        Voc - open circuit voltage (volts)
+        Voc (volts) open circuit voltage
+        Isc (amps) short circuit current
+        Rshunt (ohms) shunt resistance
+        ideality factor (units)
+        T (K) temperature
+    Note:
+        If using Jsc (amps/cm²) then Rshunt is in (ohm cm²)
     """
     voc = normalised_Voc(Voc, ideality, T)
     RCH = Voc / Isc
@@ -50,8 +72,12 @@ def FF_Rsh(Voc, Isc, Rshunt, ideality=1, T=298.15):
 
 
 def FF_ideal(Voc, ideality=1, T=298.15):
-    """Return the FF (units)
-    given Voc - open circuit voltage (volts), ideality factor, defaults to 1 (units) """
+    """Return FF_ideal (units) fill factor of a cell or module
+    Given:
+        Voc (volts) open circuit voltage
+        ideality factor (units)
+        T (K) temperature
+    """
     voc = normalised_Voc(Voc, ideality, T)
     FF0 = (voc - np.log(voc + 0.72)) / (voc + 1)
     return FF0
@@ -69,33 +95,44 @@ def iqe(ab, Wd, Se, Le, De, We, Sb, Wb, Lb, Db):
 
 def I_cell(V, IL, I0, T=298.15):
     """Return current (amps) of a solar cell
-    given voltage, light generated current, I0
-    also works for J0
+    Given:
+        V (volts) voltage
+        IL (amps) light generated current
+        I0 (amps) saturation current
+        T (K) temperature
+    Note:
+        Also works for current density in which case IL and I0 become JL and J0 in (A/cm²)  and
+        J_cell (A/cm²) is returned
     """
     return IL - I0 * np.exp(V / Vt(T))
 
 
 def I_cell_Rshunt(V, IL, I0, Rshunt, T=298.15):
-    """Return current (A) of a solar cell from   """
+    """Return current (A) of a solar cell from  a solar cell
+    """
     return IL - I0 * np.exp(V / Vt(T)) - V / Rshunt
 
 
 def I_diode(V, I0, T=298.15):
-    """Return the current (A) in an ideal diode where I0 is the saturation current (A),
-    V is the voltage across the junction (volts), T is the temperature (K) and n is the ideallity factor (units).
-    For current density. I0 is in A/cm² and current density is returned"""
+    """Return the current (A) in an ideal diode
+    Given:
+        I0 (A) is the saturation current (A),
+        V (volts) is the voltage across the junction
+        T (K) temperature
+        n (units) iideality factor
+    Note:
+        Also works for current density. I0 becomes J0 (A/cm²) and current density is returned"""
     return I0 * np.exp(V / Vt(T) - 1)
 
 
 def J0_layer(W, N, D, L, S, ni=8.6e9):
-    """Return the saturation current density (A/cm2) for the narrow case.
-    Where:
-    W - layer thickness (cm)
-    N - doping (cm-3)
-    L - diffusion length (cm)
-    S - surface recombination velocity (cm/s)
-    Optional:
-    ni - intrinsic carrier concentration (cm-3)
+    """Return the saturation current density (A/cm²) for the narrow case.
+    Given:
+        W (cm) layer thickness
+        N (cm-3) doping
+        L (cm) diffusion length
+        S (cm/s) surface recombination velocity
+        ni (cm-3) intrinsic carrier concentration
     """
     F = (S * np.cosh(W / L) + D / L * np.sinh(W / L)) / (D / L * np.cosh(W / L) + S * np.sinh(W / L))
     return q * ni ** 2 * F * D / (L * N)
@@ -106,27 +143,41 @@ def V_Rseries(voltage, I, Rs):
     return voltage - I * Rs
 
 
-def V_cell(I, IL, I0, T=298.15):
-    """Return the voltage (V) in an ideal solar cell where I0 is the saturation current (A),
-    I is the current (A), T is the temperature (K) and n is the ideallity factor (units).
+def V_cell(I, IL, I0, ideality=1, T=298.15):
+    """Return the voltage (V) in an ideal solar cell
+    Given:
+        I0 (A) saturation current ,
+        I (A) current in the cell,
+        n (units) the ideallity factor
+        T (K) temperature
     For current density. I0 is in A/cm² and current density is returned"""
-    return Vt(T) * np.log((IL - I) / I0 + 1)
+    return ideality*Vt(T) * np.log((IL - I) / I0 + 1)
 
 
 def Voc(IL, I0, n=1, T=298.15):
-    """Return the open circuit voltage, Voc, (volts) from IL(A) and I0(A).
-    IL and Io must be in the same units, Eg, (A), (mA) etc
-    Using (mA/cm²) uses J0 and JL instead.
+    """Return the open circuit voltage, Voc, (volts)
+   Given:
+        I0 (A) saturation current ,
+        I (A) current in the cell,
+        n (units) the ideality factor
+        T (K) temperature
+    For current density. I0 is in A/cm² and current density is returned
     """
     return n * Vt(T) * np.log(IL / I0 + 1)
 
 
 def cell_params(V, I):
-    """Return key parameters of a solar cell IV curve where V is a voltage array and
-    I is a current array, both with type numpy.array.
-    Voc (V), Isc (A), FF, Vmp(V), Imp(A) given voltage vector in (volts)
-    current vector in (amps) or (A/cm²)
-    If I is in (A/cm²) then Isc will be Jsc and Imp will be Jmp. No attempt is made to fit the fill factor.
+    """Return four values in a tuple (Voc , Isc , FF, Vmp, Imp)
+        Voc (V) open circuit voltage
+        Isc (A) short circuit current
+        FF (units)  fill factor
+        Vmp (V) voltage at maximum power point
+        Imp (A_ current at maximum power point
+    Given:
+        V (V)  the voltage points as a numpy array
+        I (A) the current points as a numpy array
+    Note:
+        If I is in (A/cm²) then Isc will be Jsc and Imp will be Jmp. No attempt is made to fit the fill factor.
     """
     Voc = np.interp(0, -I, V)
     Isc = np.interp(0, V, I)

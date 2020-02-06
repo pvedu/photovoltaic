@@ -2,7 +2,10 @@ from .core import arcsind, sind, joulefnm, pi
 import numpy as np
 
 def photon_flux(power, wavelength):
-    """Return the photon flux (/s) given the power of light (watts) and wavelength (nm)
+    """Return the photon flux (/s)
+    Given:
+        the power of light (watts)
+        wavelength (nm)
     If power is in W/m2 then flux is in m-2s-1"""
     return power / joulefnm(wavelength)
 
