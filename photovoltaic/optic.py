@@ -19,12 +19,6 @@ def refraction(n1, n2, θ1):
     return θ2
 
 
-def absorption_coeff(kd, wavelength):
-    """absorption coefficient (cm-1) from extinction coefficient (units) and wavelength (nm)
-    wavelength """
-    return 1e7 * 4 * pi * kd / wavelength
-
-
 def transmittance(abs_coeff, thickness):
     """Return the fraction of light transmitted (units) where abs_coeff is the absorption coefficient (cm-1)
     and 'thickness' is the depth in the material (cm)
@@ -32,20 +26,20 @@ def transmittance(abs_coeff, thickness):
     return np.exp(-abs_coeff * thickness)
 
 
-def ARC_thick(wavelength, n1):
+def arc_thick(wavelength, n1):
     """Return optimal anti-reflection coating thickness (nm) at a given wavelength (nm)
     where n1 is the refractive index of the antireflection coating.
     The returned unit is in the same as the wavelength unit."""
     return wavelength / (4 * n1)
 
 
-def ARC_opt_n(n0, n2):
+def arc_opt_n(n0, n2):
     """Return the optimal refractive index, typically denoted as n1, for an antireflection coating (units)
     where n0 is the refractive index of the incident medium and n2 is the refractive index of the object (units)"""
     return np.sqrt(n0 * n2)
 
 
-def ARC_refl(wavelength, n0, n1, nSemi, thickness):
+def arc_refl(wavelength, n0, n1, nSemi, thickness):
     """Return the reflectivity from a object (units) that has an anti-reflection coating.
     Where:
     n0 - the ambient refractive index units),
@@ -61,7 +55,7 @@ def ARC_refl(wavelength, n0, n1, nSemi, thickness):
     return reflectivity
 
 
-def DLARC_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2):
+def dlarc_refl(wavelength, n0, n1, n2, nSemi, thickness1, thickness2):
     """Return the reflectivity from a object (units) that has a double layer anti-reflection coating, DLARC.
     Where:
     n0 - refractive index of the ambient (units)

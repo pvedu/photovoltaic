@@ -3,6 +3,7 @@ import numpy as np
 from .core import pi, Vt, k, q, eV
 import os
 
+
 def resistivity_Si_n(Ndonor):
     """Return the resistivity of n-type silicon (ohm cm)
     given the doping of donors(cm-3)"""
@@ -18,7 +19,7 @@ def resistivity_Si_p(Nacceptor):
 
 
 def mob_thurber(N, p_type=True, majority=True):
-    """Return the mobility of carriers in silicon according to the model of Thurbur as a function of doping
+    """Return the mobility of carriers (cm²/Vs) in silicon according to the model of Thurbur as a function of doping
     Where:
     N - doping level (cm-3)
     p_type is True or 1 for p doped material and False or 0 for n-type.
@@ -49,7 +50,8 @@ def mob_masetti_phos(N):
 
 def mob_klassen(Nd, Na, Δn=1, T=298.16):
     """Return the mobility (cm2/Vs)
-    given the doping etc."""
+    given the dopings and excess carrier concentration
+    DOI: 10.1109/IEDM.1990.237157"""
     s1 = 0.89233
     s2 = 0.41372
     s3 = 0.19778
@@ -71,7 +73,6 @@ def mob_klassen(Nd, Na, Δn=1, T=298.16):
     T = 298.16
     n0 = Nd
     p0 = Nd / (1e10 ** 2)
-
 
     n_i = 8.31E+09
 
@@ -128,7 +129,7 @@ def mob_klassen(Nd, Na, Δn=1, T=298.16):
 
     G_Pe = 1 - s1 / ((s2 + (1 / me_m0 * 300 / T) ** s4 * Pe) ** s3) + s5 / (((me_m0 * 300 / T) ** s7 * Pe) ** s6)
     G_Ph = 1 - s1 / ((s2 + (1 / (me_m0 * mh_me) * T / 300) ** s4 * Ph) ** s3) + s5 / (
-        ((me_m0 * mh_me * 300 / T) ** s7 * Ph) ** s6)
+            ((me_m0 * mh_me * 300 / T) ** s7 * Ph) ** s6)
 
     F_Pe = (r1 * Pe ** r6 + r2 + r3 / mh_me) / (Pe ** r6 + r4 + r5 / mh_me)
     F_Ph = (r1 * Ph ** r6 + r2 + r3 * mh_me) / (Ph ** r6 + r4 + r5 * mh_me)
@@ -162,7 +163,7 @@ def Eg0_paessler(T=298.15):
 
     Tdelta = 2 * T / Θ
     wurzel = (1 + pi ** 2 / (3 * (1 + Δ ** 2)) * Tdelta ** 2 + (
-        3 * Δ ** 2 - 1) / 4 * Tdelta ** 3 + 8 / 3 * Tdelta ** 4 + Tdelta ** 6) ** (1 / 6)
+            3 * Δ ** 2 - 1) / 4 * Tdelta ** 3 + 8 / 3 * Tdelta ** 4 + Tdelta ** 6) ** (1 / 6)
     Eg0 = Eg0_T0 - α * Θ * ((1 - 3 * Δ ** 2) / (np.exp(Θ / T) - 1) + 3 / 2 * Δ ** 2 * (wurzel - 1))
     return Eg0
 
@@ -183,20 +184,18 @@ def ni_misiakos(T=298.15):
 
 
 def n_ieff(N_D, N_A, Δn, T=298.15):
-    """Return effective ni (cm-3)
+    """Return effective carrier concentration ni (cm-3) according to Altermatt
+     https://doi.org/10.1063/1.1529297
     given
     donor concentration N_D=n0 (1/cm³)      only one dopant type possible
     acceptor concentration N_A=p0 (1/cm³)    only one dopant type possible
     excess carrier density (1/cm³)
     temperature (K)
-    calculation of the effective intrinsic concentration n_ieff including BGN
-    according to Altermatt JAP 2003
     """
     # calculation of fundamental band gap according to Pässler2002
     Eg0 = Eg0_paessler(T)
 
-    # n_i without BGN according to Misiakos93, parameterization fits very well
-    # to value of Altermatt2003 at 300K
+    # n_i without bandgap narrowing
     ni0 = ni_misiakos(T)
 
     ni = ni0  # ni0 as starting value for n_ieff for calculation of n0 & p0
@@ -206,7 +205,7 @@ def n_ieff(N_D, N_A, Δn, T=298.15):
 
     # self-conistent iterative calculation of n_ieff
 
-    for i in range(5):  # lazy programmer as it converges pretty fast anyway
+    for i in range(5):  # converges quite quickly
         n = n0 + Δn
         p = p0 + Δn
         dEc, dEv = bandgap_schenk(n, p, N_A, N_D, Δn, T)
@@ -214,8 +213,38 @@ def n_ieff(N_D, N_A, Δn, T=298.15):
         n0 = np.where(N_D > N_A, N_D, N_A / ni ** 2)
         p0 = np.where(N_D > N_A, N_D / ni ** 2, N_A)
 
-    # print('iterations',ni)
     return ni
+
+
+def vth_e(T=298.15):
+    """Return the thermal velocity of electrons (cm/s) given the temperature (K)
+    """
+    m0 = 9.10938356e-31  # (kg) rest mass of electron
+    Eg0 = 1.17  # (eV) gandgap of silicon at 0 K
+    Eg = Eg0_paessler(T)  # (eV) bandgap as a function of temperature
+    # calculate the EFFECTIVE masses
+    mt = 0.1905 * Eg0 / Eg  # fig 1
+    ml = 0.9163  # Equation 9
+    delta = np.sqrt((ml - mt) / ml)  # equation 12
+    mtc = 4 * ml / (1 + np.sqrt((ml / mt)) * np.arcsin(delta) / delta) ** 2  # equation 11
+    vth = 100 * np.sqrt(8 * k * T / (pi * mtc * m0))  # (cm/s) equation 10
+    return vth
+
+
+def vth_h(T=298.15):
+    """Return the thermal velocity of electrons (cm/s) given the temperature (K)
+    """
+    m0 = 9.10938356e-31  # (kg) rest mass of electron
+    a = 0.3676
+    b = 1.98738e-5
+    c = -2.588144e-7
+    d = 1.415372e-9
+    e = -3.919169e-12
+    f = 5.410849e-15
+    g = -2.959797e-18
+    mtv = (a + b * T ** 2 + c * T ** 3 + d * T ** 4 + e * T ** 5 + f * T ** 6 + g * T ** 7)
+    vth = 100 * np.sqrt(8 * k * T / (pi * mtv * m0))  # (cm/s) equation 10
+    return vth
 
 
 def bandgap_schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
@@ -223,22 +252,13 @@ def bandgap_schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
     returns the band gap narowing in silicon
     delta conduction band, delta valence band in eV
     given:
+    n_e, total electron density with Δn (1/cm³)
+    n_h, total hole density with Δn (1/cm³)
+    N_A, acceptor concentration (1/cm³)
+    N_D, donor concentration (1/cm³)
+    Δn, excess carrier density (1/cm³)
+    T, temperature (K)
 
-    n_e => total electron density with Δn (1/cm³)
-    n_h => total hole density with Δn (1/cm³)
-    N_A => acceptor concentration (1/cm³)
-    N_D => donor concentration (1/cm³)
-    Δn  => excess carrier density (1/cm³)
-    T   => temperature (K)
-
-    Band-gap narrowing after Schenk 1998, JAP 84(3689))
-    model descriped very well in K. McIntosh IEEE PVSC 2010
-    model confirmed by Glunz2001 & Altermatt2003
-    nomenclatur and formula no. according to McIntosh2010, table no. according to Schenk1998
-    ==========================================================================
-    Input parameters:
-
-    ==========================================================================
     Code adapted from Richter at Fraunhofer ISE
     http://dx.doi.org/10.1063%2F1.368545
     """
@@ -297,23 +317,27 @@ def bandgap_schenk(n_e, n_h, N_D, N_A, Δn, T=298.15):
 
     # exchange quasi-partical shift Eq33:
     delta_xc_h = -(
-        (4 * pi) ** 3 * n_sum_xc ** 2 * ((48 * n_h / (pi * g_h)) ** (1 / 3) + c_h * np.log(1 + d_h * n_p_xc ** p_h)) + (
-            8 * pi * alfa_h / g_h) * n_h * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
-                     (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_h * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
+            (4 * pi) ** 3 * n_sum_xc ** 2 * (
+                (48 * n_h / (pi * g_h)) ** (1 / 3) + c_h * np.log(1 + d_h * n_p_xc ** p_h)) + (
+                    8 * pi * alfa_h / g_h) * n_h * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
+                         (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_h * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
                          3 / 2) * F)
     delta_xc_e = -(
-        (4 * pi) ** 3 * n_sum_xc ** 2 * ((48 * n_e / (pi * g_e)) ** (1 / 3) + c_e * np.log(1 + d_e * n_p_xc ** p_e)) + (
-            8 * pi * alfa_e / g_e) * n_e * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
-                     (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_e * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
+            (4 * pi) ** 3 * n_sum_xc ** 2 * (
+                (48 * n_e / (pi * g_e)) ** (1 / 3) + c_e * np.log(1 + d_e * n_p_xc ** p_e)) + (
+                    8 * pi * alfa_e / g_e) * n_e * F ** 2 + np.sqrt(8 * pi * n_sum_xc) * F ** (5 / 2)) / (
+                         (4 * pi) ** 3 * n_sum_xc ** 2 + F ** 3 + b_e * np.sqrt(n_sum_xc) * F ** 2 + 40 * n_sum_xc ** (
                          3 / 2) * F)
 
     # ionic quasi-partical shift Eq37:
     delta_i_h = -n_ionic * (1 + Ui) / (
-        np.sqrt(0.5 * F * n_sum_i / pi) * (1 + h_h * np.log(1 + np.sqrt(n_sum_i) / F)) + j_h * Ui * n_p_i ** 0.75 * (
-            1 + k_h * n_p_i ** q_h))
+            np.sqrt(0.5 * F * n_sum_i / pi) * (
+                1 + h_h * np.log(1 + np.sqrt(n_sum_i) / F)) + j_h * Ui * n_p_i ** 0.75 * (
+                    1 + k_h * n_p_i ** q_h))
     delta_i_e = -n_ionic * (1 + Ui) / (
-        np.sqrt(0.5 * F * n_sum_i / pi) * (1 + h_e * np.log(1 + np.sqrt(n_sum_i) / F)) + j_e * Ui * n_p_i ** 0.75 * (
-            1 + k_e * n_p_i ** q_e))
+            np.sqrt(0.5 * F * n_sum_i / pi) * (
+                1 + h_e * np.log(1 + np.sqrt(n_sum_i) / F)) + j_e * Ui * n_p_i ** 0.75 * (
+                    1 + k_e * n_p_i ** q_e))
 
     # rescale BGN
     dE_gap_h = -Ry_ex * (delta_xc_h + delta_i_h)
@@ -340,15 +364,6 @@ def U_radiative_alt(n0, p0, Δn, T=298.15):
     B_rad = B_low * B_rel
     U_radiative_alt = n * p * B_rad
     return U_radiative_alt
-
-
-def U_SRH(n, p, Et, τ_n, τ_p, ni_eff=8.5e9, T=298.15):
-    """Return the shockley read hall recombination cm-3
-    given Et (eV) trap level from intrinsic"""
-    n1 = ni_eff * np.exp(q * Et / k / T)
-    p1 = ni_eff * np.exp(-q * Et / k / T)
-    U_SRH = (n * p - ni_eff ** 2) / (τ_p * (n + n1) + τ_n * (p + p1))
-    return U_SRH
 
 
 def U_auger_richter(n0, p0, Δn, ni_eff):
@@ -382,41 +397,6 @@ def U_low_doping(n0, p0, Δn):
     return U
 
 
-
-
-# not sure if I should keep these
-def lifetime_auger(Δn, Ca=1.66e-30):
-    """Returns the Auger lifetime (s) at high level injection
-    given the injection level (cm-3)"""
-    return 1 / (Ca * Δn ** 2)
-
-
-def lifetime_SRH(N, Nt, Et, σ_n, σ_p, Δn, T=298.15):
-    Nv = 31000000000000000000 * (T / 300) ** 1.85
-    Nc = 28600000000000000000 * (T / 300) ** 1.58
-    Eg = 1.1246
-    vth = 11000000 * (T / 300) ** 0.5
-    p0 = N
-    n0 = (ni_sproul(T) ** 2) / N
-    τ_n0 = 1 / (Nt * σ_n * vth)
-    τ_p0 = 1 / (Nt * σ_p * vth)
-    n1 = Nc * np.exp(-Et / Vt())
-    p1 = Nv * np.exp((-Et - Eg) / Vt())
-    k_ratio = σ_n / σ_p
-    τ_SRH = (τ_p0 * (n0 + n1 + Δn) + τ_n0 * (p0 + p1 + Δn)) / (n0 + p0 + Δn)
-    return τ_SRH
-
-
-# surface recombination
-def U_surface(n, p, Sn, Sp, n1=8.3e9, p1=8.3e9, ni=8.3e9):
-    """Return the carrier recombination (/s) at a surface.
-    Where.
-    Sn, Sp: surface recombination for electrons and holes
-    n1, p1 XXX
-    ni - intrinsice carrier concentratoin (cm-3)"""
-    U_surface = Sn * Sp * (n * p - ni ** 2) / (Sn * (n + n1) + Sp * (p + p1))
-    return U_surface
-
 # processing
 def phos_active(T):
     """Return the active limit of phosphorous in silicon
@@ -428,6 +408,7 @@ def phos_solubility(T):
     """Return the solubility limit of phosphorous in silicon
      given the temperature (K)"""
     return 2.45e23 * np.exp(-0.62 * eV / (k * T))
+
 
 def optical_properties(fname=None):
     """Returns an array with the optical properties of a material
