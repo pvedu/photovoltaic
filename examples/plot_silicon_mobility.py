@@ -10,8 +10,8 @@ import photovoltaic as pv
 
 # plot the mobility models
 N_D = np.logspace(14, 22) # log space from 1e14 to 1e22
-mobility_masetti = pv.mob_masetti_phos(N_D)
-mobility_thurber = pv.mob_thurber(N_D, False)
+mobility_masetti = pv.si.mob_masetti_phos(N_D)
+mobility_thurber = pv.si.mob_thurber(N_D, False)
 plt.plot(N_D, mobility_masetti, label='Masetti')
 plt.plot(N_D, mobility_thurber, label='Thurber')
 plt.xlabel('doping (/cm³)')
