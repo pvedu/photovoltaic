@@ -49,8 +49,12 @@ For the graphs, Matplotlib is needed in addition to the above numpy and scipy pa
 Examples
 --------
 
-There are many more examples on github at:
-https://github.com/trautsned/photovoltaic/tree/master/examples
+Examples of using the library are available at:
+https://github.com/trautsned/pv_online
+
+But its much more fun to go to: https://mybinder.org/v2/gh/trautsned/pv_online/master
+where you can run the code without installing anything.
+
 
 Other
 -----
