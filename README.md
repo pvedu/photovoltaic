@@ -1,10 +1,24 @@
 # photovoltaic
 
 
-photovoltaic is a library of python functions used in photovoltaics. The functions are simple enough to include in your code
+photovoltaic is a library of python functions used in photovoltaics. Its preferrable to install the library but the functions are simple enough to include in your code.
 
-Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/blob/master/html/photovoltaic.html
-Code is at: 
+Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/blob/master/html/photovoltaic.html  
+Code is at: https://github.com/pvedu/photovoltaic/tree/master/photovoltaic  
+
+<!---
+
+Individual modules:
+
+| Code link        | Help Link   | Description  |
+| ------------- |-------------| -----:|
+| [cell.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/cell.py)      | right-aligned | $1600 |
+| [core.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/core.py)     | centered      |   $12 |
+| [money.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/money.py) | are neat      |    $1 |
+
+--->
+
+
 
 
 Typical usage:
@@ -64,3 +78,8 @@ This follows the conventions of other python functions such as strfdatetime.
 
 
 The library is designed to be as simple as possible and an "algorithm that runs". While it is easier to install the whole library, it is also straighforward to cut/paste parts of the code.
+
+There are other python libraries that cover sections of the photovoltaic library in much more detail.
+
+* [pvlib] (https://github.com/pvlib/pvlib-python) covers insolation and systems modeling.
+* [Semiconductors](https://github.com/MK8J) relating to solar.
