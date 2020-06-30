@@ -8,10 +8,10 @@ Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/
 
 Typical usage:
 
-
-  import photovoltaic as pv
-  irradiance = pv.sun.blackbody_spectrum(800)
-  print(irradiance)
+'''
+import photovoltaic as pv
+irradiance = pv.sun.blackbody_spectrum(800)
+print(irradiance)
 
 This would print the blackbody irradiance at 800 nm with the default temperature of 6000 K in W/m2/nm.
 
@@ -20,8 +20,9 @@ This would print the blackbody irradiance at 800 nm with the default temperature
 
 
 Installation is via pip from the pypi repositry. From a command propmpt:
-
-  pip install photovoltaic
+```
+pip install photovoltaic
+```
 	
 Tha above command should also install the latest scipy and numpy packages. They can also be installed directly with:
 
