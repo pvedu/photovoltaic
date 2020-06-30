@@ -8,10 +8,9 @@ Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/
 
 Typical usage:
 
-'''
-import photovoltaic as pv
-irradiance = pv.sun.blackbody_spectrum(800)
-print(irradiance)
+    import photovoltaic as pv
+    irradiance = pv.sun.blackbody_spectrum(800)
+    print(irradiance)
 
 This would print the blackbody irradiance at 800 nm with the default temperature of 6000 K in W/m2/nm.
 
@@ -20,15 +19,15 @@ This would print the blackbody irradiance at 800 nm with the default temperature
 
 
 Installation is via pip from the pypi repositry. From a command propmpt:
-```
-pip install photovoltaic
-```
+
+    pip install photovoltaic
+
 	
 Tha above command should also install the latest scipy and numpy packages. They can also be installed directly with:
 
-  pip install numpy
+    pip install numpy
 
-  pip install scipy
+    pip install scipy
 
 ## Requirements
 
@@ -40,7 +39,7 @@ Anaconda includes a wealth of scientific packagkes and is available at: https://
 Standard Python is at https://www.python.org/downloads/
 
 For the graphs, Matplotlib is needed in addition to the above numpy and scipy packages:
-  pip install matplotlib
+    pip install matplotlib
 
 
 
@@ -63,4 +62,4 @@ nmfeV() converts the energy of a photon from electron volts to a nm.
 This follows the conventions of other python functions such as strfdatetime.
 
 
-The library is designed to be as simple as possible and an "algorithm that runs". As such, most of the library is unashamedly procedural for simplicity. The syntax of object orientated code varies from language to language.
+The library is designed to be as simple as possible and an "algorithm that runs". While it is easier to install the whole library, it is also straighforward to cut/paste parts of the code.
