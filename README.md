@@ -1,7 +1,7 @@
 # photovoltaic
 
 
-photovoltaic is a library of python functions used in photovoltaics. Its preferrable to install the library but the functions are simple enough to include in your code.
+**photovoltaic** is a library of python functions used in photovoltaics. Its preferrable to install the library but the functions are simple enough to include in your code.
 
 Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/blob/master/html/photovoltaic.html  
 Code is at: https://github.com/pvedu/photovoltaic/tree/master/photovoltaic  
@@ -70,9 +70,9 @@ where you can run the code without installing anything.
 
 ## Other
 
-f is used to mean from in some of the function names. For example:
+**f** means **from** in some of the function names. For example:
 
-nmfeV() converts the energy of a photon from electron volts to a nm.
+nmfeV() converts the energy of a photon **from** electron volts to a nm.
 
 This follows the conventions of other python functions such as strfdatetime.
 
