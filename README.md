@@ -10,9 +10,7 @@ Typical usage:
 
 
   import photovoltaic as pv
-
   irradiance = pv.sun.blackbody_spectrum(800)
-
   print(irradiance)
 
 This would print the blackbody irradiance at 800 nm with the default temperature of 6000 K in W/m2/nm.
