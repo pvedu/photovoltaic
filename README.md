@@ -4,6 +4,7 @@
 photovoltaic is a library of python functions used in photovoltaics. The functions are simple enough to include in your code
 
 Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/blob/master/html/photovoltaic.html
+Code is at: 
 
 
 Typical usage:
