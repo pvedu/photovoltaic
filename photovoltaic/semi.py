@@ -80,7 +80,7 @@ def lengthflifetime(lifetime, diffusivity):
     return np.sqrt(lifetime * diffusivity)
 
 
-def lifetime(U, Δn):
+def lifetime(Δn, U):
     """Return the lifetime (seconds) where U is the recombination  and Δn is the excess minority carrier density.
         This is the definition of lifetime"""
     return Δn / U

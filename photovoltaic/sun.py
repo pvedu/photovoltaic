@@ -47,7 +47,12 @@ def declination(day_no):
 
 
 def elev_azi(declination, latitude, local_solar_time):
-    """Return the elevation (degrees) and azimuth (degrees)"""
+    """Return two values: the elevation (degrees) and azimuth (degrees) od the sun
+    Given:
+        declination (degrees) the declination angle
+        latitude (degrees) the latitude where +ve is in the northern hemisphere and -ve is in the southern.
+        local_solar_time (hours) where noon is zero.
+    """
     hour_angle = 15.0 * (local_solar_time - 12.0)
     elevation = arcsind(sind(declination) * sind(latitude) + cosd(declination) * cosd(latitude) * cosd(hour_angle))
     azimuth = arccosd(
@@ -65,7 +70,7 @@ def elevation(declination, latitude, local_solar_time):
 
 
 def equal_spacing(x, y, x_min, x_max, x_step):
-    """Returns spectra with equal spacking and truncation (W/m2) (NOT W/m2/nm)
+    """Returns spectra with equal spacing and truncation (W/m2) (NOT W/m2/nm)
     given a spectrum (W/m2/nm) as a function of wavelength (nm)
     wavelength minimum (nm) and wavlength maximum (nm)
     Note: would actually work for any x y data"""
@@ -127,7 +132,7 @@ def sun_position(dayNo, latitude, longitude, GMTOffset, H, M):
 
 
 def sun_rise_set(latitude, declination, time_correction):
-    """Return the sunrise and sunset times in hours
+    """Return two values: the sunrise (hours) and sunset (hours) of the sun
     given the latitude (degrees) and the declination (degrees)
     """
     A = -1 * (sind(latitude) * sind(declination)) / (cosd(latitude) * cosd(declination))

@@ -230,7 +230,7 @@ def finger_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp):
 def finger_shading(wf, Sf):
     """Return the fractional power loss due to finger shading (0 to 1)
     where wf is the width of the finger (cm) and Sf is the finger spacing (cm)."""
-    return (wf / Sf) * 100.0
+    return (wf / Sf)
 
 
 def finger_sheet(Sf, Jmp, Rsheet, Vmp):
@@ -247,7 +247,7 @@ def finger_total_loss(L, Jmp, Sf, resistivity, Rsheet, wf, df, Vmp):
     Presistivity = finger_resistivity(L, Jmp, Sf, resistivity, wf, df, Vmp)
     Pshading = finger_shading(wf, Sf)
     Psheet = finger_sheet(Sf, Jmp, Rsheet, Vmp)
-    return Presistivity + Pshading + Psheet, Presistivity, Pshading, Psheet
+    return Presistivity + Pshading + Psheet
 
 
 def impliedV(Δn, N, T=298.15):
