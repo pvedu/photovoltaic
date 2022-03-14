@@ -6,19 +6,6 @@
 Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/blob/master/html/photovoltaic.html  
 Code is at: https://github.com/pvedu/photovoltaic/tree/master/photovoltaic  
 
-<!---
-
-Individual modules:
-
-| Code link        | Help Link   | Description  |
-| ------------- |-------------| -----:|
-| [cell.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/cell.py)      | right-aligned | $1600 |
-| [core.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/core.py)     | centered      |   $12 |
-| [money.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/money.py) | are neat      |    $1 |
-
---->
-
-
 
 
 Typical usage:
@@ -64,8 +51,7 @@ For the graphs, Matplotlib is needed in addition to the above numpy and scipy pa
 Examples of using the library are available at:
 https://github.com/pvedu/pvon
 
-But its much more fun to go to: https://mybinder.org/v2/gh/pvedu/pvon/master
-where you can run the code without installing anything.
+There are instructions on how to run the examples completely within the browser and without installing anything.
 
 
 ## Other

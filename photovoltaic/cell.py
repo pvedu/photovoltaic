@@ -307,7 +307,7 @@ def normalised_Voc(Voc, ideality, T=298.15):
 
 def qefsr(spectral_response, wavelength):
     """Return the QE (unit 0 to 1) given the spectral response (A/W) and the wavelength (nm) """
-    QE = spectral_response * wavelength / 1239.8
+    QE = spectral_response *  1239.8 / wavelength
     return QE
 
 

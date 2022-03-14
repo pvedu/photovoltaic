@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 setup(name='photovoltaic',
-    version='0.1.8',
+    version='0.1.9',
     packages=find_packages(),
     platforms=['any'],
     classifiers=[
@@ -9,7 +9,7 @@ setup(name='photovoltaic',
     'Programming Language :: Python :: 3',
     'Topic :: Scientific/Engineering :: Physics',
     ],
-    url='https://github.com/trautsned/photovoltaic',
+    url='https://github.com/pvedu/photovoltaic',
     license='GPLv3',
     author='Stuart Bowden',
     author_email='sgbowden@asu.edu',
