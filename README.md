@@ -6,22 +6,14 @@
 Help Index: http://htmlpreview.github.io/?https://github.com/pvedu/photovoltaic/blob/master/html/photovoltaic.html  
 Code is at: https://github.com/pvedu/photovoltaic/tree/master/photovoltaic  
 
-<!---
+## Examples
 
-Individual modules:
+The best place to start is with the examples at:
+https://github.com/pvedu/pvon
 
-| Code link        | Help Link   | Description  |
-| ------------- |-------------| -----:|
-| [cell.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/cell.py)      | right-aligned | $1600 |
-| [core.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/core.py)     | centered      |   $12 |
-| [money.py](https://github.com/pvedu/photovoltaic/blob/master/photovoltaic/money.py) | are neat      |    $1 |
+There are instructions on how to run the examples completely within the browser and without installing anything.
 
---->
-
-
-
-
-Typical usage:
+## Typical usage
 
     import photovoltaic as pv
     irradiance = pv.sun.blackbody_spectrum(800)
@@ -32,10 +24,15 @@ This would print the blackbody irradiance at 800 nm with the default temperature
 
 ## Installation
 
-
 Installation is via pip from the pypi repositry. From a command propmpt:
 
     pip install photovoltaic
+
+Inside a Jupter notebook use:
+
+    !pip install photovoltaic
+
+Some systems use pip3 instead of pip. People recommend using a virtual environment, but I don't find its necessary on MS Windows.
 
 	
 Tha above command should also install the latest scipy and numpy packages. They can also be installed directly with:
@@ -54,18 +51,12 @@ Anaconda includes a wealth of scientific packagkes and is available at: https://
 Standard Python is at https://www.python.org/downloads/
 
 For the graphs, Matplotlib is needed in addition to the above numpy and scipy packages:
+
     pip install matplotlib
 
 
 
-## Examples
 
-
-Examples of using the library are available at:
-https://github.com/pvedu/pvon
-
-But its much more fun to go to: https://mybinder.org/v2/gh/pvedu/pvon/master
-where you can run the code without installing anything.
 
 
 ## Other
