@@ -188,20 +188,26 @@ def cell_params(V, I):
     return Voc, Isc, FF, Vmp, Imp
 
 
-def collection(x, thickness, S, L, D):
+def collection(x, thickness, s, l, d):
     """Returns the collection probability (unit 0 to 1) at a distance x (cm) from the junction.
     Where: thickness is the layer thickness (cm),
-    S is the surface recombination velocity (cm/s),
-    L is the minority carrier diffusion length (cm) and
-    D is the diffusivity (cm²/Vs)
+    s is the surface recombination velocity (cm/s),
+    l is the minority carrier diffusion length (cm) and
+    d is the diffusivity (cm²/Vs)
     """
-    hypSin_xL = np.sinh(-x / L)
-    hypCos_xL = np.cosh(-x / L)
-    hypSin_WL = np.sinh(-thickness / L)
-    hypCos_WL = np.cosh(-thickness / L)
-    num = S * L / D * hypCos_WL + hypSin_WL
-    denom = S * L / D * hypSin_WL + hypCos_WL
-    return (hypCos_xL - num / denom * hypSin_xL)
+    
+    cosh_xl = np.cosh(x/l)
+    cosh_wl = np.cosh(thickness/l)
+    sinh_xl = np.sinh(x/l)
+    sinh_wl = np.sinh(thickness/l)
+    
+    num = s*l/d*cosh_wl + sinh_wl
+    den = s*l/d*sinh_wl + cosh_wl
+    
+    cp = cosh_xl - (num/den)*sinh_xl
+    
+    return cp
+                 
 
 
 def genfcurrent(current):
