@@ -76,7 +76,7 @@ def equal_spacing(x, y, x_min, x_max, x_step):
     wavelength minimum (nm) and wavlength maximum (nm)
     Note: would actually work for any x y data"""
     print('equal_spacing is deprecated and will be removed. Use change_interval instead')
-    y_integrated = integrate.cumtrapz(y, x, initial=0)
+    y_integrated = integrate.cumulative_trapezoid(y, x, initial=0)
     x_midpoint = np.arange(x_min, x_max + x_step, x_step)
     x_extents = np.arange(x_min - x_step / 2, x_max + 3 / 2 * x_step, x_step)
     y_spaced = np.diff(np.interp(x_extents, x, y_integrated))
@@ -87,7 +87,7 @@ def change_interval(x, y, x_min, x_max, x_step):
     Returns spectra in same units
     given a spectrum (W/m2/nm) as a function of wavelength (nm)
     wavelength minimum (nm) and wavlength maximum (nm) """
-    y_integrated = integrate.cumtrapz(y, x, initial=0)
+    y_integrated = integrate.cumulative_trapezoid(y, x, initial=0)
     x_midpoint = np.arange(x_min, x_max + x_step, x_step)
     x_extents = np.arange(x_min - x_step/2, x_max + 3/2*x_step, x_step)
     y_spaced = np.diff(np.interp(x_extents,x,y_integrated))/x_step
